@@ -1,0 +1,23 @@
+The node 1 is connected to the nodes 2 and 3 and 4.
+
+The node 2 is connected to the nodes 4 and 5 and 6.
+
+The node 3 is connected to the nodes 1 and 4 and 5.
+
+The node 4 is connected to the nodes 1 and 2.
+
+The node 5 is connected to the nodes 3 and 4 and 6.  
+
+The node 6 is connected to the nodes 2 and 3 and 5.
+
+Red is a colour.
+
+Blue is a colour.  
+
+Green is a colour.         
+
+Every node is assigned to exactly one colour.
+
+It is not the case that the node X is assigned to a colour and the node Y is assigned to the colour and the node X is connected to the node Y.
+
+

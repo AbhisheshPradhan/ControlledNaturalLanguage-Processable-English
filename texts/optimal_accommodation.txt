@@ -1,0 +1,34 @@
+Choose either the accommodation Amora or Grace or Metro or Posh or Adina.
+
+The hotel Amora owns five stars and costs 170 dollars.
+
+The hotel Grace owns four stars and costs 140 dollars.
+
+The hotel Metro owns three stars and costs 90 dollars.
+
+The guesthouse Adina owns two stars and costs 60 dollars.  
+
+The motel Posh that is located on the main street owns three stars and costs 75 dollars.
+
+If an accommodation is located on a main street then the accommodation is noisy.
+
+If an accommodation costs N dollars and owns M stars then N/M is the cost per star of the accommodation.
+
+If an accommodation owns N stars then N is the star rating of the accommodation.
+
+Minimizing that an accommodation is noisy has the high priority H.  
+
+Minimizing the cost per star of an accommodation has the medium priority M.
+
+Maximizing the star rating of an accommodation has the low priority L.
+
+The high priority is 3.
+
+The medium priority is 2.  
+
+The low priority is 1. 
+
+  
+
+
+  

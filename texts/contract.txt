@@ -1,0 +1,43 @@
+There exists an Agreement of Purchase and Sell.  
+
+Every Agreement of Purchase and Sell is an agreement.
+
+Rolf Schwitter is a seller.
+
+Tracy Yap Realty is a listing brokerage.
+
+Rolf Schwitter appoints Tracy Yap Realty.
+
+Rolf Schwitter is included in the agreement.
+
+Tracy Yap Realty receives a notice that belongs to the agreement.
+
+Tracy Yap Realty gives a notice that belongs to the agreement.
+
+Every listing brokerage is a brokerage.
+
+If a seller appoints a brokerage then the brokerage represents the seller.
+
+If a brokerage represents a seller that is included in an agreement and the brokerage receives a notice that belongs to the agreement then the brokerage deals with the notice.
+
+Arun Majumdar is a buyer.
+
+McGrath is a buyer brokerage.
+
+Every buyer brokerage is a brokerage.
+
+If a buyer appoints a brokerage then the brokerage represents the buyer.
+
+Arun Majumdar appoints McGrath.
+
+Arun Majumdar is included in the agreement.
+
+McGrath receives a notice that belongs to the agreement.
+
+McGrath gives a notice that belongs to the agreement.
+
+If a brokerage represents a buyer that is included in an agreement and the brokerage receives a notice that belongs to the agreement then the brokerage deals with the notice.
+
+It is false that a brokerage represents a seller that is included in an agreement and the brokerage represents a buyer that is included in the agreement and the brokerage receives a notice that belongs to the agreement.
+
+It is false that a brokerage represents a seller that is included in an agreement and the brokerage represents a buyer that is included in the agreement and the brokerage gives a notice that belongs to the agreement.
