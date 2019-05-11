@@ -2,7 +2,6 @@
 
 var KeyHandler = {
 
-  
   keyUpdate: function(d, e) {
     var keyID = e.keyCode;
     var keyVal = (String.fromCharCode(keyID)); // Character form
@@ -62,13 +61,14 @@ var KeyHandler = {
       while (viewModel.textAreaStr() != viewModel.$text_field.val()) {
         viewModel.asyncFlag = false; // should be true
         viewModel.token(viewModel.token().slice(0, viewModel.token().length-1));
+
         var charBeingRemoved = viewModel.textAreaStr().slice(viewModel.textAreaStr().length-1, viewModel.textAreaStr().length);
         viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length-1));
         // When backspace all the way to previous token
 
-        //var currentIndexInPreviousToken = viewModel.textAreaStr().length == viewModel.firstIndexOfCurrentWord-1;
-          var currentIndexInPreviousToken = charBeingRemoved == " " || charBeingRemoved == "," ||
-	      charBeingRemoved == "." || charBeingRemoved == "?";
+        var currentIndexInPreviousToken = charBeingRemoved == " " || charBeingRemoved == "," ||
+        charBeingRemoved == "." || charBeingRemoved == "?";
+        
         if (currentIndexInPreviousToken) {
           var tokenToBeDel = textLineData.nodes[textLineData.nodes.length-2];
           this.updateToPreviousToken(charBeingRemoved);
@@ -78,8 +78,7 @@ var KeyHandler = {
             viewModel.postToken(pop);
             viewModel.lookUpTable(viewModel.lookahead.wordTable);
             viewModel.currentInitialLookUpTable = viewModel.lookahead.wordTable;
-          }
-            else if( textLineData.nodes[textLineData.nodes.length-1] == " " ){
+          } else if( textLineData.nodes[textLineData.nodes.length - 1] == " " ) {
             viewModel.currentInitialLookUpTable = viewModel.initSentenceLookUp;
             viewModel.lookaheadObject(viewModel.initLookUpObj);
             viewModel.lookUpTable(viewModel.initSentenceLookUp);
@@ -135,6 +134,55 @@ var KeyHandler = {
     }
   },
 
+  getCaretPosition(ctrl) {
+    var CaretPos = 0;   // IE Support
+    if (document.selection) {
+          ctrl.focus();
+          var Sel = document.selection.createRange();
+          Sel.moveStart('character', -ctrl.value.length);
+          CaretPos = Sel.text.length;
+    }
+    // Firefox support
+    else if (ctrl.selectionStart || ctrl.selectionStart == '0')
+          CaretPos = ctrl.selectionStart;
+    return (CaretPos);
+  },
 
+  //Functions to get the word
+  returnWord(text, caretPos) {
+    var index = text.indexOf(caretPos);
+    var preText = text.substring(0, caretPos);
+    var prevChar = preText[preText.length - 1];
+    var isNotWord = prevChar == "," || prevChar == "." || prevChar == "?";
+    var words = [" "];
 
+    //What to do when we find a punctuation?
+    //Is the punctuation also added to the nodes? i.e. posted to server as token??
+    if(isNotWord) {
+      return null;
+    } else if(preText.indexOf(" ") > 0) {
+      preText = preText.split(" ");
+      preText.pop();
+      console.log("preText : ", preText);
+      words = words.concat(preText);
+      return words;
+    } else {
+      return words;
+    }
+  },
+  
+  alertPrevWord() {
+    var text = document.getElementById("text_field");
+    var caretPos = KeyHandler.getCaretPosition(text);
+    var words = KeyHandler.returnWord(text.value, caretPos);
+
+    if(words) {
+      console.log("words : ", words);
+      
+      textLineData.nodes = words;
+      viewModel.postToken(words.pop());
+      viewModel.lookUpTable(viewModel.lookahead.wordTable);
+      viewModel.currentInitialLookUpTable = viewModel.lookahead.wordTable;
+    }
+  }
 }

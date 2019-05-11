@@ -37,7 +37,6 @@ var viewModel = {
 
       textParaList: ko.observableArray([]),
 
-
       submitButton: function() {
             KeyHandler.enterKey();
       },
@@ -178,11 +177,10 @@ var viewModel = {
             // This concat must be done to avoid unwanted changes in to other data structures
             var tempLookAheadTable = [].concat(this.lookUpTable());
             this.lookUpTable(this.lookahead.filterTable(this.token(), tempLookAheadTable));
-
       },
 
       init: function() {
-            var lastNodePostedWasBlank = textLineData.nodes[textLineData.nodes.length-1] != " ";
+            var lastNodePostedWasBlank = textLineData.nodes[textLineData.nodes.length - 1] != " ";
             var textAreaEmpty = this.textAreaStr().length == 0
             if (textAreaEmpty && lastNodePostedWasBlank) {
                   this.postToken(" ");
@@ -243,6 +241,8 @@ var viewModel = {
             request.done(function(data)
             {
                   var json = JSON.parse(data);
+                  console.log(json);
+
                   if (word == "." || word == "?") {
                         viewModel.setAsp(json);
 		            viewModel.setAnswer(json.answer)
@@ -298,16 +298,20 @@ var viewModel = {
       },
 
       loadLookUptableFor(word) {
+            // If word in lookahead
             var request = $.when(this.postToken2(word));
+            console.log("posted word : ", word);
+
             request.done(function(data)
             {
                   var json = JSON.parse(data);
+                  console.log(json)
+
                   viewModel.populateLookUpTable(json);
-                  viewModel.loadLookahead2(); 
+                  viewModel.loadLookahead2(); // MAYBE REMOVE IF
                   viewModel.anaExp(json.ana);
                   viewModel.allowInput = true;
             });
-            console.log(word)
       },
 
       contains: function(target, arr) {
@@ -344,50 +348,56 @@ var viewModel = {
             return object;
       },
 
+      // //Functions to get the word
+      // returnWord(text, caretPos) {
+      //       var index = text.indexOf(caretPos);
+      //       var preText = text.substring(0, caretPos);
 
-      //Functions to get the word
-      returnWord(text, caretPos) {
-            var index = text.indexOf(caretPos);
-            var preText = text.substring(0, caretPos);
-            if (preText.indexOf(" ") > 0) {
-                  var words = preText.split(" ");
-                  words.pop();
-                  words = words.join(" ");
-                  return words; //return last word
-            }
-            else {
-                  return preText;
-            }
-      },
+      //       if (preText.indexOf(" ") > 0) {
+      //             var words = preText.split(" ");
+      //             words.pop();
+      //             words = words.join(" ");
+      //             return words; //return last word
+      //       }
+      //       else {
+      //             return "";
+      //       }
+      // },
       
-      alertPrevWord() {
-            var text = document.getElementById("text_field");
-            var caretPos = this.getCaretPosition(text)
-            var word = this.returnWord(text.value, caretPos);
+      // alertPrevWord() {
+      //       var text = document.getElementById("text_field");
+      //       var caretPos = this.getCaretPosition(text)
+      //       var word = this.returnWord(text.value, caretPos);
+      //       let words = word.split(' ') || [];
 
-            let words = word.split(' ');
-            if (word != null) {
-                  words.forEach(word => {
-                        this.postToken(word);
-                  })
-                  console.log(word);
-            }
-      },
+      //       console.log("words[] : ", words);
+      //       console.log("word : ", word);
+      //       console.log("init lookahead table ", this.initLookUpObj)
 
-      getCaretPosition(ctrl) {
-            var CaretPos = 0;   // IE Support
-            if (document.selection) {
-                  ctrl.focus();
-                  var Sel = document.selection.createRange();
-                  Sel.moveStart('character', -ctrl.value.length);
-                  CaretPos = Sel.text.length;
-            }
-            // Firefox support
-            else if (ctrl.selectionStart || ctrl.selectionStart == '0')
-                  CaretPos = ctrl.selectionStart;
-            return (CaretPos);
-      }
+      //       if (words != null) {
+      //             words.forEach(wrd => {
+      //                   if(wrd != "") {
+      //                         this.postToken(wrd);
+      //                   } else {
+      //                         this.postToken(" ");
+      //                   }
+      //             })
+      //       }
+      // },
 
+      // getCaretPosition(ctrl) {
+      //       var CaretPos = 0;   // IE Support
+      //       if (document.selection) {
+      //             ctrl.focus();
+      //             var Sel = document.selection.createRange();
+      //             Sel.moveStart('character', -ctrl.value.length);
+      //             CaretPos = Sel.text.length;
+      //       }
+      //       // Firefox support
+      //       else if (ctrl.selectionStart || ctrl.selectionStart == '0')
+      //             CaretPos = ctrl.selectionStart;
+      //       return (CaretPos);
+      // }
 };
 
 ko.applyBindings(viewModel);
@@ -422,7 +432,6 @@ function saveButton() {
       }
 };
 
-
 function saveTemporary() {
       var file_name = 'text.tmp';
       if (textLineData.sentences.length > 0) {
@@ -456,8 +465,6 @@ function saveTemporary() {
       }
 };
 
-
-
 var addToLexicon = function(cat, wform, vform, num) {
     var idNum = textLineData.nodes.length ;
     var fs = FeatureStructure.createFS(cat, wform, vform, num);
@@ -482,54 +489,46 @@ var addToLexicon = function(cat, wform, vform, num) {
       });
 }
 
-
-
 $( document ).ready(function() {
+      $(".dropdown-menu").delegate("li", "click", function() {
+            var str = JSON.stringify($(this).html());
+            var addRegex = /Add/i
+            var saveRegex = /Save/i
+            var loadRegex = /Load/i
+
+            var notFile = !(addRegex.test(str) || saveRegex.test(str) );
+
+            if(notFile) {
+                  $(this).addClass("active").siblings().removeClass("active");
+            }
+
+      });
+
+      // FOR MENU COLOUR
+      $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $(this).parent().siblings().removeClass('open');
+            $(this).parent().toggleClass('open');
+      });
+
+      // NEED FOR TABS
+      $('.collapse').on('shown.bs.collapse', function(){
+            $(this).parent().find(".glyphicon-plus-sign").removeClass("glyphicon-plus-sign").addClass("glyphicon-minus-sign");
+      }).on('hidden.bs.collapse', function(){
+            $(this).parent().find(".glyphicon-minus-sign").removeClass("glyphicon-minus-sign").addClass("glyphicon-plus-sign");
+      });
 
 
-$(".dropdown-menu").delegate("li", "click", function() {
-      var str = JSON.stringify($(this).html());
-      var addRegex = /Add/i
-      var saveRegex = /Save/i
-      var loadRegex = /Load/i
-
-      var notFile = !(addRegex.test(str) || saveRegex.test(str) );
-
-      if(notFile) {
-            $(this).addClass("active").siblings().removeClass("active");
-      }
-
-});
-
-// FOR MENU COLOUR
-
-$('ul.dropdown-menu [data-toggle=dropdown]').on('click', function(event) {
-      event.preventDefault();
-      event.stopPropagation();
-      $(this).parent().siblings().removeClass('open');
-      $(this).parent().toggleClass('open');
-});
-
-
-
-// NEED FOR TABS
-$('.collapse').on('shown.bs.collapse', function(){
-      $(this).parent().find(".glyphicon-plus-sign").removeClass("glyphicon-plus-sign").addClass("glyphicon-minus-sign");
-}).on('hidden.bs.collapse', function(){
-      $(this).parent().find(".glyphicon-minus-sign").removeClass("glyphicon-minus-sign").addClass("glyphicon-plus-sign");
-});
-
-
-/// for asp toggle (dev mode)
-$("[name='my-checkbox']").bootstrapSwitch();
-$('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
-      if (state) {
-            viewModel.asp(viewModel.bigAsp);
-      }
-      else {
-            viewModel.asp(viewModel.smallAsp);
-      }
-      viewModel.aspState = state;
-});
-
+      /// for asp toggle (dev mode)
+      $("[name='my-checkbox']").bootstrapSwitch();
+      $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
+            if (state) {
+                  viewModel.asp(viewModel.bigAsp);
+            }
+            else {
+                  viewModel.asp(viewModel.smallAsp);
+            }
+            viewModel.aspState = state;
+      });
 });

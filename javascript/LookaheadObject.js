@@ -1,8 +1,6 @@
 /**
 *  Lookahead object, modified by Rolf Schwitter
 */
-
-
 var Lookahead = {
 
       wordTable: [],    // table for words for current token
@@ -11,7 +9,6 @@ var Lookahead = {
       vforms: [],
       nums: [],
       catsCanAdd: ["verb: intransitive", "verb: transitive", "name", "noun: common", "noun: relational", "adjective", "adjective: relational"],
-
 
       getWordTable: function() {
             return this.wordTable;
@@ -45,7 +42,6 @@ var Lookahead = {
                               this.nums.push(data.lookahead[i].num);
                         else
                               this.nums.push(" ");
-
                   }
 
 
@@ -121,12 +117,10 @@ var Lookahead = {
             alert('"'+str+'" is not a valid word. Please go back and re-enter a word or add the word to the lexicon via the Lookahead Information menu.');
             var catArr = ["verb: intransitive", "verb: transitive", "name", "noun: common", "noun: relational", "adjective", "adjective: relational"];
             for(i = 0; i < lookaheadObject.length; i++) {
-                if(catArr.includes(lookaheadObject[i].cat)) {
-		    lookaheadObject[i].wform.unshift({"add":str});
+                  if(catArr.includes(lookaheadObject[i].cat)) {
+		            lookaheadObject[i].wform.unshift({"add":str});
                   }
             }
             return lookaheadObject;
-      },
-
-
+      }
 }

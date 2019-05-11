@@ -5,7 +5,6 @@ var textLineData = {
   sposNum: 0,
   firstIndexOfSentence: 0,
 
-
   createNode: function(word, rmode) {
       //  var _spos = this.nodes.length-this.firstIndexOfSentence > 1 ? this.nodes.length-this.firstIndexOfSentence-1 : 0;
     var idNum = this.nodes.length+1;    
@@ -32,16 +31,14 @@ var textLineData = {
   addNode: function(node) {
     this.nodes.push(node);
     this.sposNum = node == " " ? 0 : this.sposNum + 1;
-
   },
 
   addSentence: function(sentence) {
     this.sentences.push(sentence);
     this.firstIndexOfSentence = this.nodes.length;
-},
+  },
 
   removeTailNode: function() {
-
     return this.nodes.pop();
   },
 
@@ -51,5 +48,4 @@ var textLineData = {
       else
             return 0;
  }
-
 };
