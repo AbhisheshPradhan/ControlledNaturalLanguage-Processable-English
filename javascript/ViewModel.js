@@ -3,7 +3,6 @@
 *   File Name: ViewModel.js
 *
 */
-
 var viewModel = {
       $text_field: $("#text_field"),
       textAreaStr: ko.observable(""), // For display
@@ -241,7 +240,7 @@ var viewModel = {
             request.done(function(data)
             {
                   var json = JSON.parse(data);
-                  console.log(json);
+                  // console.log(json);
 
                   if (word == "." || word == "?") {
                         viewModel.setAsp(json);

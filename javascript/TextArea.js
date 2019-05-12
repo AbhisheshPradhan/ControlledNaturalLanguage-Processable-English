@@ -14,7 +14,7 @@ var textLineData = {
       editmode:"parse", //"parse" ----- FIX
       token: word == "" ? " " : word, // the word itself
       featurestructure:"{ \"cat\" : \" \",  \"wform\" : \" \"}",
-      filename:" ", //when loading
+      filename: " ", //when loading
       spectext: " ", //
       snum: this.sentences.length+1,
       spos: this.getSpos(), //
@@ -43,9 +43,9 @@ var textLineData = {
   },
 
   getSpos: function() {
-      if(this.nodes.length-this.firstIndexOfSentence > 1)
-            return this.nodes.length-this.firstIndexOfSentence-1;
-      else
-            return 0;
- }
+    if(this.nodes.length-this.firstIndexOfSentence > 1)
+      return this.nodes.length-this.firstIndexOfSentence-1;
+    else
+      return 0;
+  }
 };

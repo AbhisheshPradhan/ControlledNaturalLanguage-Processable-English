@@ -42,13 +42,14 @@ var clickHelper = {
                         viewModel.postToken(viewModel.token()+dataArr[s]);
                         if(dataArr[s] == "." || dataArr[s] == "?") {
                               viewModel.token(dataArr[s]);
-                              viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length-1)+dataArr[s]);
+                              //Added space after punctuation to continue to build new sentence.
+                              viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length-1)+dataArr[s] + " ");
                         }
                         else if (data == ",") {
-                              viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length-1)+dataArr[s]+" ");
+                              viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length-1)+dataArr[s] + " ");
                         }
                         else {
-                              viewModel.textAreaStr(viewModel.textAreaStr()+dataArr[s]+" ");
+                              viewModel.textAreaStr(viewModel.textAreaStr()+dataArr[s] + " ");
                               viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
                               viewModel.loadLookahead()
                         }

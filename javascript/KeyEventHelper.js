@@ -152,37 +152,85 @@ var KeyHandler = {
   returnWord(text, caretPos) {
     var index = text.indexOf(caretPos);
     var preText = text.substring(0, caretPos);
-    var prevChar = preText[preText.length - 1];
-    var isNotWord = prevChar == "," || prevChar == "." || prevChar == "?";
+    var hasPunctuation = preText.indexOf(".") != -1 || preText.indexOf(",") != -1 || preText.indexOf("?") != -1;
     var words = [" "];
 
+    console.log(preText);
+    
     //What to do when we find a punctuation?
     //Is the punctuation also added to the nodes? i.e. posted to server as token??
-    if(isNotWord) {
-      return null;
+    if(hasPunctuation) {
+      //if it has punctuation, return proper array with punctuations splitted
+      preText = preText.split(" ");
+      if(preText[preText.length - 1] == "") {
+        preText.pop();
+      }
+
+      preText.forEach((item) => {
+        if(item.indexOf(".") != -1) {
+          words.push(item.substring(0, item.length - 1));
+          words.push(".");
+
+          console.log(item.substring(0, item.length - 1));
+        } else {
+          words.push(item);
+        }
+      })
+      console.log(words);
+      return words;
     } else if(preText.indexOf(" ") > 0) {
       preText = preText.split(" ");
-      preText.pop();
-      console.log("preText : ", preText);
+      // preText.pop(); //remove the last item which is ""
+      if(preText[preText.length - 1] == "") {
+        preText.pop();
+      }
+      // console.log("preText : ", preText);
       words = words.concat(preText);
       return words;
     } else {
       return words;
     }
   },
-  
+
+  //NEED TO POST EVERY ITEM THAT IS MISSING IN textLineData.nodes from words.
+  //if textLineData.nodes.length < words.length
+  //otherwise 
   alertPrevWord() {
     var text = document.getElementById("text_field");
     var caretPos = KeyHandler.getCaretPosition(text);
     var words = KeyHandler.returnWord(text.value, caretPos);
 
     if(words) {
-      console.log("words : ", words);
-      
+      if(words.length - textLineData.nodes.length >= 2) {
+        // console.log("words", words);
+        // console.log("words not in textLineData ", words);
+        for(let i = textLineData.nodes.length; i < words.length; i++) {
+          viewModel.postToken(words[i]);
+        }
+        textLineData.nodes = words;
+        // viewModel.postToken(words.pop());
+        viewModel.lookUpTable(viewModel.lookahead.wordTable);
+        viewModel.currentInitialLookUpTable = viewModel.lookahead.wordTable;
+      } else {
+        
+        textLineData.nodes = words;
+        // console.log("popped word : ",  words.pop())
+        viewModel.postToken(words.pop());
+        viewModel.lookUpTable(viewModel.lookahead.wordTable);
+        viewModel.currentInitialLookUpTable = viewModel.lookahead.wordTable;
+      }
+    }
+    
+
+    //Re Init lookup table when we find .
+    if(words[words.length - 1] == ".") {
+      words.push(" ");
       textLineData.nodes = words;
+      // console.log("popped word : ",  words.pop())
       viewModel.postToken(words.pop());
       viewModel.lookUpTable(viewModel.lookahead.wordTable);
       viewModel.currentInitialLookUpTable = viewModel.lookahead.wordTable;
     }
+    console.log("words", words);
   }
 }
