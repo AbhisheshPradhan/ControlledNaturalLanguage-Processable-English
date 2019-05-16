@@ -41,46 +41,41 @@ $( "#text_field" )
    })
    .autocomplete({
 
-     minLength: 0,
-     source: function( request, response ) {
+      minLength: 0,
+      source: function( request, response ) {
 
-       // delegate back to autocomplete, but extract the last term
-       response( $.ui.autocomplete.filter(
-         generateList(), extractLast( viewModel.textAreaStr() ) ) );
+         // delegate back to autocomplete, but extract the last term
+         response( $.ui.autocomplete.filter(
+            generateList(), extractLast( viewModel.textAreaStr() ) ) );
 
-     },
-    open: function() {
-       $("ul.ui-menu").width( $(this).innerWidth() -19 );
+      },
+      open: function() {
+         $("ul.ui-menu").width( $(this).innerWidth() -19 );
 
-    },
+      },
 
-     focus: function() {
-       // prevent value inserted on focus
-       return false;
-     },
-     select: function( event, ui ) {
-           var terms = split( this.value );
-           viewModel.textAreaStr(ui.item.value);
-           // remove the current input
-           terms.pop();
-           // add the selected item
-           terms.push( ui.item.value );
-           // add placeholder to get the comma-and-space at the end
-           terms.push( " " );
+      focus: function() {
+         // prevent value inserted on focus
+         return false;
+      },
+      select: function( event, ui ) {
+            var terms = split( this.value );
+            viewModel.textAreaStr(ui.item.value);
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            terms.push( " " );
 
-           this.value = terms.join( " " );
+            this.value = terms.join( " " );
 
-
-           var temp = ui.item.value.split(" ");
-           viewModel.textAreaStr()
-           viewModel.token(temp.pop());
-           this.value = this.value.slice(0, this.value.length-2);
-           return false;
- },
-
-
-
-
+            var temp = ui.item.value.split(" ");
+            viewModel.textAreaStr()
+            viewModel.token(temp.pop());
+            this.value = this.value.slice(0, this.value.length-2);
+            return false;
+      }
    });
 
    generateList = function() {

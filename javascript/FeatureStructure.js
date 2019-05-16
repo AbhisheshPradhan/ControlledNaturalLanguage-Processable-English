@@ -26,7 +26,8 @@ var FeatureStructure = {
 	}
      var str = JSON.stringify(fs);
      return str;
-    }}
+	}
+}
 	
 
      

@@ -27,7 +27,7 @@ var SuccessHelper = {
             var nodes = s.split(" ");
             
             textLineData['sentences'] = [];
-	    viewModel.textList([]);
+	      viewModel.textList([]);
 
             for (i = 0; i < nodes.length; i++) {
                  var x = i;
@@ -42,10 +42,10 @@ var SuccessHelper = {
                     sentence+=nodes[i]+" "; }
                 i = x;
             }
-	    // viewModel.anaExp(json.ana);
+	      //viewModel.anaExp(json.ana);
             viewModel.setAsp(json);
-	    viewModel.setAnswer(json.answer);
-	    viewModel.postToken(" ");
+            viewModel.setAnswer(json.answer);
+            viewModel.postToken(" ");
             viewModel.$loader.css("visibility", "hidden");
       },
 
@@ -65,12 +65,11 @@ var SuccessHelper = {
             s = s.split('.').join(' . ');
             s = s.split('?').join(' ? ');
             s = s.split(', ').join(' , ');
-            
 
             var nodes = s.split(" ");
             
             textLineData['sentences'] = [];
-	    viewModel.textList([]);
+	      viewModel.textList([]);
 
             for (i = 0; i < nodes.length; i++) {
                  var x = i;
@@ -104,9 +103,7 @@ var SuccessHelper = {
             var gnodes = g.split(" ");
             
             //textLineData['sentences'] = [];
-	    //viewModel.textList([]);
-
-	  
+	      //viewModel.textList([]);
 
             for (i = 0; i < gnodes.length; i++) {
                  var x = i;
@@ -121,10 +118,10 @@ var SuccessHelper = {
                     gsentence+=gnodes[i]+" "; }
                 i = x;
             }  
-	    // viewModel.anaExp(json.ana);
+	      //viewModel.anaExp(json.ana);
             viewModel.setAsp(json);
-	    viewModel.setAnswer(json.answer);
-	    viewModel.postToken(" ");
+            viewModel.setAnswer(json.answer);
+            viewModel.postToken(" ");
             viewModel.$loader.css("visibility", "hidden");
 	    
       },
@@ -151,7 +148,5 @@ var SuccessHelper = {
                   if(json.hasOwnProperty('ana') && word != ".") {
                         viewModel.anaExp(json.ana);
                   }
-
       }
-
 }

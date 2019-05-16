@@ -156,9 +156,13 @@ var KeyHandler = {
     var words = [" "];
 
     console.log(preText);
+
+    if(text[preText.length] != " ") {
+      console.log("middle text!!!!");
+      console.log(text.substring(0, preText.lastIndexOf(" ")));
+      preText = text.substring(0, preText.lastIndexOf(" "));
+    }
     
-    //What to do when we find a punctuation?
-    //Is the punctuation also added to the nodes? i.e. posted to server as token??
     if(hasPunctuation) {
       //if it has punctuation, return proper array with punctuations splitted
       preText = preText.split(" ");
@@ -170,24 +174,19 @@ var KeyHandler = {
         if(item.indexOf(".") != -1) {
           words.push(item.substring(0, item.length - 1));
           words.push(".");
-
-          console.log(item.substring(0, item.length - 1));
         } else {
           words.push(item);
         }
       })
-      console.log(words);
       return words;
-    } else if(preText.indexOf(" ") > 0) {
+
+    } else {
       preText = preText.split(" ");
-      // preText.pop(); //remove the last item which is ""
+      //remove the last item which is ""
       if(preText[preText.length - 1] == "") {
         preText.pop();
       }
-      // console.log("preText : ", preText);
       words = words.concat(preText);
-      return words;
-    } else {
       return words;
     }
   },
@@ -223,6 +222,7 @@ var KeyHandler = {
     
 
     //Re Init lookup table when we find .
+    // TODO: what to do when there are multiple sentences??
     if(words[words.length - 1] == ".") {
       words.push(" ");
       textLineData.nodes = words;

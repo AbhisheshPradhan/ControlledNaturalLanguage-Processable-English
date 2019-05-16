@@ -38,6 +38,8 @@ var viewModel = {
 
       submitButton: function() {
             KeyHandler.enterKey();
+            console.log("Sentences : ", textLineData.sentences);
+            console.log("Nodes : ", textLineData.nodes);
       },
 
       changeToTextMode: function() {
@@ -149,11 +151,10 @@ var viewModel = {
             return true;
       },
 
-
       // Generates text
       generateText: function() {
-	  // viewModel.$loader.css("visibility", "visible");
-	    saveTemporary();
+	      // viewModel.$loader.css("visibility", "visible");
+	      saveTemporary();
             var jsonObj = viewModel.createJsonObject("generate", " ", " ", " ", "off", "normal");
             $.ajax({
                   url : "/peng/",
@@ -345,58 +346,7 @@ var viewModel = {
                   reasonermode: rmode
             }
             return object;
-      },
-
-      // //Functions to get the word
-      // returnWord(text, caretPos) {
-      //       var index = text.indexOf(caretPos);
-      //       var preText = text.substring(0, caretPos);
-
-      //       if (preText.indexOf(" ") > 0) {
-      //             var words = preText.split(" ");
-      //             words.pop();
-      //             words = words.join(" ");
-      //             return words; //return last word
-      //       }
-      //       else {
-      //             return "";
-      //       }
-      // },
-      
-      // alertPrevWord() {
-      //       var text = document.getElementById("text_field");
-      //       var caretPos = this.getCaretPosition(text)
-      //       var word = this.returnWord(text.value, caretPos);
-      //       let words = word.split(' ') || [];
-
-      //       console.log("words[] : ", words);
-      //       console.log("word : ", word);
-      //       console.log("init lookahead table ", this.initLookUpObj)
-
-      //       if (words != null) {
-      //             words.forEach(wrd => {
-      //                   if(wrd != "") {
-      //                         this.postToken(wrd);
-      //                   } else {
-      //                         this.postToken(" ");
-      //                   }
-      //             })
-      //       }
-      // },
-
-      // getCaretPosition(ctrl) {
-      //       var CaretPos = 0;   // IE Support
-      //       if (document.selection) {
-      //             ctrl.focus();
-      //             var Sel = document.selection.createRange();
-      //             Sel.moveStart('character', -ctrl.value.length);
-      //             CaretPos = Sel.text.length;
-      //       }
-      //       // Firefox support
-      //       else if (ctrl.selectionStart || ctrl.selectionStart == '0')
-      //             CaretPos = ctrl.selectionStart;
-      //       return (CaretPos);
-      // }
+      }
 };
 
 ko.applyBindings(viewModel);
