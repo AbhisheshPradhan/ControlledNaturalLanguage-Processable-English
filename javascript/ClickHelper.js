@@ -56,7 +56,7 @@ var clickHelper = {
                   }
 
                   if(!viewModel.allowInput)
-                        viewModel.token(viewModel.token()+ dataArr[0]);
+                        viewModel.token(viewModel.token() + dataArr[0]);
             }
       },
 

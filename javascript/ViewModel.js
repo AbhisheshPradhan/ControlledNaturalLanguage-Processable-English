@@ -83,7 +83,10 @@ var viewModel = {
 
       postWordClicked: function(data, event) {
             clickHelper.postWordClicked(data, event);
-            // console.log(data);
+            // console.log("postWordClicked");
+            // console.log("cursor between word? : ", KeyHandler.cursorBetweenText);
+            // console.log("getWords : ", KeyHandler.getWords())
+            // console.log("getWordsInTextBox : ", KeyHandler.getWordsInTextBox())
       },
 
       postAnaExpClicked: function() {

@@ -2,6 +2,8 @@
 
 var KeyHandler = {
 
+  cursorBetweenText: false,
+
   keyUpdate: function(d, e) {
     var keyID = e.keyCode;
     var keyVal = (String.fromCharCode(keyID)); // Character form
@@ -137,14 +139,14 @@ var KeyHandler = {
   getCaretPosition(ctrl) {
     var CaretPos = 0;   // IE Support
     if (document.selection) {
-          ctrl.focus();
-          var Sel = document.selection.createRange();
-          Sel.moveStart('character', -ctrl.value.length);
-          CaretPos = Sel.text.length;
+      ctrl.focus();
+      var Sel = document.selection.createRange();
+      Sel.moveStart('character', -ctrl.value.length);
+      CaretPos = Sel.text.length;
     }
     // Firefox support
     else if (ctrl.selectionStart || ctrl.selectionStart == '0')
-          CaretPos = ctrl.selectionStart;
+      CaretPos = ctrl.selectionStart;
     return (CaretPos);
   },
 
@@ -155,11 +157,10 @@ var KeyHandler = {
     var hasPunctuation = preText.indexOf(".") != -1 || preText.indexOf(",") != -1 || preText.indexOf("?") != -1;
     var words = [" "];
 
-    console.log(preText);
-
-    if(text[preText.length] != " ") {
-      console.log("middle text!!!!");
-      console.log(text.substring(0, preText.lastIndexOf(" ")));
+    //If the cursor is between letters of a word and the cursor is not between the last word and full-stop
+    //eg. this is an example|.
+    //we set preText to previous word otherwise we select the last word as well
+    if(text[preText.length] != " " && preText[preText.length - 1] != "." && text[preText.length] != ".") {
       preText = text.substring(0, preText.lastIndexOf(" "));
     }
     
@@ -170,16 +171,20 @@ var KeyHandler = {
         preText.pop();
       }
 
+      //preText is a string, so we need to separate . and ? when we find one then push it to word
+      //TODO : check for commas
       preText.forEach((item) => {
         if(item.indexOf(".") != -1) {
           words.push(item.substring(0, item.length - 1));
           words.push(".");
+        } else if (item.indexOf("?") != -1){
+          words.push(item.substring(0, item.length - 1));
+          words.push("?");
         } else {
           words.push(item);
         }
       })
       return words;
-
     } else {
       preText = preText.split(" ");
       //remove the last item which is ""
@@ -194,43 +199,71 @@ var KeyHandler = {
   //NEED TO POST EVERY ITEM THAT IS MISSING IN textLineData.nodes from words.
   //if textLineData.nodes.length < words.length
   //otherwise 
+
+  //Trying to replace the word instead of posting at the end of the sentence
+  //maybe try making text, words, wordsintextbox a property of KeyHandler so it can be accessed from viewModel.
   alertPrevWord() {
     var text = document.getElementById("text_field");
     var caretPos = KeyHandler.getCaretPosition(text);
     var words = KeyHandler.returnWord(text.value, caretPos);
+    var wordsInTextbox = [" "];
+    wordsInTextbox = wordsInTextbox.concat(text.value.split(" "));
+
+    //Remove "" if it exists at the end 
+    if(wordsInTextbox[wordsInTextbox.length - 1] == "") {
+      wordsInTextbox.pop();
+    }
 
     if(words) {
+      // console.log(words);
+      //Post multiple words
       if(words.length - textLineData.nodes.length >= 2) {
-        // console.log("words", words);
-        // console.log("words not in textLineData ", words);
         for(let i = textLineData.nodes.length; i < words.length; i++) {
           viewModel.postToken(words[i]);
         }
         textLineData.nodes = words;
-        // viewModel.postToken(words.pop());
         viewModel.lookUpTable(viewModel.lookahead.wordTable);
         viewModel.currentInitialLookUpTable = viewModel.lookahead.wordTable;
-      } else {
-        
+
+      } else { //post only single word
         textLineData.nodes = words;
-        // console.log("popped word : ",  words.pop())
         viewModel.postToken(words.pop());
         viewModel.lookUpTable(viewModel.lookahead.wordTable);
         viewModel.currentInitialLookUpTable = viewModel.lookahead.wordTable;
       }
     }
-    
 
     //Re Init lookup table when we find .
     // TODO: what to do when there are multiple sentences??
-    if(words[words.length - 1] == ".") {
-      words.push(" ");
-      textLineData.nodes = words;
-      // console.log("popped word : ",  words.pop())
-      viewModel.postToken(words.pop());
-      viewModel.lookUpTable(viewModel.lookahead.wordTable);
-      viewModel.currentInitialLookUpTable = viewModel.lookahead.wordTable;
-    }
-    console.log("words", words);
-  }
+    // if(words[words.length - 1] == ".") {
+    //   words.push(" ");
+    //   textLineData.nodes = words;
+    //   // console.log("popped word : ",  words.pop())
+    //   viewModel.postToken(words.pop());
+    //   viewModel.lookUpTable(viewModel.lookahead.wordTable);
+    //   viewModel.currentInitialLookUpTable = viewModel.lookahead.wordTable;
+    // }
+
+    // console.log("textbox words", wordsInTextbox);
+    // console.log("words", words);
+    // console.log("word to replace : ", wordsInTextbox[words.length]);
+  },
+
+  // getWords() {
+  //   var text = document.getElementById("text_field");
+  //   var caretPos = KeyHandler.getCaretPosition(text);
+  //   return KeyHandler.returnWord(text.value, caretPos); 
+  // }, 
+
+  // getWordsInTextBox() {
+  //   var wordsInTextbox = [" "];
+  //   wordsInTextbox = wordsInTextbox.concat(text.value.split(" "));
+
+  //   //Remove "" if it exists at the end 
+  //   if(wordsInTextbox[wordsInTextbox.length - 1] == "") {
+  //     wordsInTextbox.pop();
+  //   }
+
+  //   return wordsInTextbox;
+  // }
 }
