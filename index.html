@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University, 2019
+-->
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PENG Editors</title>
+
+  <!-- jQuery -->
+  <script src="../lib/jquery/jquery.min.js" type="text/javascript"></script>
+  <script src="../lib/jquery/jquery-ui.js" type="text/javascript"></script>
+
+  <!-- Scripts -->
+  <!-- Bootstrap 4 dropdown requires popper.js -->
+  <script src="../lib/bootstrap/popper.min.js" type="text/javascript"></script>
+  <script src="../lib/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+  <script src="../lib/bootstrap/bootstrap-toggle.js" type="text/javascript"></script>
+  <script src="../lib/bootstrap/bootstrap-switch.min.js" type="text/javascript"></script>
+
+  <script src="../lib/knockout/knockout.js" type="text/javascript"></script>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="../lib/bootstrap/bootstrap.css">
+  <link rel="stylesheet" href="../lib/bootstrap/bootstrap-toggle.css">
+  <link rel="stylesheet" href="../lib/bootstrap/bootstrap-switch.min.css">
+
+  <!-- Superfish CSS -->
+  <link rel="stylesheet" href="../lib/superfish-master/dist/css/superfish.css" media="screen">
+
+  <!--Superfish menu files -->
+  <script src="../lib/superfish-master/dist/js/hoverIntent.js"></script>
+  <script src="../lib/superfish-master/dist/js/superfish.js"></script>
+  <script type="text/javascript" src="../src/js/superfish_modules.js"></script>
+
+  <!-- Project CSS -->
+  <link rel="stylesheet" href="../src/css/styles.css">
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand navbar-dark">
+    <a class="navbar-brand" href="#">
+      <strong><i>PENG<sup>ASP</sup></i></strong>
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            File
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" data-bind="event:{click: loadFileNames}">
+              Load
+            </a>
+            <ul class="dropdown-menu dropdown-submenu" data-bind="foreach: fileNames">
+              <li>
+                <a href="#" class="dropdown-item" data-bind="text:$data, click: $parent.loadFile"> </a>
+              </li>
+              <li class="dropdown-divider"></li>
+            </ul>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" data-toggle="modal" data-target="#saveModal">
+              Save
+            </a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Options
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" onclick="window.location.reload(true);">Clear</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" data-bind="event:{text:$data, click: generateText}">Generate</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#helpModal">Help</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#contactModal">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="text-editor-container">
+    <div class="cnl-text">CNL Input</div>
+    <div id="cnl-input-container">
+      <div class="input-group">
+        <input id="text_field" spellcheck="false" type="text" class="form-control cnl-input"
+          placeholder="Enter sentence here..." 
+          data-bind="event: {click: init, keypress: keyHandler, keyup: backSpaceHandler }"
+          />
+        <span class="input-group-append">
+          <button class="btn submit-button" type="button" data-bind="event: {click: submitButton}">Submit</button>
+        </span>
+      </div>
+    </div>
+
+    <div class="processed-input-container">
+      Processed Input:
+      <span data-bind="text: textAreaStr"></span>
+    </div>
+
+    <!--  LOOKAHEAD MOD -->
+    <div class="lookahead-container">
+      <ul class="sf-menu" id="example">
+        <li class="lookahead-button-container">
+          <a class="lookahead-button" href="javascript:void(0);" data-bind="loadLookahead">Lookahead Information &#9660;</a>
+          <ul class="lookahead-dropdown" data-bind="foreach: lookaheadObject">
+            <li class="dropdown-item">
+              <a href="javascript:void(0);" data-bind="text:cat"> </a>
+              <ul class="scrollable-menu" role="menu" data-bind="foreach: wform">
+                <li class="lookahead-dropdown-submenu">
+                  <div data-bind="if: $data.add" class="dropdown-item">
+                    <input type="text" size="30" class="lexicon-input" autofocus
+                      data-bind="textInput: $data.add, valueUpdate: 'afterkeydown', click:$root.postWordClicked" />
+                  </div>
+                  <div data-bind="ifnot: $data.add" class="dropdown-item">
+                    <a href="javascript:void(0);" data-bind="text: $data, click: $root.postWordClicked"> </a> </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li class="anaphoric-button-container">
+          <a class="anaphoric-button" href="javascript:void(0);">Anaphoric Expressions &#9660;</a>
+          <ul class="anaphoric-dropdown scrollable-menu" role="menu" data-bind="foreach: anaExp">
+            <li class="dropdown-item">
+              <a href="javascript:void(0);" data-bind="text:$data, click: $root.postAnaExpClicked"> </a>
+            </li>
+          </ul>
+
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Save File Modal -->
+  <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title" id="saveModalLabel">Save file</h6>
+        </div>
+        <div class="modal-body">
+          <span aria-hidden="true">
+            <label for="save-file">Please enter file name: </label>
+            <input type="text" class="form-control" name="save-file">
+          </span>
+        </div>
+        <div class="modal-footer">
+          <button id="modal_save_file_close_button" type="button" class="btn btn-secondary"
+            data-dismiss="modal">Close</button>
+          <button id="modal_save_file_button" type="button" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Modal -->
+  <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title" id="helpModalLabel">Help</h6>
+        </div>
+        <div class="modal-body">
+          Add a sentence into the CNL Input textfield and Submit it. <br>
+          Alternatively, compose a sentence via the Lookahead Information menu and Submit it. <br>
+          Select accessible anaphoric expressions of an emerging CNL text from the Anaphoric Expressions menu. <br>
+          New content words are classified under the relevant categories in the Lookahead Information menu and can be
+          added to the system, before parsing is resumed. <br>
+          Options &gt; Generate demonstrates the round-tripping capability of the bi-directional ASP grammar (first load
+          a CNL text).
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Modal -->
+  <div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="contactModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title" id="contactModalLabel">Contact</h6>
+        </div>
+        <div class="modal-body">
+          Macquarie University <br>
+          Department of Computing <br>
+          Rolf.Schwitter@mq.edu.au <br>
+          NSW, 2109, Australia <br>
+          &copy; Macquarie University 2019
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="results-container">
+    <div class="card">
+      <div class="card-header" id="cnl_text_heading">
+        <h5 class="mb-0">
+          <button class="btn btn-link results-button" data-toggle="collapse" data-target="#cnl_text"
+            aria-expanded="true" aria-controls="cnl_text">
+            CNL Text
+          </button>
+        </h5>
+      </div>
+
+      <div id="cnl_text" class="collapse show" aria-labelledby="cnl_text_heading">
+        <div class="card-body">
+          <ol data-bind="foreach: textList">
+            <li data-bind="text: $data"> </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="asp_heading">
+        <h5 class="mb-0 asp-header-container">
+          <button class="btn btn-link collapsed results-button asp-results-button" data-toggle="collapse"
+            data-target="#asp" aria-expanded="false" aria-controls="asp">
+            Answer Set Program
+          </button>
+          <div class="background-theory-container">
+            <span class="background-theory-text">Background Theory: </span>
+            <input class="background-theory-toggle-button" type="checkbox" name="my-checkbox" data-size="mini">
+          </div>
+        </h5>
+      </div>
+      <div id="asp" class="collapse" aria-labelledby="asp_heading">
+        <div class="card-body">
+          <pre id="asp-text" data-bind="text: asp"></pre>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="anwser_sets_heading">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed results-button" data-toggle="collapse"
+            data-target="#answer_sets_container" aria-expanded="false" aria-controls="answer_sets_container">
+            Answer Sets
+          </button>
+        </h5>
+      </div>
+      <div id="answer_sets_container" class="collapse" aria-labelledby="anwser_sets_heading">
+        <div class="card-body">
+          <pre data-bind="text: result"></pre>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="answers_heading">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed results-button" data-toggle="collapse" data-target="#answers_container"
+            aria-expanded="false" aria-controls="answers_container">
+            Answers
+          </button>
+        </h5>
+      </div>
+      <div id="answers_container" class="collapse" aria-labelledby="answers_heading">
+        <div class="card-body">
+          <pre data-bind="text: answer"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- For text AREA -->
+  <script type="text/javascript" src="../src/js/Autocomplete.js"></script>
+  <script type="text/javascript" src="../src/js/FeatureStructure.js"></script>
+  <script type="text/javascript" src="../src/js/TextArea.js"></script>
+  <script type="text/javascript" src="../src/js/LookaheadObject.js"></script>
+  <script type="text/javascript" src="../src/js/SuccessHelper.js"></script>
+  <script type="text/javascript" src="../src/js/ClickHelper.js"></script>
+  <script type="text/javascript" src="../src/js/KeyEventHelper.js"></script>
+  <script type="text/javascript" src="../src/js/ViewModel.js"></script>
+
+</body>
+
+</html>
