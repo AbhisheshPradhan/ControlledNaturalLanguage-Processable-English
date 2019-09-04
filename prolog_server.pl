@@ -111,6 +111,8 @@ server(Port) :-
 
 :- http_handler('/src/js/ViewModel.js', js_view_model, []).
 
+:- http_handler('/src/js/Dropdown.js', js_dropdown, []).
+
 
 %---------------------------------------------------------------
 % HTTP Reply
@@ -245,6 +247,9 @@ js_lookahead(Request) :-
 
 js_superfish_mod(Request) :-
   http_reply_file('src/js/superfish_modules.js', [mime_type('text/javascript')], Request).
+  
+js_dropdown(Request) :-
+  http_reply_file('src/js/Dropdown.js', [mime_type('text/javascript')], Request).
 
 % ---------------------------------------------------------------
 % Starts the server on port 8085

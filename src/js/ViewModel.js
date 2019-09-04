@@ -9,66 +9,23 @@ var viewModel = {
       textAreaStr: ko.observable(""), // For display
       result: ko.observable(""),
       firstIndexOfCurrentWord: 0,
-
       token: ko.observable(""),
       textList: ko.observableArray([]),
-
       smallAsp: "",
       bigAsp: "",
       aspState: false,
-
-      $procSpan: $("#proc-span"),
-
-      allowInit: true,
-      // CLASSES
       lookahead: Lookahead,
       allowInput: true,
-
       catTable: ko.observableArray([]),
       anaExp: ko.observableArray([]),
-
       lookaheadObject: ko.observableArray([]),
-
       reasonerMode: "normal", // default settings
       inputMode: ko.observable("Text Mode"), //default settings
-      speechData: ko.observable(""),
-
       $loader: $(".loader"),
-
-
       textParaList: ko.observableArray([]),
-
 
       submitButton: function () {
             KeyHandler.enterKey();
-      },
-
-      changeToTextMode: function () {
-            $("#start_button").hide();
-            $("#speech-detected").hide();
-            this.inputMode("Text Mode");
-            $('.searchbox-div').css('height', "220px");
-      },
-
-      changeToSpeechMode: function () {
-            $("#start_button").show();
-            $("#speech-detected").show();
-            this.inputMode("Speech Mode");
-            $('.searchbox-div').css('height', "240px");
-            init();
-            this.init();
-      },
-
-      changeToNormal: function () {
-            this.reasonerMode = "normal"
-      },
-
-      changeToBrave: function () {
-            this.reasonerMode = "brave";
-      },
-
-      changeToCautious: function () {
-            this.reasonerMode = "cautious";
       },
 
       loadLookahead: function () {
@@ -95,10 +52,9 @@ var viewModel = {
       answer: ko.observable(''),
       currentInitialLookUpTable: [],
       initSentenceLookUp: [],
-
       asyncFlag: false,
-
       fileNames: ko.observableArray([]),
+      
       //WIDGETS
       loadFileNames: function () {
             if (viewModel.fileNames().length == 0) {
@@ -107,39 +63,28 @@ var viewModel = {
                         url: "/peng/",
                         type: "POST",
                         data: jsonObj,
-                        success: function (data, textStatus, jqXHR) {
+                        success: function (data) {
                               var json = JSON.parse(data);
-                              fnames = json.filenames;   // .slice(1,  json.filenames.length);
-                              viewModel.fileNames(fnames);
+                              var filenames = json.filenames;
+                              viewModel.fileNames(filenames);
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                               alert("Failed input on loading file names: \n " + errorThrown);
                         }
                   });
             }
-
       },
 
       // Load a single file name
       loadFile: function () {
-            // viewModel.$loader.css("visibility", "visible");
-            var jsonObj = viewModel.createJsonObject("load", " ", this, " ", "off", "normal");
-            var str = JSON.stringify(this);
-            str = str.replace(" ", "");
-            str = str.replace('"', "");
-            str = str.replace('"', "");
-            var index = viewModel.fileNames().indexOf(str);
-            var fn = viewModel.fileNames();
-            // fn.splice(index, 1);
-            viewModel.fileNames(fn);
-            // console.log(viewModel.fileNames());
+            var loadedFileName = this;
+            var jsonObj = viewModel.createJsonObject("load", " ", loadedFileName, " ", "off", "normal");
             $.ajax({
                   url: "/peng/",
                   type: "POST",
                   data: jsonObj,
                   success: function (data, textStatus, jqXHR) {
                         SuccessHelper.loadSingleTextFile(data, textStatus, jqXHR);
-
                   },
                   error: function (jqXHR, textStatus, errorThrown) {
                         alert("Failed JSON object input when loading file: \n " + errorThrown);
@@ -148,10 +93,8 @@ var viewModel = {
             return true;
       },
 
-
       // Generates text
       generateText: function () {
-            // viewModel.$loader.css("visibility", "visible");
             saveTemporary();
             var jsonObj = viewModel.createJsonObject("generate", " ", " ", " ", "off", "normal");
             $.ajax({
@@ -160,7 +103,6 @@ var viewModel = {
                   data: jsonObj,
                   success: function (data, textStatus, jqXHR) {
                         SuccessHelper.generateText(data, textStatus, jqXHR);
-
                   },
                   error: function (jqXHR, textStatus, errorThrown) {
                         alert("Failed to generate text: \n " + errorThrown);
@@ -173,14 +115,13 @@ var viewModel = {
             // This concat must be done to avoid unwanted changes in to other data structures
             var tempLookAheadTable = [].concat(this.lookUpTable());
             this.lookUpTable(this.lookahead.filterTable(this.token(), tempLookAheadTable));
-
       },
 
       init: function () {
             var lastNodePostedWasBlank = textLineData.nodes[textLineData.nodes.length - 1] != " ";
             var textAreaEmpty = this.textAreaStr().length == 0
             if (textAreaEmpty && lastNodePostedWasBlank) {
-                  this.postToken(" ");
+                  this.updateViewForWord(" ");
                   this.initSentenceLookUp = this.lookUpTable();
                   this.initLookUpObj = this.lookaheadObject();
             }
@@ -191,13 +132,11 @@ var viewModel = {
 
       populateLookUpTable: function (data) {
             this.lookahead.setAll(data);
-            //      this.loadLookahead();  // NEEDS TO BE REMOVED FOR SINGLE FILE LOADING
             this.lookUpTable(this.lookahead.getWordTable());
       },
 
       setAnswer: function (ansData) {
             var ans = "";
-            // alert(ansData.length);
             for (var s = 0; s < ansData.length; s++) {
                   ans += ansData[s] + "\n";
             }
@@ -222,29 +161,25 @@ var viewModel = {
             this.allowInput = true;
       },
 
-      postToken2(word) {
+      postToken(word) {
             var wordData = textLineData.createNode(word, this.reasonerMode);
             var request = $.ajax({
                   url: "/peng/",
                   type: "POST",
                   data: wordData,
-                  async: this.asyncFlag
+                  async: false
             });
             return request;
       },
 
-      postToken(word) {
+      updateViewForWord(word) {
             // If word in lookahead
-            var request = $.when(this.postToken2(word));
+            var request = $.when(this.postToken(word));
             request.done(function (data) {
                   var json = JSON.parse(data);
                   if (word == "." || word == "?") {
                         viewModel.setAsp(json);
                         viewModel.setAnswer(json.answer)
-                        // if(word == "?") {
-                        //      viewModel.setAnswer(json.answer);
-                        // }
-                        // need to get generated paraphrases
                         var para = json.para;
                         var newPara = [];
                         var s = "";
@@ -253,11 +188,9 @@ var viewModel = {
                                     s = s.slice(0, s.length - 1) + para[z];
                                     newPara.push(s)
                                     s = "";
-                              }
-                              else if (para[z] == ",") {
+                              } else if (para[z] == ",") {
                                     s = s.slice(0, s.length - 1) + para[z] + " ";
-                              }
-                              else {
+                              } else {
                                     s += para[z] + " ";
                               }
                         }
@@ -271,8 +204,7 @@ var viewModel = {
                         lAhead = Lookahead.addStrInHeadForEachCatInLookahead(word, lAhead);
                         viewModel.lookaheadObject(lAhead);
                         viewModel.anaExp(json.ana);
-                  }
-                  else {
+                  } else {
                         viewModel.populateLookUpTable(json);
                         viewModel.loadLookahead2(); // MAYBE REMOVE IF
                         viewModel.anaExp(json.ana);
@@ -285,63 +217,18 @@ var viewModel = {
                               if (json.ana[i].length > 1) {
                                     temp[i] = [temp[i].join(" ")];
 
-                              }
-                              else {
+                              } else {
                                     temp[i] = json.ana[i];
                               }
                         }
                         viewModel.anaExp(temp);
                   }
-
             });
-
       },
-
-      postSpeechToken: function (words) {
-            var newWords = words.replace(",", " ");
-            newWords = newWords.replace(".", " .");
-            newWords = newWords.split(" ");
-            for (var s = 0; s < newWords.length; s++) {
-                  if (this.contains(newWords[s], this.lookUpTable())) {
-                        console.log("posting:   " + newWords[s]);
-                        this.postToken(newWords[s]);
-                        if (newWords[s] == ".") {
-                              viewModel.token(newWords[s]);
-                        }
-                  }
-                  else {
-                        console.log("not posting:   " + newWords[s]);
-                        break;
-                  }
-            }
-            if (this.textAreaStr() == "") {
-                  this.textAreaStr(words);
-                  this.$text_field.val(words);
-            }
-            else if (words[i] == "," || words[i] == ".") {
-                  this.textAreaStr(this.textAreaStr() + words);
-                  this.$text_field.val(this.$text_field.val() + words);
-            }
-            else {
-                  this.textAreaStr(this.textAreaStr() + " " + words);
-                  this.$text_field.val(this.$text_field.val() + " " + words);
-            }
-      },
-
-      contains: function (target, arr) {
-            for (i = 0; i < arr.length; i++) {
-                  if (target == arr[i]) {
-                        return true;
-                  }
-            }
-            return false;
-      },
-
 
       keyHandler: function (d, e) {
             return KeyHandler.keyUpdate(d, e);
       },
-
 
       backSpaceHandler: function (d, e) {
             KeyHandler.backspace(d, e);
@@ -363,7 +250,6 @@ var viewModel = {
             }
             return object;
       }
-
 };
 
 ko.applyBindings(viewModel);
@@ -457,55 +343,3 @@ var addToLexicon = function (cat, wform, vform, num) {
             data: addData
       });
 }
-
-
-
-$(document).ready(function () {
-
-
-      $(".dropdown-menu").delegate("li", "click", function () {
-            var str = JSON.stringify($(this).html());
-            var addRegex = /Add/i
-            var saveRegex = /Save/i
-            var loadRegex = /Load/i
-
-            var notFile = !(addRegex.test(str) || saveRegex.test(str));
-
-            if (notFile) {
-                  $(this).addClass("active").siblings().removeClass("active");
-            }
-
-      });
-
-      // FOR MENU COLOUR
-
-      $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            $(this).parent().siblings().removeClass('open');
-            $(this).parent().toggleClass('open');
-      });
-
-
-
-      // NEED FOR TABS
-      $('.collapse').on('shown.bs.collapse', function () {
-            $(this).parent().find(".glyphicon-plus-sign").removeClass("glyphicon-plus-sign").addClass("glyphicon-minus-sign");
-      }).on('hidden.bs.collapse', function () {
-            $(this).parent().find(".glyphicon-minus-sign").removeClass("glyphicon-minus-sign").addClass("glyphicon-plus-sign");
-      });
-
-
-      /// for asp toggle (dev mode)
-      $("[name='my-checkbox']").bootstrapSwitch();
-      $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function (event, state) {
-            if (state) {
-                  viewModel.asp(viewModel.bigAsp);
-            }
-            else {
-                  viewModel.asp(viewModel.smallAsp);
-            }
-            viewModel.aspState = state;
-      });
-
-});
