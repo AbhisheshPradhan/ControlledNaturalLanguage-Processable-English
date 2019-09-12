@@ -24,7 +24,7 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
     <script src="../lib/knockout/knockout.js" type="text/javascript"></script>
 
     <!-- ICONS -->
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <!-- <script src="https://kit.fontawesome.com/a076d05399.js"></script> -->
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../lib/bootstrap/bootstrap.css">
@@ -207,8 +207,25 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
         <div class="card">
             <div class="card-header" id="cnl_text_heading">
                 <h5 class="mb-0">
-                    <button class="btn btn-link results-button" data-toggle="collapse" data-target="#cnl_text" aria-expanded="true" aria-controls="cnl_text" id="click_advance">
-                        <span><i class="fas fa-minus"></i>CNL Text</span>
+                    <button class="btn btn-link results-button expanded" data-toggle="collapse" data-target="#cnl_text" aria-expanded="true" aria-controls="cnl_text" id="click_advance">
+                        <span class="results-text">
+                            <svg aria-hidden="true" 
+                                    focusable="false" 
+                                    data-prefix="fas" 
+                                    data-icon="plus" 
+                                    class="svg-inline--fa fa-plus fa-w-14" 
+                                    role="img" 
+                                    xmlns="http://www.w3.org/2000/svg" 0
+                                    viewBox="0 0 448 512"
+                            >
+                                <path fill="currentColor" 
+                                        d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+                                >
+                                </path>
+                            </svg>
+                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus" class="svg-inline--fa fa-minus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path></svg>
+                            CNL Text
+                        </span>
                     </button>
                 </h5>
             </div>
@@ -225,7 +242,23 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
             <div class="card-header" id="asp_heading">
                 <h5 class="mb-0 asp-header-container">
                     <button class="btn btn-link collapsed results-button asp-results-button" data-toggle="collapse" data-target="#asp" aria-expanded="false" aria-controls="asp">
-                        <span><i class="fas fa-plus"></i>Answer Set Program</span>
+                        <span class="results-text">         
+                            <svg aria-hidden="true" 
+                                    focusable="false" 
+                                    data-prefix="fas" 
+                                    data-icon="plus" 
+                                    class="svg-inline--fa fa-plus fa-w-14" 
+                                    role="img" 
+                                    xmlns="http://www.w3.org/2000/svg" 0
+                                    viewBox="0 0 448 512"
+                            >
+                                <path fill="currentColor" 
+                                        d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+                                >
+                        </path>
+                    </svg>
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus" class="svg-inline--fa fa-minus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path></svg>
+                        Answer Set Program</span>
                     </button>
                     <div class="background-theory-container">
                         <span class="background-theory-text">Background Theory: </span>
@@ -243,7 +276,22 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
             <div class="card-header" id="anwser_sets_heading">
                 <h5 class="mb-0">
                     <button class="btn btn-link collapsed results-button" data-toggle="collapse" data-target="#answer_sets_container" aria-expanded="false" aria-controls="answer_sets_container">
-                        <span><i class="fas fa-plus"></i>Answer Sets</span>
+                        <span class="results-text">         <svg aria-hidden="true" 
+                            focusable="false" 
+                            data-prefix="fas" 
+                            data-icon="plus" 
+                            class="svg-inline--fa fa-plus fa-w-14" 
+                            role="img" 
+                            xmlns="http://www.w3.org/2000/svg" 0
+                            viewBox="0 0 448 512"
+                    >
+                        <path fill="currentColor" 
+                                d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+                        >
+                        </path>
+                    </svg>
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus" class="svg-inline--fa fa-minus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path></svg>
+                    Answer Sets</span>
                     </button>
                 </h5>
             </div>
@@ -257,7 +305,24 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
             <div class="card-header" id="answers_heading">
                 <h5 class="mb-0">
                     <button class="btn btn-link collapsed results-button" data-toggle="collapse" data-target="#answers_container" aria-expanded="false" aria-controls="answers_container">
-                            <span><i class="fas fa-plus"></i>Answers</span>
+                        <span class="results-text">         
+                            <svg aria-hidden="true" 
+                                    focusable="false" 
+                                    data-prefix="fas" 
+                                    data-icon="plus" 
+                                    class="svg-inline--fa fa-plus fa-w-14" 
+                                    role="img" 
+                                    xmlns="http://www.w3.org/2000/svg" 0
+                                    viewBox="0 0 448 512"
+                            >
+                                <path fill="currentColor" 
+                                        d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+                                >
+                                </path>
+                            </svg>
+                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus" class="svg-inline--fa fa-minus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path></svg>
+                            Answers
+                        </span>
                     </button>
                 </h5>
             </div>

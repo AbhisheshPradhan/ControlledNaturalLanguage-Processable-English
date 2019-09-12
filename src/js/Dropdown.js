@@ -38,13 +38,29 @@
         });
     });
 
+    $(".results-button").each(function() {
+        console.log("clicked")
+        expanded = $(this).hasClass("expanded");
+        if (expanded) {
+            $(this).find(".fa-plus").hide();
+            $(this).find(".fa-minus").show();
+        } else {
+            $(this).find(".fa-plus").show();
+            $(this).find(".fa-minus").hide();
+        }
+    });
+
     $(".results-button").click(function() {
         console.log("clicked")
-        icon = $(this).find("i");
-        if (icon.hasClass("fa-minus")) {
-            icon.addClass("fa-plus").removeClass("fa-minus");
+        expanded = $(this).hasClass("expanded");
+        if (expanded) {
+            $(this).removeClass("expanded");
+            $(this).find(".fa-plus").show();
+            $(this).find(".fa-minus").hide();
         } else {
-            icon.addClass("fa-minus").removeClass("fa-plus");
+            $(this).addClass("expanded");
+            $(this).find(".fa-plus").hide();
+            $(this).find(".fa-minus").show();
         }
     });
 
