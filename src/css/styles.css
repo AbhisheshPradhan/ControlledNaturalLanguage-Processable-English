@@ -2,7 +2,8 @@ a {
     cursor: pointer;
 }
 
-.dropdown-item.active, .dropdown-item:active {
+.dropdown-item.active,
+.dropdown-item:active {
     color: #fff !important;
     text-decoration: none !important;
     background-color: #001f3f;
@@ -13,7 +14,9 @@ a {
     background-color: #001f3f;
 }
 
+
 /* lvl2 submenu navbar css */
+
 .dropdown-submenu {
     left: 100%;
     top: -3px;
@@ -26,7 +29,7 @@ a {
     color: #fff;
 }
 
-.text-editor-container > div {
+.text-editor-container>div {
     margin-bottom: 10px;
 }
 
@@ -48,26 +51,25 @@ a {
     background-color: #222 !important;
 }
 
+
 /* .processed-input-container {
         margin-top: 10px; 
 }  */
 
-.card .card-header button:after {
-    content: "+";
-}
-.card .card-header button.collapsed:after {
-    content: "-";
+.results-button i {
+    margin-right: 10px;
 }
 
 .lookahead-container {
-    display:flex;
+    display: flex;
 }
 
 .lookahead-button-container {
     margin-right: 3px;
 }
 
-.lookahead-button, .anaphoric-button {
+.lookahead-button,
+.anaphoric-button {
     color: #333 !important;
     padding: 10px;
     background-color: #ebebeb;
@@ -77,49 +79,53 @@ a {
     width: 100%;
 }
 
-.lookahead-dropdown>.dropdown-item>a, .anaphoric-dropdown>.dropdown-item>a {
+.lookahead-dropdown>.dropdown-item>a,
+.anaphoric-dropdown>.dropdown-item>a {
     background-color: #ebebeb;
     border-radius: 0;
     width: 100%;
     color: #333;
 }
 
-.lookahead-dropdown > .dropdown-item >a:hover, .anaphoric-dropdown > .dropdown-item>a:hover {
+.lookahead-dropdown>.dropdown-item>a:hover,
+.anaphoric-dropdown>.dropdown-item>a:hover {
     background-color: #fff;
 }
 
 @media screen and (max-width: 600px) {
-    .lookahead-button, .anaphoric-button {
+    .lookahead-button,
+    .anaphoric-button {
         width: 50%;
         font-size: 14px;
     }
 }
 
-.lookahead-button:hover, .anaphoric-button:hover {
-  cursor: pointer;
+.lookahead-button:hover,
+.anaphoric-button:hover {
+    cursor: pointer;
 }
 
-.lookahead-dropdown-submenu > .dropdown-item > a, 
-.anaphoric-dropdown-submenu > .dropdown-item > a{
+.lookahead-dropdown-submenu>.dropdown-item>a,
+.anaphoric-dropdown-submenu>.dropdown-item>a {
     background-color: #ebebeb;
     border-radius: 0;
     width: 100%;
     color: #333 !important;
 }
 
-.lookahead-dropdown-submenu > .dropdown-item > a:hover, 
-.anaphoric-dropdown-submenu > .dropdown-item > a:hover{
+.lookahead-dropdown-submenu>.dropdown-item>a:hover,
+.anaphoric-dropdown-submenu>.dropdown-item>a:hover {
     background-color: #fff;
 }
 
-.lexicon-input{
-    height: 38px; 
-    background-color:red; 
-    border-color:black;
-    border-style:dotted;
-    padding-left:6px;
-    color:white;
-    caret-color:black;
+.lexicon-input {
+    height: 38px;
+    background-color: red;
+    border-color: black;
+    border-style: dotted;
+    padding-left: 6px;
+    color: white;
+    caret-color: black;
 }
 
 .results-container {
@@ -153,6 +159,7 @@ a {
     align-items: center;
 }
 
+
 /* .asp-results-button{
     width: 80%;
 } */
@@ -169,4 +176,42 @@ a {
 
 .background-theory-text {
     margin-right: 10px;
+}
+
+
+/* jQUery UI */
+
+.ui-menu .ui-menu-item a {
+    color: #333;
+    border-radius: 0px;
+    display: block
+}
+
+.ui-state-focus {
+    color: white;
+    background: blue;
+}
+
+.ui-helper-hidden-accessible {
+    display: none;
+}
+
+.ui-autocomplete {
+    max-height: 100px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+ul.ui-autocomplete {
+    list-style: none;
+    list-style-type: none;
+    padding: 5px;
+    margin: 0px;
+    border-color: blue;
+    border-radius: 2px;
+}
+
+.ui-menu {
+    position: inherit;
+    background-color: white;
 }
