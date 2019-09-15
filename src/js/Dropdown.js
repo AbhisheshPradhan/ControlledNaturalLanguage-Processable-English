@@ -39,7 +39,6 @@
     });
 
     $(".results-button").each(function() {
-        console.log("clicked")
         expanded = $(this).hasClass("expanded");
         if (expanded) {
             $(this).find(".fa-plus").hide();

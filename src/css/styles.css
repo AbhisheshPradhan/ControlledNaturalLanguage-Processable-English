@@ -75,20 +75,22 @@ a {
     background-color: #ebebeb;
 }
 
-.lookahead-dropdown {
+.lookahead-dropdown-menu {
     width: 100%;
 }
 
-.lookahead-dropdown>.dropdown-item>a,
-.anaphoric-dropdown>.dropdown-item>a {
+.lookahead-dropdown-menu>.dropdown-item>a,
+.anaphoric-dropdown-menu>.dropdown-item>a {
     background-color: #ebebeb;
     border-radius: 0;
     width: 100%;
     color: #333;
+    height: 40px;
+    line-height: 15px;
 }
 
-.lookahead-dropdown>.dropdown-item>a:hover,
-.anaphoric-dropdown>.dropdown-item>a:hover {
+.lookahead-dropdown-menu>.dropdown-item>a:hover,
+.anaphoric-dropdown-menu>.dropdown-item>a:hover {
     background-color: #fff;
 }
 
@@ -105,17 +107,25 @@ a {
     cursor: pointer;
 }
 
-.lookahead-dropdown-submenu>.dropdown-item>a,
-.anaphoric-dropdown-submenu>.dropdown-item>a {
+.lookahead-dropdown-submenu-item>.dropdown-item>a,
+.anaphoric-dropdown-menu>.dropdown-item>a {
     background-color: #ebebeb;
     border-radius: 0;
     width: 100%;
     color: #333 !important;
+    height: 40px;
+    line-height: 15px;
 }
 
-.lookahead-dropdown-submenu>.dropdown-item>a:hover,
-.anaphoric-dropdown-submenu>.dropdown-item>a:hover {
+.lookahead-dropdown-submenu-item>.dropdown-item>a:hover,
+.anaphoric-dropdown-menu>.dropdown-item>a:hover {
     background-color: #fff;
+}
+
+.lookahead-dropdown-submenu {
+    max-height: 150px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .lexicon-input {

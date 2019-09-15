@@ -20,19 +20,25 @@ $(function() {
                 response($.ui.autocomplete.filter(generateList(), extractLast(viewModel.textAreaStr())));
             },
             open: function() {
-                $("ul.ui-menu").width($(this).innerWidth() - 19);
+                $("ul.ui-menu").width($(this).innerWidth());
             },
             focus: function() {
                 return false;
             },
             select: function(event, ui) {
+                console.log(this.value)
                 var terms = split(this.value);
-                viewModel.textAreaStr(ui.item.value);
+                // remove the current input
                 terms.pop();
+                // add the selected item
+                terms.push(ui.item.value);
+                // add placeholder to get the comma-and-space at the end
                 terms.push(" ");
+    
                 this.value = terms.join(" ");
+    
                 var temp = ui.item.value.split(" ");
-                viewModel.textAreaStr()
+                viewModel.textAreaStr(ui.item.value);
                 viewModel.token(temp.pop());
                 this.value = this.value.slice(0, this.value.length - 2);
                 return false;
