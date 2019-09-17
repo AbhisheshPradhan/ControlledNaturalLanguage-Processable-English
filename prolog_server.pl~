@@ -51,7 +51,7 @@ server(Port) :-
 %   - General HTTP handler
 %---------------------------------------------------------------
 
-:- http_handler('/peng/', handle, []).
+:- http_handler('/peng', handle, []).
 
 %---------------------------------------------------------------
 % http_handler/3
@@ -255,11 +255,11 @@ font3(Request) :-
 
 % ---------------------------------------------------------------
 % Starts the server on port 8085
-% You can connect to the server via http://localhost:8085/peng/
+% You can connect to the server via http://localhost:8085/peng
 % ---------------------------------------------------------------
 
 :- server(8085),
    nl, nl,
    write('*** Prolog Server is listening on port: 8085  ***'), nl,
-   write('*** Connect via: http://localhost:8085/peng/  ***'),
+   write('*** Connect via: http://localhost:8085/peng  ***'),
    nl, nl.

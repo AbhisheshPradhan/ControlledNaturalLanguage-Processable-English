@@ -11,36 +11,36 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
     <title>PENG Editors</title>
 
     <!-- jQuery -->
-    <script src="../lib/jquery/jquery.min.js" type="text/javascript"></script>
-    <script src="../lib/jquery/jquery-ui.js" type="text/javascript"></script>
+    <script src="./libs/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="./libs/jquery/jquery-ui.js" type="text/javascript"></script>
 
     <!-- Scripts -->
     <!-- Bootstrap 4 dropdown requires popper.js -->
-    <script src="../lib/bootstrap/popper.min.js" type="text/javascript"></script>
-    <script src="../lib/bootstrap/bootstrap.min.js" type="text/javascript"></script>
-    <script src="../lib/bootstrap/bootstrap-toggle.js" type="text/javascript"></script>
-    <script src="../lib/bootstrap/bootstrap-switch.min.js" type="text/javascript"></script>
+    <script src="./libs/bootstrap/popper.min.js" type="text/javascript"></script>
+    <script src="./libs/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+    <script src="./libs/bootstrap/bootstrap-toggle.js" type="text/javascript"></script>
+    <script src="./libs/bootstrap/bootstrap-switch.min.js" type="text/javascript"></script>
 
-    <script src="../lib/knockout/knockout.js" type="text/javascript"></script>
+    <script src="./libs/knockout/knockout.js" type="text/javascript"></script>
 
     <!-- ICONS -->
     <!-- <script src="https://kit.fontawesome.com/a076d05399.js"></script> -->
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../lib/bootstrap/bootstrap.css">
-    <link rel="stylesheet" href="../lib/bootstrap/bootstrap-toggle.css">
-    <link rel="stylesheet" href="../lib/bootstrap/bootstrap-switch.min.css">
+    <link rel="stylesheet" href="./libs/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="./libs/bootstrap/bootstrap-toggle.css">
+    <link rel="stylesheet" href="./libs/bootstrap/bootstrap-switch.min.css">
 
     <!-- Superfish CSS -->
-    <link rel="stylesheet" href="../lib/superfish-master/dist/css/superfish.css" media="screen">
+    <link rel="stylesheet" href="./libs/superfish-master/dist/css/superfish.css" media="screen">
 
     <!--Superfish menu files -->
-    <script src="../lib/superfish-master/dist/js/hoverIntent.js"></script>
-    <script src="../lib/superfish-master/dist/js/superfish.js"></script>
-    <script type="text/javascript" src="../src/js/superfish_modules.js"></script>
+    <script src="./libs/superfish-master/dist/js/hoverIntent.js"></script>
+    <script src="./libs/superfish-master/dist/js/superfish.js"></script>
+    <script src="./src/scripts/superfish_modules.js"></script>
 
     <!-- Project CSS -->
-    <link rel="stylesheet" href="../src/css/styles.css">
+    <link rel="stylesheet" href="./src/styles/styles.css">
 
 </head>
 
@@ -106,10 +106,10 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
             <div class="input-group">
                 <input id="text_field" spellcheck="false" type="text" class="form-control cnl-input"
                     placeholder="Enter sentence here..."
-                    data-bind="event: {click: init, keypress: keyHandler, keyup: backSpaceHandler }" />
+                    data-bind="event: {click: init, keypress: onKeyPress, keyup: onKeyUp }" />
                 <span class="input-group-append">
                     <button class="btn submit-button" type="button"
-                        data-bind="event: {click: submitButton}">Submit</button>
+                        data-bind="event: {click: onSubmit}">Submit</button>
                 </span>
             </div>
         </div>
@@ -123,7 +123,7 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
         <div class="lookahead-container">
             <ul class="sf-menu" id="example">
                 <li class="lookahead-button-container">
-                    <a class="lookahead-button" href="javascript:void(0);" data-bind="loadLookahead">Lookahead
+                    <a class="lookahead-button" href="javascript:void(0);" data-bind="click: loadLookahead">Lookahead
                         Information &#9660;</a>
                     <ul class="lookahead-dropdown-menu" data-bind="foreach: lookaheadObject">
                         <li class="dropdown-item">
@@ -132,11 +132,11 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
                                 <li class="lookahead-dropdown-submenu-item">
                                     <div data-bind="if: $data.add" class="dropdown-item">
                                         <input type="text" size="30" class="lexicon-input" autofocus
-                                            data-bind="textInput: $data.add, valueUpdate: 'afterkeydown', click:$root.postWordClicked" />
+                                            data-bind="textInput: $data.add, valueUpdate: 'afterkeydown', click:$root.postLookaheadWord" />
                                     </div>
                                     <div data-bind="ifnot: $data.add" class="dropdown-item">
                                         <a href="javascript:void(0);"
-                                            data-bind="text: $data, click: $root.postWordClicked"> </a>
+                                            data-bind="text: $data, click: $root.postLookaheadWord"> </a>
                                     </div>
                                 </li>
                             </ul>
@@ -356,15 +356,21 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
     </div>
 
     <!-- For text AREA -->
-    <script type="text/javascript" src="../src/js/Autocomplete.js"></script>
-    <script type="text/javascript" src="../src/js/FeatureStructure.js"></script>
-    <script type="text/javascript" src="../src/js/TextArea.js"></script>
-    <script type="text/javascript" src="../src/js/LookaheadObject.js"></script>
-    <script type="text/javascript" src="../src/js/SuccessHelper.js"></script>
-    <script type="text/javascript" src="../src/js/ClickHelper.js"></script>
-    <script type="text/javascript" src="../src/js/KeyEventHelper.js"></script>
-    <script type="text/javascript" src="../src/js/ViewModel.js"></script>
-    <script type="text/javascript" src="../src/js/Dropdown.js"></script>
+    <script type="text/javascript" src="./src/scripts/Autocomplete.js"></script>
+    <script type="text/javascript" src="./src/scripts/TextArea.js"></script>
+    <script type="text/javascript" src="./src/scripts/LookaheadObject.js"></script>
+    <script type="text/javascript" src="./src/scripts/EventHandler.js"></script>
+    <script type="text/javascript" src="./src/scripts/ViewModel.js"></script>
+
+    <!-- View  -->
+    <script type="text/javascript" src="./src/scripts/Dropdown.js"></script>
+
+    <!-- new -->
+    <script type="text/javascript" src="./src/scripts/Navbar.js"></script>
+    <script type="text/javascript" src="./src/scripts/GlobalHelper.js"></script>
+    <script type="text/javascript" src="./src/scripts/Results.js"></script>
+    <script type="text/javascript" src="./src/scripts/ExpressionLoader.js"></script>
+    <script type="text/javascript" src="./src/scripts/Token.js"></script>
 </body>
 
 </html>

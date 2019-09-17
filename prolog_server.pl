@@ -51,7 +51,7 @@ server(Port) :-
 %   - General HTTP handler
 %---------------------------------------------------------------
 
-:- http_handler('/peng/', handle, []).
+:- http_handler('/peng', handle, []).
 
 %---------------------------------------------------------------
 % http_handler/3
@@ -59,15 +59,15 @@ server(Port) :-
 %   - CSS handler
 %---------------------------------------------------------------
 
-:- http_handler('/src/css/styles.css', css_styles, []).
+:- http_handler('/src/styles/styles.css', css_styles, []).
 
-:- http_handler('/lib/bootstrap/bootstrap.css', css_bootstrap, []).
+:- http_handler('/libs/bootstrap/bootstrap.css', css_bootstrap, []).
 
-:- http_handler('/lib/bootstrap/bootstrap-toggle.css', css_bootstrap_toggle, []).
+:- http_handler('/libs/bootstrap/bootstrap-toggle.css', css_bootstrap_toggle, []).
 
-:- http_handler('/lib/superfish-master/dist/css/superfish.css', css_superfish, []).
+:- http_handler('/libs/superfish-master/dist/css/superfish.css', css_superfish, []).
 
-:- http_handler('/lib/bootstrap/bootstrap-switch.min.css', css_bootstrap_switch, []).
+:- http_handler('/libs/bootstrap/bootstrap-switch.min.css', css_bootstrap_switch, []).
 
 %---------------------------------------------------------------
 % http_handler/3
@@ -75,43 +75,47 @@ server(Port) :-
 %   - JavaScript handler
 %---------------------------------------------------------------
 
-:- http_handler('/lib/jquery/jquery.min.js', js_jquery, []).
+:- http_handler('/libs/jquery/jquery.min.js', js_jquery, []).
 
-:- http_handler('/lib/jquery/jquery-ui.js', js_jquery_ui, []).
+:- http_handler('/libs/jquery/jquery-ui.js', js_jquery_ui, []).
 
-:- http_handler('/lib/bootstrap/popper.min.js', js_popper, []).
+:- http_handler('/libs/bootstrap/popper.min.js', js_popper, []).
 
-:- http_handler('/lib/bootstrap/bootstrap.min.js', js_bootstrap, []).
+:- http_handler('/libs/bootstrap/bootstrap.min.js', js_bootstrap, []).
 
-:- http_handler('/lib/bootstrap/bootstrap-toggle.js', js_bootstrap_toggle, []).
+:- http_handler('/libs/bootstrap/bootstrap-toggle.js', js_bootstrap_toggle, []).
 
-:- http_handler('/lib/bootstrap/bootstrap-switch.min.js', js_bootstrap_switch, []).
+:- http_handler('/libs/bootstrap/bootstrap-switch.min.js', js_bootstrap_switch, []).
 
-:- http_handler('/lib/knockout/knockout.js', js_knockout, []).
+:- http_handler('/libs/knockout/knockout.js', js_knockout, []).
 
-:- http_handler('/lib/superfish-master/dist/js/hoverIntent.js', js_hover, []).
+:- http_handler('/libs/superfish-master/dist/js/hoverIntent.js', js_hover, []).
 
-:- http_handler('/lib/superfish-master/dist/js/superfish.js', js_superfish, []).
+:- http_handler('/libs/superfish-master/dist/js/superfish.js', js_superfish, []).
 
-:- http_handler('/src/js/Autocomplete.js', js_autocomplete, []).
+:- http_handler('/src/scripts/Autocomplete.js', js_autocomplete, []).
 
-:- http_handler('/src/js/ClickHelper.js', js_click_helper, []).
+:- http_handler('/src/scripts/EventHandler.js', js_event_handler, []).
 
-:- http_handler('/src/js/FeatureStructure.js', js_feature_struct, []).
+:- http_handler('/src/scripts/LookaheadObject.js', js_lookahead, []).
 
-:- http_handler('/src/js/KeyEventHelper.js', js_key_helper, []).
+:- http_handler('/src/scripts/superfish_modules.js', js_superfish_mod, []).
 
-:- http_handler('/src/js/LookaheadObject.js', js_lookahead, []).
+:- http_handler('/src/scripts/TextArea.js', js_text_area, []).
 
-:- http_handler('/src/js/SuccessHelper.js', js_success_helper, []).
+:- http_handler('/src/scripts/ViewModel.js', js_view_model, []).
 
-:- http_handler('/src/js/superfish_modules.js', js_superfish_mod, []).
+:- http_handler('/src/scripts/Dropdown.js', js_dropdown, []).
 
-:- http_handler('/src/js/TextArea.js', js_text_area, []).
+:- http_handler('/src/scripts/Navbar.js', js_navbar, []).
 
-:- http_handler('/src/js/ViewModel.js', js_view_model, []).
+:- http_handler('/src/scripts/GlobalHelper.js', js_global_helper, []).
 
-:- http_handler('/src/js/Dropdown.js', js_dropdown, []).
+:- http_handler('/src/scripts/Results.js', js_results, []).
+
+:- http_handler('/src/scripts/ExpressionLoader.js', js_expression_loader, []).
+
+:- http_handler('/src/scripts/Token.js', js_token, []).
 
 
 %---------------------------------------------------------------
@@ -176,88 +180,94 @@ display_json_out(JSON) :-
 %---------------------------------------------------------------
 
 css_styles(Request) :-
-  http_reply_file('src/css/styles.css', [mime_type('text/css')], Request).
+  http_reply_file('./src/styles/styles.css', [mime_type('text/css')], Request).
 
 css_bootstrap(Request) :-
-  http_reply_file('lib/bootstrap/bootstrap.css', [mime_type('text/css')], Request).
+  http_reply_file('./libs/bootstrap/bootstrap.css', [mime_type('text/css')], Request).
 
 css_bootstrap_toggle(Request) :-
-  http_reply_file('lib/bootstrap/bootstrap-toggle.css', [mime_type('text/css')], Request).
+  http_reply_file('./libs/bootstrap/bootstrap-toggle.css', [mime_type('text/css')], Request).
 
 css_bootstrap_switch(Request) :-
-  http_reply_file('lib/bootstrap/bootstrap-switch.min.css', [mime_type('text/css')], Request).
+  http_reply_file('./libs/bootstrap/bootstrap-switch.min.css', [mime_type('text/css')], Request).
 
 css_superfish(Request) :-
-  http_reply_file('lib/superfish-master/dist/css/superfish.css', [mime_type('text/css')], Request).
+  http_reply_file('./libs/superfish-master/dist/css/superfish.css', [mime_type('text/css')], Request).
 
 %---------------------------------------------------------------
 % JavaScript closure
 %---------------------------------------------------------------
 
 js_jquery(Request) :-
-  http_reply_file('lib/jquery/jquery.min.js', [mime_type('text/javascript')], Request).
+  http_reply_file('./libs/jquery/jquery.min.js', [mime_type('text/javascript')], Request).
 
 js_jquery_ui(Request) :-
-  http_reply_file('lib/jquery/jquery-ui.js', [mime_type('text/javascript')], Request).
+  http_reply_file('./libs/jquery/jquery-ui.js', [mime_type('text/javascript')], Request).
 
 js_popper(Request) :-
-  http_reply_file('lib/bootstrap/popper.min.js', [mime_type('text/javascript')], Request).
+  http_reply_file('./libs/bootstrap/popper.min.js', [mime_type('text/javascript')], Request).
 
 js_bootstrap_toggle(Request) :-
-  http_reply_file('lib/bootstrap/bootstrap-toggle.js', [mime_type('text/javascript')], Request).
+  http_reply_file('./libs/bootstrap/bootstrap-toggle.js', [mime_type('text/javascript')], Request).
 
 js_bootstrap(Request) :-
-  http_reply_file('lib/bootstrap/bootstrap.min.js', [mime_type('text/javascript')], Request).
+  http_reply_file('./libs/bootstrap/bootstrap.min.js', [mime_type('text/javascript')], Request).
 
 js_bootstrap_switch(Request) :-
-  http_reply_file('lib/bootstrap/bootstrap-switch.min.js', [mime_type('text/javascript')], Request).
+  http_reply_file('./libs/bootstrap/bootstrap-switch.min.js', [mime_type('text/javascript')], Request).
 
 js_knockout(Request) :-
-  http_reply_file('lib/knockout/knockout.js', [mime_type('text/javascript')], Request).
+  http_reply_file('./libs/knockout/knockout.js', [mime_type('text/javascript')], Request).
 
 js_hover(Request) :-
-  http_reply_file('lib/superfish-master/dist/js/hoverIntent.js', [mime_type('text/javascript')], Request).
+  http_reply_file('./libs/superfish-master/dist/js/hoverIntent.js', [mime_type('text/javascript')], Request).
 
 js_superfish(Request) :-
-  http_reply_file('lib/superfish-master/dist/js/superfish.js', [mime_type('text/javascript')], Request).
+  http_reply_file('./libs/superfish-master/dist/js/superfish.js', [mime_type('text/javascript')], Request).
 
 js_view_model(Request) :-
-  http_reply_file('src/js/ViewModel.js', [mime_type('text/javascript')], Request).
+  http_reply_file('./src/scripts/ViewModel.js', [mime_type('text/javascript')], Request).
 
 js_autocomplete(Request) :-
-  http_reply_file('src/js/Autocomplete.js', [mime_type('text/javascript')], Request).
+  http_reply_file('./src/scripts/Autocomplete.js', [mime_type('text/javascript')], Request).
 
-js_key_helper(Request) :-
-  http_reply_file('src/js/KeyEventHelper.js', [mime_type('text/javascript')], Request).
+js_event_handler(Request) :-
+  http_reply_file('./src/scripts/EventHandler.js', [mime_type('text/javascript')], Request).
 
 js_text_area(Request) :-
-  http_reply_file('src/js/TextArea.js', [mime_type('text/javascript')], Request).
-
-js_success_helper(Request) :-
-  http_reply_file('src/js/SuccessHelper.js', [mime_type('text/javascript')], Request).
-
-js_click_helper(Request) :-
-  http_reply_file('src/js/ClickHelper.js', [mime_type('text/javascript')], Request).
-
-js_feature_struct(Request) :-
-  http_reply_file('src/js/FeatureStructure.js', [mime_type('text/javascript')], Request).
+  http_reply_file('./src/scripts/TextArea.js', [mime_type('text/javascript')], Request).
 
 js_lookahead(Request) :-
-  http_reply_file('src/js/LookaheadObject.js', [mime_type('text/javascript')], Request).
+  http_reply_file('./src/scripts/LookaheadObject.js', [mime_type('text/javascript')], Request).
 
 js_superfish_mod(Request) :-
-  http_reply_file('src/js/superfish_modules.js', [mime_type('text/javascript')], Request).
+  http_reply_file('./src/scripts/superfish_modules.js', [mime_type('text/javascript')], Request).
   
 js_dropdown(Request) :-
-  http_reply_file('src/js/Dropdown.js', [mime_type('text/javascript')], Request).
+  http_reply_file('./src/scripts/Dropdown.js', [mime_type('text/javascript')], Request).
+
+js_navbar(Request) :-
+  http_reply_file('./src/scripts/Navbar.js', [mime_type('text/javascript')], Request).
+
+js_global_helper(Request) :-
+  http_reply_file('./src/scripts/GlobalHelper.js', [mime_type('text/javascript')], Request).
+  
+js_results(Request) :-
+  http_reply_file('./src/scripts/Results.js', [mime_type('text/javascript')], Request).
+    
+js_expression_loader(Request) :-
+  http_reply_file('./src/scripts/ExpressionLoader.js', [mime_type('text/javascript')], Request).
+
+js_token(Request) :-
+  http_reply_file('./src/scripts/Token.js', [mime_type('text/javascript')], Request).
 
 % ---------------------------------------------------------------
 % Starts the server on port 8085
-% You can connect to the server via http://localhost:8085/peng/
+% You can connect to the server via http://localhost:8085/peng
 % ---------------------------------------------------------------
 
 :- server(8085),
    nl, nl,
    write('*** Prolog Server is listening on port: 8085  ***'), nl,
-   write('*** Connect via: http://localhost:8085/peng/  ***'),
+   write('*** Connect via: http://localhost:8085/peng  ***'),
    nl, nl.
