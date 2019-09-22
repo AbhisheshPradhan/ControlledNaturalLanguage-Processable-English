@@ -68,3 +68,5 @@ pred(L,M,deal_with) :- class(L,brokerage), pred(L,N,represent), class(N,buyer), 
 
 :- class(U,brokerage), pred(U,V,represent), class(V,seller), prop(V,W,included_in), class(W,agreement), pred(U,X,represent), class(X,buyer), prop(X,W,included_in), pred(U,Y,give), class(Y,notice), pred(Y,W,belong_to).
 
+:- prop(7,Z,included_in), class(Z,agreement).
+
