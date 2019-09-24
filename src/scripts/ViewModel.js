@@ -9,7 +9,7 @@ var viewModel = {
     textAreaStr: ko.observable(""), // For display
     result: ko.observable(""),
     firstIndexOfCurrentWord: 0,
-    token: ko.observable(""),
+    token: ko.observable(""), 
     textList: ko.observableArray([]),
     smallAsp: "",
     bigAsp: "",
@@ -20,8 +20,7 @@ var viewModel = {
     lookaheadObject: ko.observableArray([]),
     reasonerMode: "normal", // default settings
     inputMode: ko.observable("Text Mode"), //default settings
-    $loader: $(".loader"),
-    textParaList: ko.observableArray([]),
+    // textParaList: ko.observableArray([]),
     lookUpTable: ko.observableArray([]),
     asp: ko.observable(''),
     answer: ko.observable(''),
@@ -30,6 +29,7 @@ var viewModel = {
     asyncFlag: false,
     fileNames: ko.observableArray([]),
     initialLoad: true,
+    isEndOfSentence: false,
 
     init: function () {
         console.log("init should be only called once or after sentence completion")
@@ -74,28 +74,27 @@ var viewModel = {
         request.done(function (data) {
             var json = JSON.parse(data);
             if (word == "." || word == "?") {
+                viewModel.isEndOfSentence = true;
+                console.log("sentence textAreaStr: ", viewModel.textAreaStr());
+                var sentences = (viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1) + word).replace(/\.(?!\d)|([^\d])\.(?=\d)/g,'$1.|');
+                console.log("sentences : ", sentences);
+                var sentencesArray = sentences.split("|");
+                sentencesArray.pop(); //remove "" at the end of the array
+                console.log("sentencesArray : ", sentencesArray);
+
+                textLineData.addSentence((sentencesArray.pop()).trim());
+
                 viewModel.setAsp(json);
-                viewModel.setAnswer(json.answer)
-                var para = json.para;
-                var newPara = [];
-                var s = "";
-                for (var z = 0; z < para.length; z++) {
-                    if (para[z] == "?" || para[z] == ".") {
-                        s = s.slice(0, s.length - 1) + para[z];
-                        newPara.push(s)
-                        s = "";
-                    } else if (para[z] == ",") {
-                        s = s.slice(0, s.length - 1) + para[z] + " ";
-                    } else {
-                        s += para[z] + " ";
-                    }
-                }
-                viewModel.textParaList(newPara);
+                viewModel.setAnswer(json.answer);
+                viewModel.updateViewForWord(" ");
                 viewModel.allowInput = true;
+            } else {
+                viewModel.isEndOfSentence = false;
             }
 
             if (json.hasOwnProperty('spelling suggestions') || (json.lookahead.length == 0 && !json.hasOwnProperty('asp'))) {
-                viewModel.allowInput = false;
+                console.log("allowInput false");
+                // viewModel.allowInput = false;
                 var lAhead = lookaheadObj.createLookaheadTable(lookaheadObj);
                 lAhead = lookaheadObj.addStrInHeadForEachCatInLookahead(word, lAhead);
                 viewModel.lookaheadObject(lAhead);
@@ -149,7 +148,7 @@ var viewModel = {
 
     // Char entered
     onKeyPress: function (d, e) {
-        return eventHandler.charKey(d, e);
+        return eventHandler.keyUpdate(d, e);
     },
 
     // Backspace detected

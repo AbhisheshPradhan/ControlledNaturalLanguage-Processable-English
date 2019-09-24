@@ -70,8 +70,7 @@ var navBar = {
                         textLineData.addSentence(sentence);
                         viewModel.textList.push(sentence);
                         sentence = "";
-                    }
-                    else {
+                    } else {
                         sentence += nodes[i] + " ";
                     }
                     i = x;
@@ -79,7 +78,6 @@ var navBar = {
                 viewModel.setAsp(json);
                 viewModel.setAnswer(json.answer);
                 viewModel.updateViewForWord(" ");
-                viewModel.$loader.css("visibility", "hidden");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("Failed JSON object input when loading file: \n " + errorThrown);
@@ -91,7 +89,7 @@ var navBar = {
     // Generates text
     generateText: function () {
         let self = this;
-        saveTemporary();
+        this.saveTemporary();
         var jsonObj = globalHelper.createJsonObject("generate", " ", " ", " ", "off", "normal");
         $.ajax({
             url: "/peng",
@@ -134,7 +132,6 @@ var navBar = {
                 viewModel.setAsp(json);
                 viewModel.setAnswer(json.answer);
                 viewModel.updateViewForWord(" ");
-                viewModel.$loader.css("visibility", "hidden");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("Failed to generate text: \n " + errorThrown);
@@ -145,11 +142,11 @@ var navBar = {
 
     saveTemporary: function () {
         var file_name = 'text.tmp';
-        if (viewModel.textLineData.sentences.length > 0) {
+        if (textLineData.sentences.length > 0) {
             var spectext = "";
-            for (var i = 0; i < viewModel.textLineData.sentences.length; i++) {
-                viewModel.textLineData.sentences[i] = viewModel.textLineData.sentences[i].split('\r').join('');
-                spectext += ('\n' + viewModel.textLineData.sentences[i] + '\n');
+            for (var i = 0; i < textLineData.sentences.length; i++) {
+                textLineData.sentences[i] = textLineData.sentences[i].split('\r').join('');
+                spectext += ('\n' + textLineData.sentences[i] + '\n');
             }
 
             var saveData = {
@@ -177,7 +174,6 @@ var navBar = {
     },
 
     // Helper function
-
     _formatToReadableInput: function (input) {
         // FORMATS TO READABLE INPUT
         input = input.replace(/%(.)*/g, '');

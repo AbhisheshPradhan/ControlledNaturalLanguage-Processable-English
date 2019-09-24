@@ -33,6 +33,8 @@ var textLineData = {
   addSentence: function (sentence) {
     this.sentences.push(sentence);
     this.firstIndexOfSentence = this.nodes.length;
+
+    console.log("sentences", this.sentences)
   },
 
   removeTailNode: function () {

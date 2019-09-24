@@ -1,7 +1,7 @@
 // Modified by Rolf Schwitter: 1.2.2019
 
 var eventHandler = {
-  charKey: function (d, e) {
+  keyUpdate: function (d, e) {
     var keyID = e.keyCode;
     var keyVal = (String.fromCharCode(keyID)); // Character form
     var charAllowed = (keyID != 13 && viewModel.token().charAt(viewModel.token().length - 1) != "." && viewModel.token().charAt(viewModel.token().length - 1) != "?") || keyID == 13;
@@ -14,8 +14,9 @@ var eventHandler = {
       return false;
     }
 
-    if (!charAllowed)
+    if (!charAllowed) {
       return false;
+    }
 
     if (viewModel.allowInput) {
       this.switchKeyVal(keyVal);
@@ -26,16 +27,22 @@ var eventHandler = {
     return true;
   },
 
+  // Submit action happens here
+  // Need to create and array and split up sentences and add them as sentences..push them into textList 
+  //and then clear everything. Or not??
   enterKey: function () {
-    var isEndOfSentence = viewModel.token().charAt(viewModel.token().length - 1) == "." || viewModel.token().charAt(viewModel.token().length - 1) == "?";
-    if (isEndOfSentence) {
-      textLineData.addSentence(viewModel.textAreaStr());
-      viewModel.textList.push(viewModel.textAreaStr());
-      viewModel.textAreaStr('');
-      viewModel.token('');
-      viewModel.$text_field.val('');
-      viewModel.init();
-    }
+      var isEndOfSentence = viewModel.isEndOfSentence;
+      if (isEndOfSentence) {
+        viewModel.textList.removeAll();
+        for (let i = 0; i < textLineData.sentences.length; i++) {
+          viewModel.textList.push(textLineData.sentences[i]);
+          // viewModel.textAreaStr('');
+          // viewModel.$text_field.val('');
+          // viewModel.init();
+        }
+      }
+
+      console.log("isEndOfSentence : ", isEndOfSentence);
   },
 
   punctuation: function (chr) { //str is what to update currentWord
@@ -43,11 +50,12 @@ var eventHandler = {
     viewModel.updateViewForWord(viewModel.token().slice(0, sizeOfWord));
     viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length + 1;
     if (chr == '.' || chr == '?') {
-      if (viewModel.allowInput && $.inArray(chr, viewModel.lookUpTable()) != -1)
+      if (viewModel.allowInput && $.inArray(chr, viewModel.lookUpTable()) != -1) {
         viewModel.updateViewForWord(chr);
-      else {
+      } else {
         textLineData.sposNum--;
-        viewModel.allowInput = false;
+        // viewModel.allowInput = false;
+        console.log("allowInput false");
       }
     }
   },

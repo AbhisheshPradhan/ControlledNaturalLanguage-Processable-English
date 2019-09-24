@@ -104,10 +104,10 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
         <div class="cnl-text">CNL Input</div>
         <div id="cnl-input-container">
             <div class="input-group">
-                <input id="text_field" spellcheck="false" type="text" class="form-control cnl-input"
+                <textarea id="text_field" spellcheck="false" type="text" class="form-control cnl-input"
                     placeholder="Enter sentence here..."
-                    data-bind="event: {click: init, keypress: onKeyPress, keyup: onKeyUp }" />
-                <span class="input-group-append">
+                    data-bind="event: {click: loadLookahead, keypress: onKeyPress, keyup: onKeyUp }"></textarea>
+                <span class="input-group-addon">
                     <button class="btn submit-button" type="button"
                         data-bind="event: {click: onSubmit}">Submit</button>
                 </span>
@@ -117,6 +117,10 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
         <div class="processed-input-container">
             Processed Input:
             <span data-bind="text: textAreaStr"></span>
+        </div>
+        <div class="processed-input-container">
+            Token:
+            <span data-bind="text: token"></span>
         </div>
 
         <!--  LOOKAHEAD MOD -->
@@ -173,7 +177,9 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
                 <div class="modal-footer">
                     <button id="modal_save_file_close_button" type="button" class="btn btn-secondary"
                         data-dismiss="modal">Close</button>
-                    <button id="modal_save_file_button" type="button" class="btn btn-primary">Save</button>
+                    <button id="modal_save_file_button" type="button" class="btn btn-primary"
+                            data-bind="event: {click: onSubmit}"
+                    >Save</button>
                 </div>
             </div>
         </div>

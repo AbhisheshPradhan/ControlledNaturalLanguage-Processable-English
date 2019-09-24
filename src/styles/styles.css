@@ -39,12 +39,14 @@ a {
 }
 
 .cnl-input {
-    height: 56px;
+    height: 125px !important;
 }
 
 .submit-button {
     padding: 15px;
     background-color: #ebebeb;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
 }
 
 .navbar {
