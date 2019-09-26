@@ -8,7 +8,17 @@ prop(2,blue).
 
 class(2,accommodation).
 
-data_prop(2,pos_int(11),cardinal).
+prop(2,blue).
 
-class(2,dollar).
+prop(3,blue).
+
+class(3,accommodation).
+
+prop(3,blue).
+
+prop(4,blue).
+
+class(4,accommodation).
+
+prop(4,blue).
 

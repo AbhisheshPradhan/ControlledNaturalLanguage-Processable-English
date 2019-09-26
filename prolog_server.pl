@@ -117,6 +117,15 @@ server(Port) :-
 
 :- http_handler('/src/scripts/Token.js', js_token, []).
 
+%---------------------------------------------------------------
+% http_handler/3
+%
+%   - Assets handler
+%---------------------------------------------------------------
+
+:- http_handler('/src/styles/icon-plus.png', icon_plus, []).
+
+:- http_handler('/src/styles/icon-minus.png', icon_minus, []).
 
 %---------------------------------------------------------------
 % HTTP Reply
@@ -260,6 +269,16 @@ js_expression_loader(Request) :-
 
 js_token(Request) :-
   http_reply_file('./src/scripts/Token.js', [mime_type('text/javascript')], Request).
+
+%---------------------------------------------------------------
+% Assets closure
+%---------------------------------------------------------------
+
+icon_plus(Request) :-
+  http_reply_file('./src/styles/icon-plus.png', [mime_type('image/png')], Request).
+
+icon_minus(Request) :-
+  http_reply_file('./src/styles/icon-minus.png', [mime_type('image/png')], Request).
 
 % ---------------------------------------------------------------
 % Starts the server on port 8085

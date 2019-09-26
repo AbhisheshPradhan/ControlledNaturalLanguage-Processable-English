@@ -53,15 +53,6 @@ a {
     background-color: #222 !important;
 }
 
-
-/* .processed-input-container {
-        margin-top: 10px; 
-}  */
-
-.results-button i {
-    margin-right: 10px;
-}
-
 .lookahead-container {
     display: flex;
 }
@@ -162,6 +153,24 @@ a {
     text-decoration: none;
 }
 
+.results-card-title {
+    display: flex;
+}
+
+.results-icon {
+    height: 24px;
+    width: 24px;
+    margin-right: 10px;
+}
+
+.results-icon-plus {
+    background-image: url(./icon-plus.png);
+}
+
+.results-icon-minus {
+    background-image: url(./icon-minus.png);
+}
+
 .card {
     margin-bottom: 5px;
 }
@@ -175,11 +184,6 @@ a {
     width: 100%;
     align-items: center;
 }
-
-
-/* .asp-results-button{
-    width: 80%;
-} */
 
 .background-theory-container {
     color: #333;

@@ -9,7 +9,7 @@ var viewModel = {
     textAreaStr: ko.observable(""), // For display
     result: ko.observable(""),
     firstIndexOfCurrentWord: 0,
-    token: ko.observable(""), 
+    token: ko.observable(""),
     textList: ko.observableArray([]),
     smallAsp: "",
     bigAsp: "",
@@ -17,19 +17,21 @@ var viewModel = {
     allowInput: true,
     catTable: ko.observableArray([]),
     anaExp: ko.observableArray([]),
-    lookaheadObject: ko.observableArray([]),
     reasonerMode: "normal", // default settings
     inputMode: ko.observable("Text Mode"), //default settings
-    // textParaList: ko.observableArray([]),
-    lookUpTable: ko.observableArray([]),
     asp: ko.observable(''),
     answer: ko.observable(''),
-    currentInitialLookUpTable: [],
-    initSentenceLookUp: [],
     asyncFlag: false,
     fileNames: ko.observableArray([]),
     initialLoad: true,
     isEndOfSentence: false,
+
+    lookaheadObject: ko.observableArray([]),
+    initLookUpObj: [], //initial lookup obj
+    lookUpTable: ko.observableArray([]),
+    initLookUpTable: [], //initial lookuptable
+
+    currentInitialLookUpTable: [], //used in backspace handler
 
     init: function () {
         console.log("init should be only called once or after sentence completion")
@@ -37,19 +39,18 @@ var viewModel = {
         var textAreaEmpty = this.textAreaStr().length == 0;
         if (textAreaEmpty && lastNodePostedWasBlank) {
             this.updateViewForWord(" ");
-            this.initSentenceLookUp = this.lookUpTable();
+            this.initLookUpTable = this.lookUpTable();
             this.initLookUpObj = this.lookaheadObject();
         }
     },
 
     loadLookahead: function () {
+        console.log("loadLookahead clicked")
         if (this.initialLoad) {
+            expressionLoader.loadLookahead();
             this.init();
             this.initialLoad = false;
-        } else {
-            this.$text_field.val(this.textAreaStr());
         }
-        expressionLoader.loadLookahead();
     },
 
     postLookaheadWord: function (data, event) {
@@ -76,7 +77,7 @@ var viewModel = {
             if (word == "." || word == "?") {
                 viewModel.isEndOfSentence = true;
                 console.log("sentence textAreaStr: ", viewModel.textAreaStr());
-                var sentences = (viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1) + word).replace(/\.(?!\d)|([^\d])\.(?=\d)/g,'$1.|');
+                var sentences = (viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1) + word).replace(/\.(?!\d)|([^\d])\.(?=\d)/g, '$1.|');
                 console.log("sentences : ", sentences);
                 var sentencesArray = sentences.split("|");
                 sentencesArray.pop(); //remove "" at the end of the array
@@ -171,3 +172,27 @@ var viewModel = {
 };
 
 ko.applyBindings(viewModel);
+
+
+// Prevent default behavior of the text area html element
+(function ($) {
+    $(document).ready(function () {
+        $("#text_field").keypress(function (e) {
+            if (e.keyCode == 13 && !e.shiftKey) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        $("#text_field").click(function (e) {
+            console.log("text field clicked");
+            e.preventDefault();
+        });
+        $("#text_field").keyup(function (e) {
+            if (e.keyCode == 8) {
+                console.log("backspace pressed");
+                e.preventDefault();
+                return false;
+            }
+        });
+    });
+})(jQuery);

@@ -46,25 +46,26 @@
             $(".results-button").each(function () {
                 expanded = $(this).hasClass("expanded");
                 if (expanded) {
-                    $(this).find(".fa-plus").hide();
-                    $(this).find(".fa-minus").show();
+                    $(this).find(".results-icon").addClass("results-icon-minus");
+                    $(this).find(".results-icon").removeClass("results-icon-plus");
                 } else {
-                    $(this).find(".fa-plus").show();
-                    $(this).find(".fa-minus").hide();
+                    $(this).find(".results-icon").addClass("results-icon-plus");
+                    $(this).find(".results-icon").removeClass("results-icon-minus");
                 }
             });
 
-            $(".results-button").click(function () {
+            $(".results-button").click(function (event) {
                 console.log("clicked")
+
                 expanded = $(this).hasClass("expanded");
                 if (expanded) {
                     $(this).removeClass("expanded");
-                    $(this).find(".fa-plus").show();
-                    $(this).find(".fa-minus").hide();
+                    $(this).find(".results-icon").addClass("results-icon-plus");
+                    $(this).find(".results-icon").removeClass("results-icon-minus");
                 } else {
                     $(this).addClass("expanded");
-                    $(this).find(".fa-plus").hide();
-                    $(this).find(".fa-minus").show();
+                    $(this).find(".results-icon").addClass("results-icon-minus");
+                    $(this).find(".results-icon").removeClass("results-icon-plus");
                 }
             });
         });

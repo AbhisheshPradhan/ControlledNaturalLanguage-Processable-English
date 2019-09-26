@@ -108,8 +108,7 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
                     placeholder="Enter sentence here..."
                     data-bind="event: {click: loadLookahead, keypress: onKeyPress, keyup: onKeyUp }"></textarea>
                 <span class="input-group-addon">
-                    <button class="btn submit-button" type="button"
-                        data-bind="event: {click: onSubmit}">Submit</button>
+                    <button class="btn submit-button" type="button" data-bind="event: {click: onSubmit}">Submit</button>
                 </span>
             </div>
         </div>
@@ -178,8 +177,7 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
                     <button id="modal_save_file_close_button" type="button" class="btn btn-secondary"
                         data-dismiss="modal">Close</button>
                     <button id="modal_save_file_button" type="button" class="btn btn-primary"
-                            data-bind="event: {click: onSubmit}"
-                    >Save</button>
+                        data-bind="event: {click: onSubmit}">Save</button>
                 </div>
             </div>
         </div>
@@ -234,23 +232,10 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
                 <h5 class="mb-0">
                     <button class="btn btn-link results-button expanded" data-toggle="collapse" data-target="#cnl_text"
                         aria-expanded="true" aria-controls="cnl_text" id="click_advance">
-                        <span class="results-text">
-                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus"
-                                class="svg-inline--fa fa-plus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" 0
-                                viewBox="0 0 448 512">
-                                <path fill="currentColor"
-                                    d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z">
-                                </path>
-                            </svg>
-                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus"
-                                class="svg-inline--fa fa-minus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 448 512">
-                                <path fill="currentColor"
-                                    d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z">
-                                </path>
-                            </svg>
+                        <div class="results-card-title">
+                            <div class="results-icon"></div>
                             CNL Text
-                        </span>
+                        </div>
                     </button>
                 </h5>
             </div>
@@ -268,22 +253,10 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
                 <h5 class="mb-0 asp-header-container">
                     <button class="btn btn-link collapsed results-button asp-results-button" data-toggle="collapse"
                         data-target="#asp" aria-expanded="false" aria-controls="asp">
-                        <span class="results-text">
-                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus"
-                                class="svg-inline--fa fa-plus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" 0
-                                viewBox="0 0 448 512">
-                                <path fill="currentColor"
-                                    d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z">
-                                </path>
-                            </svg>
-                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus"
-                                class="svg-inline--fa fa-minus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 448 512">
-                                <path fill="currentColor"
-                                    d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z">
-                                </path>
-                            </svg>
-                            Answer Set Program</span>
+                        <div class="results-card-title">
+                            <div class="results-icon"></div>
+                            Answer Set Program
+                        </div>
                     </button>
                     <div class="background-theory-container">
                         <span class="background-theory-text">Background Theory: </span>
@@ -304,21 +277,10 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
                     <button class="btn btn-link collapsed results-button" data-toggle="collapse"
                         data-target="#answer_sets_container" aria-expanded="false"
                         aria-controls="answer_sets_container">
-                        <span class="results-text"> <svg aria-hidden="true" focusable="false" data-prefix="fas"
-                                data-icon="plus" class="svg-inline--fa fa-plus fa-w-14" role="img"
-                                xmlns="http://www.w3.org/2000/svg" 0 viewBox="0 0 448 512">
-                                <path fill="currentColor"
-                                    d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z">
-                                </path>
-                            </svg>
-                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus"
-                                class="svg-inline--fa fa-minus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 448 512">
-                                <path fill="currentColor"
-                                    d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z">
-                                </path>
-                            </svg>
-                            Answer Sets</span>
+                        <div class="results-card-title">
+                            <div class="results-icon"></div>
+                            Answer Sets
+                        </div>
                     </button>
                 </h5>
             </div>
@@ -333,23 +295,10 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
                 <h5 class="mb-0">
                     <button class="btn btn-link collapsed results-button" data-toggle="collapse"
                         data-target="#answers_container" aria-expanded="false" aria-controls="answers_container">
-                        <span class="results-text">
-                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus"
-                                class="svg-inline--fa fa-plus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" 0
-                                viewBox="0 0 448 512">
-                                <path fill="currentColor"
-                                    d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z">
-                                </path>
-                            </svg>
-                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus"
-                                class="svg-inline--fa fa-minus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 448 512">
-                                <path fill="currentColor"
-                                    d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z">
-                                </path>
-                            </svg>
+                        <div class="results-card-title">
+                            <div class="results-icon"></div>
                             Answers
-                        </span>
+                        </div>
                     </button>
                 </h5>
             </div>

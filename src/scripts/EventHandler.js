@@ -4,26 +4,33 @@ var eventHandler = {
   keyUpdate: function (d, e) {
     var keyID = e.keyCode;
     var keyVal = (String.fromCharCode(keyID)); // Character form
-    var charAllowed = (keyID != 13 && viewModel.token().charAt(viewModel.token().length - 1) != "." && viewModel.token().charAt(viewModel.token().length - 1) != "?") || keyID == 13;
+    let enterKeyPressed = keyID == 13 ? true : false;
 
-    if (keyVal == " " && viewModel.textAreaStr().length == 0) {
-      return false;
+    if (enterKeyPressed) {
+      console.log("enter pressed");
+      this.enterKey();
     }
 
-    if (keyVal == " " && viewModel.textAreaStr().slice(-1) == " ") {
-      return false;
-    }
+    // var charAllowed = (keyID != 13 && viewModel.token().charAt(viewModel.token().length - 1) != "." && viewModel.token().charAt(viewModel.token().length - 1) != "?") || keyID == 13;
 
-    if (!charAllowed) {
-      return false;
-    }
+    // if (keyVal == " " && viewModel.textAreaStr().length == 0) {
+    //   return false;
+    // }
 
-    if (viewModel.allowInput) {
-      this.switchKeyVal(keyVal);
-      keyVal = (keyID == 13) ? "" : keyVal;
-      viewModel.textAreaStr(viewModel.textAreaStr() + keyVal);
-      viewModel.updateLookUpTable();
-    }
+    // if (keyVal == " " && viewModel.textAreaStr().slice(-1) == " ") {
+    //   return false;
+    // }
+
+    // if (!charAllowed) {
+    //   return false;
+    // }
+
+    // if (viewModel.allowInput) {
+    //   this.switchKeyVal(keyVal);
+    //   keyVal = (keyID == 13) ? "" : keyVal;
+    //   viewModel.textAreaStr(viewModel.textAreaStr() + keyVal);
+    //   viewModel.updateLookUpTable();
+    // }
     return true;
   },
 
@@ -31,18 +38,19 @@ var eventHandler = {
   // Need to create and array and split up sentences and add them as sentences..push them into textList 
   //and then clear everything. Or not??
   enterKey: function () {
-      var isEndOfSentence = viewModel.isEndOfSentence;
-      if (isEndOfSentence) {
-        viewModel.textList.removeAll();
-        for (let i = 0; i < textLineData.sentences.length; i++) {
-          viewModel.textList.push(textLineData.sentences[i]);
-          // viewModel.textAreaStr('');
-          // viewModel.$text_field.val('');
-          // viewModel.init();
-        }
+    console.log("sentence submitted")
+    var isEndOfSentence = viewModel.isEndOfSentence;
+    if (isEndOfSentence) {
+      viewModel.textList.removeAll();
+      for (let i = 0; i < textLineData.sentences.length; i++) {
+        viewModel.textList.push(textLineData.sentences[i]);
+        // viewModel.textAreaStr('');
+        // viewModel.$text_field.val('');
+        // viewModel.init();
       }
+    }
 
-      console.log("isEndOfSentence : ", isEndOfSentence);
+    // console.log("isEndOfSentence : ", isEndOfSentence);
   },
 
   punctuation: function (chr) { //str is what to update currentWord
@@ -79,9 +87,9 @@ var eventHandler = {
           viewModel.lookUpTable(lookaheadObj.wordTable);
           viewModel.currentInitialLookUpTable = lookaheadObj.wordTable;
         } else if (textLineData.nodes[textLineData.nodes.length - 1] == " ") {
-          viewModel.currentInitialLookUpTable = viewModel.initSentenceLookUp;
+          viewModel.currentInitialLookUpTable = viewModel.initLookUpTable;
           viewModel.lookaheadObject(viewModel.initLookUpObj);
-          viewModel.lookUpTable(viewModel.initSentenceLookUp);
+          viewModel.lookUpTable(viewModel.initLookUpTable);
         }
         viewModel.allowInput = true;
       } else {

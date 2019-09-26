@@ -2,7 +2,6 @@ var expressionLoader = {
     loadLookahead: function () {
         var lookaheadTable = lookaheadObj.createLookaheadTable(lookaheadObj);
         viewModel.lookaheadObject(lookaheadTable);
-        viewModel.$text_field.val(viewModel.textAreaStr());
     },
 
     updateLookUpTable: function () {
@@ -58,13 +57,14 @@ var expressionLoader = {
                 if (dataArr[s] == "." || dataArr[s] == "?") {
                     console.log("full stop");
                     viewModel.isEndOfSentence = true;
+
+                    // The text editor sentence will have space in the end
                     viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1) + dataArr[s] + " ");
                     viewModel.$text_field.val(viewModel.textAreaStr());
 
-                    viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
-                    viewModel.currentInitialLookUpTable = viewModel.initSentenceLookUp;
+                    // viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
                     viewModel.lookaheadObject(viewModel.initLookUpObj);
-                    viewModel.lookUpTable(viewModel.initSentenceLookUp);
+                    viewModel.lookUpTable(viewModel.initLookUpTable);
                     
                 } else if (data == ",") {
                     viewModel.isEndOfSentence = false;
@@ -73,6 +73,7 @@ var expressionLoader = {
                 } else {
                     viewModel.isEndOfSentence = false;
                     viewModel.textAreaStr(viewModel.textAreaStr() + dataArr[s] + " ");
+                    viewModel.$text_field.val(viewModel.textAreaStr());
                     viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
                     this.loadLookahead();
                 }
