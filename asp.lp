@@ -1,8 +1,6 @@
-prop(1,blue).
+class(1,frog).
 
-class(1,accommodation).
-
-prop(1,blue).
+prop(1,green).
 
 prop(2,blue).
 
@@ -12,13 +10,7 @@ prop(2,blue).
 
 prop(3,blue).
 
-class(3,accommodation).
+class(3,frog).
 
 prop(3,blue).
-
-prop(4,blue).
-
-class(4,accommodation).
-
-prop(4,blue).
 

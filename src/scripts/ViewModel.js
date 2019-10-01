@@ -8,7 +8,7 @@ var viewModel = {
     $text_field: $("#text_field"),
     textAreaStr: ko.observable(""), // For display
     result: ko.observable(""),
-    firstIndexOfCurrentWord: 0,
+    // firstIndexOfCurrentWord: 0, Need to use this for backspace 
     token: ko.observable(""),
     textList: ko.observableArray([]),
     smallAsp: "",
@@ -34,7 +34,7 @@ var viewModel = {
     currentInitialLookUpTable: [], //used in backspace handler
 
     init: function () {
-        console.log("init should be only called once or after sentence completion")
+        // console.log("init should be only called once or after sentence completion")
         var lastNodePostedWasBlank = textLineData.nodes[textLineData.nodes.length - 1] != " ";
         var textAreaEmpty = this.textAreaStr().length == 0;
         if (textAreaEmpty && lastNodePostedWasBlank) {
@@ -45,7 +45,7 @@ var viewModel = {
     },
 
     loadLookahead: function () {
-        console.log("loadLookahead clicked")
+        // console.log("loadLookahead clicked")
         if (this.initialLoad) {
             expressionLoader.loadLookahead();
             this.init();
@@ -75,9 +75,8 @@ var viewModel = {
         request.done(function (data) {
             var json = JSON.parse(data);
             if (word == "." || word == "?") {
-                viewModel.isEndOfSentence = true;
                 console.log("sentence textAreaStr: ", viewModel.textAreaStr());
-                var sentences = (viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1) + word).replace(/\.(?!\d)|([^\d])\.(?=\d)/g, '$1.|');
+                var sentences = (viewModel.textAreaStr().trim().slice(0, viewModel.textAreaStr().length) + word).replace(/\.(?!\d)|([^\d])\.(?=\d)/g, '$1.|');
                 console.log("sentences : ", sentences);
                 var sentencesArray = sentences.split("|");
                 sentencesArray.pop(); //remove "" at the end of the array
@@ -88,18 +87,15 @@ var viewModel = {
                 viewModel.setAsp(json);
                 viewModel.setAnswer(json.answer);
                 viewModel.updateViewForWord(" ");
-                viewModel.allowInput = true;
-            } else {
-                viewModel.isEndOfSentence = false;
             }
 
             if (json.hasOwnProperty('spelling suggestions') || (json.lookahead.length == 0 && !json.hasOwnProperty('asp'))) {
-                console.log("allowInput false");
-                // viewModel.allowInput = false;
+                viewModel.allowInput = false;
                 var lAhead = lookaheadObj.createLookaheadTable(lookaheadObj);
                 lAhead = lookaheadObj.addStrInHeadForEachCatInLookahead(word, lAhead);
                 viewModel.lookaheadObject(lAhead);
                 viewModel.anaExp(json.ana);
+                viewModel.allowInput = true;
             } else {
                 viewModel.populateLookUpTable(json);
                 expressionLoader.loadLookahead();

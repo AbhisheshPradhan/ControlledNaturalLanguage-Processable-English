@@ -42,7 +42,7 @@ var expressionLoader = {
                 for (s1 = 0; s1 < dataArr1.length; s1++) {
                     viewModel.updateViewForWord(viewModel.token() + dataArr1[s1]);
                     viewModel.textAreaStr(viewModel.textAreaStr() + dataArr1[s1] + " ");
-                    viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
+                    // viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
                     this.loadLookahead();
                     viewModel.$text_field.val(viewModel.textAreaStr());
                 }
@@ -51,11 +51,9 @@ var expressionLoader = {
             }
         } else if (viewModel.allowInput) {
             var dataArr = data.split(" ");
-            var s;
-            for (s = 0; s < dataArr.length; s++) {
+            for (var s = 0; s < dataArr.length; s++) {
                 viewModel.updateViewForWord(viewModel.token() + dataArr[s]);
                 if (dataArr[s] == "." || dataArr[s] == "?") {
-                    console.log("full stop");
                     viewModel.isEndOfSentence = true;
 
                     // The text editor sentence will have space in the end
@@ -65,7 +63,6 @@ var expressionLoader = {
                     // viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
                     viewModel.lookaheadObject(viewModel.initLookUpObj);
                     viewModel.lookUpTable(viewModel.initLookUpTable);
-                    
                 } else if (data == ",") {
                     viewModel.isEndOfSentence = false;
                     viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1) + dataArr[s] + " ");
@@ -74,13 +71,9 @@ var expressionLoader = {
                     viewModel.isEndOfSentence = false;
                     viewModel.textAreaStr(viewModel.textAreaStr() + dataArr[s] + " ");
                     viewModel.$text_field.val(viewModel.textAreaStr());
-                    viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
+                    // viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
                     this.loadLookahead();
                 }
-            }
-            if (!viewModel.allowInput) {
-                // viewModel.token(viewModel.token() + dataArr[0]);
-                console.log("allowInput false");
             }
         }
     },
