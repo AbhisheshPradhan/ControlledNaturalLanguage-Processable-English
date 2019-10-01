@@ -18,22 +18,12 @@ CNL PENG ASP
   <li>Save button</li>
   <li>Backspace handling</li>
   <li>Cursor jump handling</li>
-  <li>UI fixes</li>
-  <li>Navbar collapse (mobile)</li>
-  <li>Browser Testing</li>
-  <li>Unit Testing</li>
-  <li>Functional Testing</li>
-  <li>Test auto-complete for multiple words suggestions Testing</li>
 </ul>
 
 <h5>UI:</h5>
 <ul>
   <li>UI fixes</li>
   <li>Navbar collapse (mobile)</li>
-  <li>Browser Testing</li>
-  <li>Unit Testing</li>
-  <li>Functional Testing</li>
-  <li>Test auto-complete for multiple words suggestions Testing</li>
 </ul>
 
 <h5>Testing:</h5>
