@@ -42,6 +42,10 @@ a {
     height: 125px !important;
 }
 
+.submit-button-container {
+    align-self: center;
+}
+
 .submit-button {
     padding: 15px;
     background-color: #ebebeb;
@@ -155,11 +159,12 @@ a {
 
 .results-card-title {
     display: flex;
+    align-items: center;
 }
 
 .results-icon {
-    height: 24px;
-    width: 24px;
+    height: 16px;
+    width: 16px;
     margin-right: 10px;
 }
 

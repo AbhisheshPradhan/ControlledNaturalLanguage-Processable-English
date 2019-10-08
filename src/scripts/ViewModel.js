@@ -75,18 +75,34 @@ var viewModel = {
         request.done(function (data) {
             var json = JSON.parse(data);
             if (word == "." || word == "?") {
-                console.log("sentence textAreaStr: ", viewModel.textAreaStr());
-                var sentences = (viewModel.textAreaStr().trim().slice(0, viewModel.textAreaStr().length) + word).replace(/\.(?!\d)|([^\d])\.(?=\d)/g, '$1.|');
-                console.log("sentences : ", sentences);
+                // console.log("word", word)
+                // console.log("sentence textAreaStr: ", viewModel.textAreaStr());
+                var sentences = (viewModel.textAreaStr().trim().slice(0, viewModel.textAreaStr().length) + word)
+                // remove extra '.'s when there are consecutive .'s e.g .. = .
+                var regexReplace = /(^[\.\s]*)|([\s\.]*(?=(\.|\))))|(\s*\([\.\s]*\)\s*\.)|(\s*(?=\())/g;
+                sentences = sentences.replace(regexReplace, "").trim();
+
+
+                sentences = sentences.replace(/\.(?!\d)|([^\d])\.(?=\d)/g, '$1.|');
+                // console.log("sentences : ", sentences);
+
+
+
                 var sentencesArray = sentences.split("|");
                 sentencesArray.pop(); //remove "" at the end of the array
-                console.log("sentencesArray : ", sentencesArray);
+                // console.log("sentencesArray : ", sentencesArray);
 
                 textLineData.addSentence((sentencesArray.pop()).trim());
 
                 viewModel.setAsp(json);
                 viewModel.setAnswer(json.answer);
                 viewModel.updateViewForWord(" ");
+                
+                
+                viewModel.isEndOfSentence = true;
+                console.log("viewModel.isEndOfSentence = true;")
+            } else {
+                viewModel.isEndOfSentence = false;
             }
 
             if (json.hasOwnProperty('spelling suggestions') || (json.lookahead.length == 0 && !json.hasOwnProperty('asp'))) {
@@ -140,6 +156,7 @@ var viewModel = {
 
     // Text submitted
     onSubmit: function () {
+        console.log("onSubmit")
         eventHandler.enterKey();
     },
 

@@ -159,10 +159,10 @@ handle(Request) :-
                    spos=SPos,
                    reasoner=Flag,
                    reasonermode=RMode]),
-      % display_json_in(JSTN),                  
+      display_json_in(JSTN),                  
       main_process(JSTN, JSON),         % defined in asp_main.pl
-      reply_json(JSON)
-      % display_json_out(JSON)
+      reply_json(JSON),
+      display_json_out(JSON)
    ;
       http_reply_file('./index.html', [mime_type('text/html')], Request)
    ).
