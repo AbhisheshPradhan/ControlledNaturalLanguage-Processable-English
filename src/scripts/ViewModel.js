@@ -8,7 +8,7 @@ var viewModel = {
     $text_field: $("#text_field"),
     textAreaStr: ko.observable(""), // For display
     result: ko.observable(""),
-    // firstIndexOfCurrentWord: 0, Need to use this for backspace 
+    firstIndexOfCurrentWord: 0, //Need to use this for backspace 
     token: ko.observable(""),
     textList: ko.observableArray([]),
     smallAsp: "",
@@ -70,10 +70,27 @@ var viewModel = {
     },
 
     updateViewForWord(word) {
-        // If word in lookahead
         var request = $.when(token.postToken(word));
+
+        console.log("updateViewForWord", word)
+        console.log("textLineData.nodes", textLineData.nodes)
         request.done(function (data) {
             var json = JSON.parse(data);
+            if (eventHandler.lastInputEntered == "." || eventHandler.lastInputEntered == "?") {
+                // alert(eventHandler.lastInputEntered + "inputed. Now trigger lexicon check, and only insert punctuation");
+                if (json.hasOwnProperty('spelling suggestions') || (json.lookahead.length == 0 && !json.hasOwnProperty('asp'))) {
+                    // viewModel.allowInput = false;
+                    // var lAhead = lookaheadObj.createLookaheadTable(lookaheadObj);
+                    // lAhead = lookaheadObj.addStrInHeadForEachCatInLookahead(word, lAhead);
+                    // viewModel.lookaheadObject(lAhead);
+                    // viewModel.anaExp(json.ana);
+                    console.log("word", word);
+                    console.log("eventHandler.lastInputEntered", eventHandler.lastInputEntered);
+                    console.log("viewModel.token()", viewModel.token());
+                }
+            }
+            // console.log("viewModel.token()", viewModel.token());
+
             if (word == "." || word == "?") {
                 // console.log("word", word)
                 // console.log("sentence textAreaStr: ", viewModel.textAreaStr());
@@ -82,11 +99,8 @@ var viewModel = {
                 var regexReplace = /(^[\.\s]*)|([\s\.]*(?=(\.|\))))|(\s*\([\.\s]*\)\s*\.)|(\s*(?=\())/g;
                 sentences = sentences.replace(regexReplace, "").trim();
 
-
                 sentences = sentences.replace(/\.(?!\d)|([^\d])\.(?=\d)/g, '$1.|');
                 // console.log("sentences : ", sentences);
-
-
 
                 var sentencesArray = sentences.split("|");
                 sentencesArray.pop(); //remove "" at the end of the array
@@ -97,10 +111,9 @@ var viewModel = {
                 viewModel.setAsp(json);
                 viewModel.setAnswer(json.answer);
                 viewModel.updateViewForWord(" ");
-                
-                
+
                 viewModel.isEndOfSentence = true;
-                console.log("viewModel.isEndOfSentence = true;")
+                // console.log("viewModel.isEndOfSentence = true;")
             } else {
                 viewModel.isEndOfSentence = false;
             }
@@ -111,7 +124,9 @@ var viewModel = {
                 lAhead = lookaheadObj.addStrInHeadForEachCatInLookahead(word, lAhead);
                 viewModel.lookaheadObject(lAhead);
                 viewModel.anaExp(json.ana);
-                viewModel.allowInput = true;
+                // console.log("word", word);
+                // console.log("eventHandler.lastInputEntered", eventHandler.lastInputEntered);
+                // console.log("viewModel.token()", viewModel.token());
             } else {
                 viewModel.populateLookUpTable(json);
                 expressionLoader.loadLookahead();
