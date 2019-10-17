@@ -52,6 +52,8 @@ var navBar = {
     loadFile: function (loadedFileName) {
         let self = this;
         let jsonObj = globalHelper.createJsonObject("load", " ", loadedFileName, " ", "off", "normal");
+        // viewModel.updateViewForWord(" ");
+        viewModel.$loading.show();
         $.ajax({
             url: "/peng",
             type: "POST",
@@ -59,28 +61,35 @@ var navBar = {
             success: function (data, textStatus, jqXHR) {
                 var json = JSON.parse(data);
                 var nodes = self._formatToReadableInput(json.spectext);
-                var sentence = "";
-                textLineData['sentences'] = [];
+                console.log("nodes", nodes)
+                // var sentences = "";
+                // textLineData['sentences'] = [];
                 viewModel.textList([]);
                 for (i = 0; i < nodes.length; i++) {
-                    var x = i;
-                    if (nodes[i] == "." || nodes[i] == "?") {
-                        sentence = sentence.slice(0, sentence.length - 1);
-                        sentence += nodes[i];
-                        textLineData.addSentence(sentence);
-                        viewModel.textList.push(sentence);
-                        sentence = "";
-                    } else {
-                        sentence += nodes[i] + " ";
+                    if(nodes[i] != "") {
+                        var x = i;
+                        if (nodes[i] == "." || nodes[i] == "?") {
+                            viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1) + nodes[i] + " ");
+                        } else {
+                            viewModel.textAreaStr(viewModel.textAreaStr() + nodes[i] + " ");
+                        }
+    
+                        viewModel.$text_field.val(viewModel.textAreaStr());
+                        viewModel.updateViewForWord(nodes[i]);
+                        i = x;
                     }
-                    i = x;
+  
                 }
-                viewModel.setAsp(json);
-                viewModel.setAnswer(json.answer);
-                viewModel.updateViewForWord(" ");
+
+                viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
+                viewModel.lookaheadObject(viewModel.initLookUpObj);
+                viewModel.lookUpTable(viewModel.initLookUpTable);
+
+                viewModel.$loading.hide();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("Failed JSON object input when loading file: \n " + errorThrown);
+                viewModel.$loading.hide();
             }
         });
         return true;
@@ -186,6 +195,9 @@ var navBar = {
         input = input.split('.').join(' . ');
         input = input.split('?').join(' ? ');
         input = input.split(', ').join(' , ');
-        return input.split(" ");
+        console.log("input", input);
+        input = input.split(" ");
+        input.pop();
+        return input;
     }
 }

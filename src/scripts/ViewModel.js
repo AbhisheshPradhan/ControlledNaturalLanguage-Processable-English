@@ -26,6 +26,8 @@ var viewModel = {
     initialLoad: true,
     isEndOfSentence: false,
 
+    $loading: $("#loader-overlay"),
+
     lookaheadObject: ko.observableArray([]),
     initLookUpObj: [], //initial lookup obj
     lookUpTable: ko.observableArray([]),
@@ -34,7 +36,7 @@ var viewModel = {
     currentInitialLookUpTable: [], //used in backspace handler
 
     init: function () {
-        // console.log("init should be only called once or after sentence completion")
+        console.log("init should be only called once or after sentence completion")
         var lastNodePostedWasBlank = textLineData.nodes[textLineData.nodes.length - 1] != " ";
         var textAreaEmpty = this.textAreaStr().length == 0;
         if (textAreaEmpty && lastNodePostedWasBlank) {
@@ -72,8 +74,9 @@ var viewModel = {
     updateViewForWord(word) {
         var request = $.when(token.postToken(word));
 
-        console.log("updateViewForWord", word)
-        console.log("textLineData.nodes", textLineData.nodes)
+        console.log("updateViewForWord", word);
+        console.log("textLineData.nodes", textLineData.nodes);
+
         request.done(function (data) {
             var json = JSON.parse(data);
             if (eventHandler.lastInputEntered == "." || eventHandler.lastInputEntered == "?") {
@@ -124,9 +127,6 @@ var viewModel = {
                 lAhead = lookaheadObj.addStrInHeadForEachCatInLookahead(word, lAhead);
                 viewModel.lookaheadObject(lAhead);
                 viewModel.anaExp(json.ana);
-                // console.log("word", word);
-                // console.log("eventHandler.lastInputEntered", eventHandler.lastInputEntered);
-                // console.log("viewModel.token()", viewModel.token());
             } else {
                 viewModel.populateLookUpTable(json);
                 expressionLoader.loadLookahead();
@@ -153,6 +153,11 @@ var viewModel = {
 
     // Loads the list of file names in texts folder
     loadFileNames: function () {
+        if (this.initialLoad) {
+            expressionLoader.loadLookahead();
+            this.init();
+            this.initialLoad = false;
+        }
         navBar.loadFileNames();
     },
 

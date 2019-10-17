@@ -61,6 +61,8 @@ server(Port) :-
 
 :- http_handler('/src/styles/styles.css', css_styles, []).
 
+:- http_handler('/src/styles/loader.css', css_loader, []).
+
 :- http_handler('/libs/bootstrap/bootstrap.css', css_bootstrap, []).
 
 :- http_handler('/libs/bootstrap/bootstrap-toggle.css', css_bootstrap_toggle, []).
@@ -190,6 +192,9 @@ display_json_out(JSON) :-
 
 css_styles(Request) :-
   http_reply_file('./src/styles/styles.css', [mime_type('text/css')], Request).
+
+css_loader(Request) :-
+  http_reply_file('./src/styles/loader.css', [mime_type('text/css')], Request).
 
 css_bootstrap(Request) :-
   http_reply_file('./libs/bootstrap/bootstrap.css', [mime_type('text/css')], Request).
