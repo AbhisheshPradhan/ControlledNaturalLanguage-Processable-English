@@ -9,21 +9,26 @@ CNL PENG ASP
   <li>Auto-complete sentences</li>
   <li>Scrollable dropdown menu</li>
   <li>Enter to submit</li>
+  
 </ul>
 
 <h4>Remaining tasks:</h4>
+<h5>Bug fixing:</h5>
+<ul>
+  <li>Backspace bugs</li>
+  <li>Add to lexicon + punctuation (happening in previous version as well)</li>
+</ul>
 
 <h5>Functionality:</h5>
 <ul>
   <li>Save button</li>
-  <li>Backspace handling</li>
   <li>Cursor jump handling</li>
 </ul>
 
 <h5>UI:</h5>
 <ul>
   <li>UI fixes</li>
-  <li>Navbar collapse (mobile)</li>
+  <li>Responsive UI</li>
 </ul>
 
 <h5>Testing:</h5>
