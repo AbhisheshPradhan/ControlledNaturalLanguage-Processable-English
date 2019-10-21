@@ -52,46 +52,48 @@ var navBar = {
     loadFile: function (loadedFileName) {
         let self = this;
         let jsonObj = globalHelper.createJsonObject("load", " ", loadedFileName, " ", "off", "normal");
-        // viewModel.updateViewForWord(" ");
-        viewModel.$loading.show();
-        $.ajax({
-            url: "/peng",
-            type: "POST",
-            data: jsonObj,
-            success: function (data, textStatus, jqXHR) {
-                var json = JSON.parse(data);
-                var nodes = self._formatToReadableInput(json.spectext);
-                console.log("nodes", nodes)
-                // var sentences = "";
-                // textLineData['sentences'] = [];
-                viewModel.textList([]);
-                for (i = 0; i < nodes.length; i++) {
-                    if(nodes[i] != "") {
-                        var x = i;
-                        if (nodes[i] == "." || nodes[i] == "?") {
-                            viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1) + nodes[i] + " ");
-                        } else {
-                            viewModel.textAreaStr(viewModel.textAreaStr() + nodes[i] + " ");
+
+        
+        if (viewModel.textAreaStr().length == 0 || viewModel.isEndOfSentence) {
+            viewModel.$loading.show();
+            $.ajax({
+                url: "/peng",
+                type: "POST",
+                data: jsonObj,
+                success: function (data, textStatus, jqXHR) {
+                    var json = JSON.parse(data);
+                    var nodes = self._formatToReadableInput(json.spectext);
+                    viewModel.textList([]);
+                    for (i = 0; i < nodes.length; i++) {
+                        if (nodes[i] != "") {
+                            var x = i;
+                            if (nodes[i] == "." || nodes[i] == "?") {
+                                viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1) + nodes[i] + " ");
+                            } else {
+                                viewModel.textAreaStr(viewModel.textAreaStr() + nodes[i] + " ");
+                            }
+
+                            viewModel.$text_field.val(viewModel.textAreaStr());
+                            viewModel.updateViewForWord(nodes[i]);
+                            i = x;
                         }
-    
-                        viewModel.$text_field.val(viewModel.textAreaStr());
-                        viewModel.updateViewForWord(nodes[i]);
-                        i = x;
                     }
-  
+
+                    viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
+                    viewModel.lookaheadObject(viewModel.initLookUpObj);
+                    viewModel.lookUpTable(viewModel.initLookUpTable);
+
+                    viewModel.$loading.hide();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Failed JSON object input when loading file: \n " + errorThrown);
+                    viewModel.$loading.hide();
                 }
+            });
+        } else {
+            alert("Complete sentence before loading file.");
+        }
 
-                viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
-                viewModel.lookaheadObject(viewModel.initLookUpObj);
-                viewModel.lookUpTable(viewModel.initLookUpTable);
-
-                viewModel.$loading.hide();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert("Failed JSON object input when loading file: \n " + errorThrown);
-                viewModel.$loading.hide();
-            }
-        });
         return true;
     },
 

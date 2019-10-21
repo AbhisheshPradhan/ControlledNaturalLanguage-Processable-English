@@ -49,22 +49,13 @@ var eventHandler = {
   punctuation: function (chr) {
     // Post the word before punctuation first
     var sizeOfWord = viewModel.token().length;
-    // console.log("token", viewModel.token() + " " + viewModel.token().length);
-    // console.log("chr", chr);
-
     eventHandler.lastInputEntered = chr;
 
     if (viewModel.token() != '.' && viewModel.token() != '?') {
       viewModel.updateViewForWord(viewModel.token().slice(0, sizeOfWord));
 
-      // console.log("updateViewForWord", viewModel.token().slice(0, sizeOfWord));
     } else if (viewModel.token() == '.' || viewModel.token() == '?'){
-      // console.log("viewModel.allowInput", viewModel.allowInput)
-      // console.log("inarray", $.inArray(viewModel.token(), viewModel.lookUpTable()) != -1)
-      // console.log("chr == ''", chr == '')
-
       if (viewModel.allowInput && $.inArray(viewModel.token(), viewModel.lookUpTable()) != -1) {
-
         viewModel.updateViewForWord(viewModel.token());
         viewModel.lookaheadObject(viewModel.initLookUpObj);
         viewModel.lookUpTable(viewModel.initLookUpTable);

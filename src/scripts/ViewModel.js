@@ -6,7 +6,8 @@
 
 var viewModel = {
     $text_field: $("#text_field"),
-    textAreaStr: ko.observable(""), // For display
+    textAreaStr: ko.observable(""), 
+    processedInput: ko.observable(""),// For display 
     result: ko.observable(""),
     firstIndexOfCurrentWord: 0, //Need to use this for backspace 
     token: ko.observable(""),
@@ -25,6 +26,7 @@ var viewModel = {
     fileNames: ko.observableArray([]),
     initialLoad: true,
     isEndOfSentence: false,
+    currentProcessingSentence: "",
 
     $loading: $("#loader-overlay"),
 
@@ -74,9 +76,10 @@ var viewModel = {
     updateViewForWord(word) {
         var request = $.when(token.postToken(word));
 
-        console.log("updateViewForWord", word);
-        console.log("textLineData.nodes", textLineData.nodes);
+        // console.log("updateViewForWord", word);
+        // console.log("textLineData.nodes", textLineData.nodes);
 
+        let str = viewModel.textAreaStr().toString();
         request.done(function (data) {
             var json = JSON.parse(data);
             if (eventHandler.lastInputEntered == "." || eventHandler.lastInputEntered == "?") {
@@ -87,40 +90,12 @@ var viewModel = {
                     // lAhead = lookaheadObj.addStrInHeadForEachCatInLookahead(word, lAhead);
                     // viewModel.lookaheadObject(lAhead);
                     // viewModel.anaExp(json.ana);
-                    console.log("word", word);
-                    console.log("eventHandler.lastInputEntered", eventHandler.lastInputEntered);
-                    console.log("viewModel.token()", viewModel.token());
+                    // console.log("word", word);
+                    // console.log("eventHandler.lastInputEntered", eventHandler.lastInputEntered);
+                    // console.log("viewModel.token()", viewModel.token());
                 }
             }
             // console.log("viewModel.token()", viewModel.token());
-
-            if (word == "." || word == "?") {
-                // console.log("word", word)
-                // console.log("sentence textAreaStr: ", viewModel.textAreaStr());
-                var sentences = (viewModel.textAreaStr().trim().slice(0, viewModel.textAreaStr().length) + word)
-                // remove extra '.'s when there are consecutive .'s e.g .. = .
-                var regexReplace = /(^[\.\s]*)|([\s\.]*(?=(\.|\))))|(\s*\([\.\s]*\)\s*\.)|(\s*(?=\())/g;
-                sentences = sentences.replace(regexReplace, "").trim();
-
-                sentences = sentences.replace(/\.(?!\d)|([^\d])\.(?=\d)/g, '$1.|');
-                // console.log("sentences : ", sentences);
-
-                var sentencesArray = sentences.split("|");
-                sentencesArray.pop(); //remove "" at the end of the array
-                // console.log("sentencesArray : ", sentencesArray);
-
-                textLineData.addSentence((sentencesArray.pop()).trim());
-
-                viewModel.setAsp(json);
-                viewModel.setAnswer(json.answer);
-                viewModel.updateViewForWord(" ");
-
-                viewModel.isEndOfSentence = true;
-                // console.log("viewModel.isEndOfSentence = true;")
-            } else {
-                viewModel.isEndOfSentence = false;
-            }
-
             if (json.hasOwnProperty('spelling suggestions') || (json.lookahead.length == 0 && !json.hasOwnProperty('asp'))) {
                 viewModel.allowInput = false;
                 var lAhead = lookaheadObj.createLookaheadTable(lookaheadObj);
@@ -132,7 +107,45 @@ var viewModel = {
                 expressionLoader.loadLookahead();
                 viewModel.anaExp(json.ana);
                 viewModel.allowInput = true;
+                viewModel.currentProcessingSentence += word + " ";
+                viewModel.processedInput(viewModel.currentProcessingSentence);
             }
+            
+            if (word == "." || word == "?") {
+                // console.log("word", word)
+                // console.log("sentence textAreaStr: ", viewModel.textAreaStr());
+                var sentences = (viewModel.textAreaStr().trim().slice(0, viewModel.textAreaStr().length) + word)
+                // console.log("sentences", sentences);
+                // remove extra '.'s when there are consecutive .'s e.g .. = .
+                var regexReplaceFullStop = /(^[\.\s]*)|([\s\.]*(?=(\.|\))))|(\s*\([\.\s]*\)\s*\.)|(\s*(?=\())/g;
+                sentences = sentences.replace(regexReplaceFullStop, "").trim();
+
+                var regexReplaceQuestionMark = /(^[\?\s]*)|([\s\?]*(?=(\?|\))))|(\s*\([\?\s]*\)\s*\?)|(\s*(?=\())/g;
+                sentences = sentences.replace(regexReplaceQuestionMark, "").trim();
+
+                sentences = sentences.replace(/\.(?!\d)|([^\d])\.(?=\d)/g, '$1.|');
+                sentences = sentences.replace(/\?(?!\d)|([^\d])\?(?=\d)/g, '$1?|');
+                // console.log("sentences : ", sentences);
+
+                var sentencesArray = sentences.split("|");
+                sentencesArray.pop(); //remove "" at the end of the array
+
+                textLineData.addSentence((sentencesArray.pop()).trim());
+
+                viewModel.setAsp(json);
+                viewModel.setAnswer(json.answer);
+                viewModel.updateViewForWord(" ");
+                viewModel.processedInput(textLineData.sentences[textLineData.sentences.length - 1]);
+                viewModel.currentProcessingSentence = "";
+                // console.log("textLineData.sentences", textLineData.sentences);
+
+                viewModel.isEndOfSentence = true;
+                // console.log("viewModel.isEndOfSentence = true;")
+            } else {
+                viewModel.isEndOfSentence = false;
+            }
+
+
 
             if (json.hasOwnProperty('ana') && word != "." && json.ana.length != 0) {
                 var temp = json.ana;

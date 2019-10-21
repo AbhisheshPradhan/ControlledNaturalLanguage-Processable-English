@@ -68,7 +68,6 @@ var expressionLoader = {
                     viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1) + dataArr[s] + " ");
                     viewModel.$text_field.val(viewModel.textAreaStr());
                 } else {
-
                     viewModel.isEndOfSentence = false;
                     viewModel.textAreaStr(viewModel.textAreaStr() + dataArr[s] + " ");
                     viewModel.$text_field.val(viewModel.textAreaStr());

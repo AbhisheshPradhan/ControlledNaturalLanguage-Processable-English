@@ -21,6 +21,6 @@ var results = {
         }
 
         viewModel.result(clingo);
-        // viewModel.allowInput = true;
+        viewModel.allowInput = true;
     }
 }
