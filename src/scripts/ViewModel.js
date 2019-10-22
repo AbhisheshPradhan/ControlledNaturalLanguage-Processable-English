@@ -22,11 +22,10 @@ var viewModel = {
     inputMode: ko.observable("Text Mode"), //default settings
     asp: ko.observable(''),
     answer: ko.observable(''),
-    asyncFlag: false,
+
     fileNames: ko.observableArray([]),
     initialLoad: true,
     isEndOfSentence: false,
-    currentProcessingSentence: "",
 
     $loading: $("#loader-overlay"),
 
@@ -79,7 +78,7 @@ var viewModel = {
         // console.log("updateViewForWord", word);
         // console.log("textLineData.nodes", textLineData.nodes);
 
-        let str = viewModel.textAreaStr().toString();
+        // let str = viewModel.textAreaStr().toString();
         request.done(function (data) {
             var json = JSON.parse(data);
             if (eventHandler.lastInputEntered == "." || eventHandler.lastInputEntered == "?") {
@@ -107,8 +106,6 @@ var viewModel = {
                 expressionLoader.loadLookahead();
                 viewModel.anaExp(json.ana);
                 viewModel.allowInput = true;
-                viewModel.currentProcessingSentence += word + " ";
-                viewModel.processedInput(viewModel.currentProcessingSentence);
             }
             
             if (word == "." || word == "?") {
@@ -135,9 +132,6 @@ var viewModel = {
                 viewModel.setAsp(json);
                 viewModel.setAnswer(json.answer);
                 viewModel.updateViewForWord(" ");
-                viewModel.processedInput(textLineData.sentences[textLineData.sentences.length - 1]);
-                viewModel.currentProcessingSentence = "";
-                // console.log("textLineData.sentences", textLineData.sentences);
 
                 viewModel.isEndOfSentence = true;
                 // console.log("viewModel.isEndOfSentence = true;")
@@ -145,7 +139,11 @@ var viewModel = {
                 viewModel.isEndOfSentence = false;
             }
 
-
+            if(textLineData.lastSentenceNodes().length > 1) {
+                viewModel.processedInput(textLineData.lastSentenceNodes().join(" "));
+            } else if(textLineData.sentences.length > 0) {
+                viewModel.processedInput(textLineData.sentences[textLineData.sentences.length - 1]);
+            }
 
             if (json.hasOwnProperty('ana') && word != "." && json.ana.length != 0) {
                 var temp = json.ana;
@@ -159,6 +157,17 @@ var viewModel = {
                 }
                 viewModel.anaExp(temp);
             }
+        });
+    },
+
+    postToken: function (word) {
+        var request = $.when(token.postToken(word));
+        request.done(function (data) {
+            var json = JSON.parse(data);
+            expressionLoader.loadLookahead();
+            viewModel.populateLookUpTable(json);
+            viewModel.anaExp(json.ana);
+            viewModel.allowInput = true;
         });
     },
 
@@ -202,7 +211,7 @@ var viewModel = {
     onKeyUp: function (d, e) {
         var keyVal = e.keyCode;
         if (keyVal == 8) {
-            eventHandler.backspace(d, e);
+            eventHandler.backspace();
         }
     },
 
@@ -235,7 +244,6 @@ ko.applyBindings(viewModel);
         });
         $("#text_field").keyup(function (e) {
             if (e.keyCode == 8) {
-                console.log("backspace pressed");
                 e.preventDefault();
                 return false;
             }

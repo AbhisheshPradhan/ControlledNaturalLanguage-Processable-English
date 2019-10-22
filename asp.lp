@@ -1,6 +1,10 @@
-prop(1,blue).
+named(1,bob).
 
-class(1,accomodation).
+pred(1,work).
 
-prop(1,blue).
+prop(2,blue).
+
+class(2,accommodation).
+
+prop(2,blue).
 

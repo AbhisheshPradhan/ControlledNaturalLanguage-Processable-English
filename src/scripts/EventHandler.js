@@ -54,7 +54,7 @@ var eventHandler = {
     if (viewModel.token() != '.' && viewModel.token() != '?') {
       viewModel.updateViewForWord(viewModel.token().slice(0, sizeOfWord));
 
-    } else if (viewModel.token() == '.' || viewModel.token() == '?'){
+    } else if (viewModel.token() == '.' || viewModel.token() == '?') {
       if (viewModel.allowInput && $.inArray(viewModel.token(), viewModel.lookUpTable()) != -1) {
         viewModel.updateViewForWord(viewModel.token());
         viewModel.lookaheadObject(viewModel.initLookUpObj);
@@ -66,7 +66,7 @@ var eventHandler = {
   },
 
   switchKeyVal: function (keyVal) {
-    
+
     switch (keyVal) {
       case ',':
         eventHandler.punctuation('');
@@ -91,68 +91,67 @@ var eventHandler = {
   },
 
 
-  backspace: function (d, e) {
-    var keyVal = e.keyCode;
-    if (keyVal == 8) { //backspace detected
-      var counter = 0;
+  backspace: function () {
+    //backspace detected
+    if (viewModel.$text_field.val().length > 0) {
       while (viewModel.textAreaStr() != viewModel.$text_field.val()) {
-        viewModel.asyncFlag = false; // should be true
-        viewModel.token(viewModel.token().slice(0, viewModel.token().length - 1));
+        console.log("viewModel.textAreaStr()", viewModel.textAreaStr());
+        console.log("viewModel.$text_field.val()", viewModel.$text_field.val());
 
-        var charBeingRemoved = viewModel.textAreaStr().slice(viewModel.textAreaStr().length - 1, viewModel.textAreaStr().length);
+        let charBeingRemoved = viewModel.textAreaStr().slice(viewModel.textAreaStr().length - 1, viewModel.textAreaStr().length);
+        let removeToken = false;
+        let tokenToBeRemoved = "";
         viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1));
-        // When backspace all the way to previous token
 
-        var currentIndexInPreviousToken = charBeingRemoved == " " || charBeingRemoved == "," ||
-          charBeingRemoved == "." || charBeingRemoved == "?";
-
-        if (currentIndexInPreviousToken) {
-          var tokenToBeDel = textLineData.nodes[textLineData.nodes.length - 2];
-
-          // console.log("tokenToBeDel", tokenToBeDel);
-          // console.log("charBeingRemoved", charBeingRemoved);
-
-          this.updateToPreviousToken(charBeingRemoved);
-          //MIGHT NEED CHANGES
-          if (tokenToBeDel != " " && tokenToBeDel != ".") {
-            console.log("character deleted");
-            var pop = textLineData.removeTailNode();
-            viewModel.updateViewForWord(pop);
-            viewModel.lookUpTable(lookaheadObj.wordTable);
-            viewModel.currentInitialLookUpTable = lookaheadObj.wordTable;
-          } else if (textLineData.nodes[textLineData.nodes.length - 1] == " ") {
-            console.log("whole sentence deleted");
-            viewModel.currentInitialLookUpTable = viewModel.initSentenceLookUp;
-            viewModel.lookaheadObject(viewModel.initLookUpObj);
-            viewModel.lookUpTable(viewModel.initSentenceLookUp);
-          } else if (tokenToBeDel == " ") {
-            console.log("tokenToBeDel is ' '")
-          }
-
-          viewModel.allowInput = true;
-        } else {
-          console.log("viewModel.lookUpTable(viewModel.currentInitialLookUpTable);", viewModel.currentInitialLookUpTable);
-          viewModel.lookUpTable(viewModel.currentInitialLookUpTable);
+        let charBeforeCharBeingRemoved = viewModel.textAreaStr().slice(viewModel.textAreaStr().length - 1, viewModel.textAreaStr().length);
+        
+        if (charBeingRemoved == "." || charBeingRemoved == "?") {
+          console.log("nodes before", textLineData.nodes);
+          tokenToBeRemoved = textLineData.removeTailNode();
+          console.log("nodes after", textLineData.nodes);
+          textLineData.removeSentence();
+          removeToken = true;
+        } else if (charBeforeCharBeingRemoved == " ") {
+          console.log("nodes before", textLineData.nodes);
+          tokenToBeRemoved = textLineData.removeTailNode();
+          console.log("nodes after", textLineData.nodes);
+          removeToken = true;
+        } else if (charBeforeCharBeingRemoved == "." || charBeforeCharBeingRemoved == "?") {
+          console.log("nodes before", textLineData.nodes);
+          tokenToBeRemoved = textLineData.removeTailNode();
+          console.log("nodes after", textLineData.nodes);
         }
-        counter++;
 
-        if (counter > 50) {
-          viewModel.textAreaStr(viewModel.$text_field.val());
-          break;
+        if (textLineData.lastSentenceNodes().length == 1) {
+          viewModel.lookaheadObject(viewModel.initLookUpObj);
+          viewModel.lookUpTable(viewModel.initLookUpTable);
+        } else if (removeToken) {
+          let prevToken = textLineData.removeTailNode();
+          viewModel.updateViewForWord(prevToken);
+          viewModel.lookUpTable(lookaheadObj.wordTable);
+          viewModel.currentInitialLookUpTable = lookaheadObj.wordTable;
+          console.log("tokenToBeRemoved", tokenToBeRemoved)
+          removeToken = false;
         }
       }
-      viewModel.allowInput = true;
-      viewModel.asyncFlag = false;
+    } else if (viewModel.$text_field.val().length == 0) {
+      console.log("this._clearTextArea();")
+      this._clearTextArea();
     }
   },
 
-  updateToPreviousToken(charBeingRem) {
-    var prevToken = textLineData.removeTailNode(); //also removes prev token
-    if (prevToken == '.' || prevToken == '?')
-      prevToken = textLineData.removeTailNode();
-    viewModel.token(prevToken);
-    viewModel.firstIndexOfCurrentWord = viewModel.firstIndexOfCurrentWord - viewModel.token().length - 1;
-    if (charBeingRem == ",")
-      viewModel.firstIndexOfCurrentWord++;
+  _clearTextArea() {
+    console.log("text area empty");
+    textLineData.nodes = [" "];
+    textLineData.sentences = [];
+    viewModel.textAreaStr("");
+    viewModel.token("");
+    viewModel.processedInput("");
+
+    console.log("viewModel.textAreaStr()", viewModel.textAreaStr());
+    console.log("viewModel.token()", viewModel.token())
+
+    viewModel.lookaheadObject(viewModel.initLookUpObj);
+    viewModel.lookUpTable(viewModel.initLookUpTable);
   }
 }

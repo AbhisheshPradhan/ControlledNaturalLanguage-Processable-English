@@ -28,13 +28,24 @@ var textLineData = {
   addNode: function (node) {
     this.nodes.push(node);
     this.sposNum = node == " " ? 0 : this.sposNum + 1;
+    
   },
 
   addSentence: function (sentence) {
     this.sentences.push(sentence);
     this.firstIndexOfSentence = this.nodes.length;
+    console.log("sposNum", this.sposNum);
 
-    console.log("sentences", this.sentences)
+    console.log("sentences", this.sentences);
+  },
+
+  lastSentenceNodes: function() {
+    return this.nodes.lastIndexOf(" ") > this.nodes.lastIndexOf("") ? this.nodes.slice(this.nodes.lastIndexOf(" ")) : this.nodes.slice(this.nodes.lastIndexOf(""));
+  },
+
+  removeSentence: function() {
+    console.log("sentences", this.sentences);
+    return this.sentences.pop();
   },
 
   removeTailNode: function () {
