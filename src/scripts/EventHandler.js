@@ -95,31 +95,31 @@ var eventHandler = {
     //backspace detected
     if (viewModel.$text_field.val().length > 0) {
       while (viewModel.textAreaStr() != viewModel.$text_field.val()) {
-        console.log("viewModel.textAreaStr()", viewModel.textAreaStr());
-        console.log("viewModel.$text_field.val()", viewModel.$text_field.val());
+        // console.log("viewModel.textAreaStr()", viewModel.textAreaStr());
+        // console.log("viewModel.$text_field.val()", viewModel.$text_field.val());
 
         let charBeingRemoved = viewModel.textAreaStr().slice(viewModel.textAreaStr().length - 1, viewModel.textAreaStr().length);
         let removeToken = false;
-        let tokenToBeRemoved = "";
+        viewModel.token(viewModel.token().slice(0, viewModel.token().length - 1));
         viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1));
 
         let charBeforeCharBeingRemoved = viewModel.textAreaStr().slice(viewModel.textAreaStr().length - 1, viewModel.textAreaStr().length);
         
         if (charBeingRemoved == "." || charBeingRemoved == "?") {
-          console.log("nodes before", textLineData.nodes);
+          // console.log("nodes before", textLineData.nodes);
           tokenToBeRemoved = textLineData.removeTailNode();
-          console.log("nodes after", textLineData.nodes);
+          // console.log("nodes after", textLineData.nodes);
           textLineData.removeSentence();
           removeToken = true;
         } else if (charBeforeCharBeingRemoved == " ") {
-          console.log("nodes before", textLineData.nodes);
+          // console.log("nodes before", textLineData.nodes);
           tokenToBeRemoved = textLineData.removeTailNode();
-          console.log("nodes after", textLineData.nodes);
+          // console.log("nodes after", textLineData.nodes);
           removeToken = true;
         } else if (charBeforeCharBeingRemoved == "." || charBeforeCharBeingRemoved == "?") {
-          console.log("nodes before", textLineData.nodes);
+          // console.log("nodes before", textLineData.nodes);
           tokenToBeRemoved = textLineData.removeTailNode();
-          console.log("nodes after", textLineData.nodes);
+          // console.log("nodes after", textLineData.nodes);
         }
 
         if (textLineData.lastSentenceNodes().length == 1) {
@@ -130,26 +130,26 @@ var eventHandler = {
           viewModel.updateViewForWord(prevToken);
           viewModel.lookUpTable(lookaheadObj.wordTable);
           viewModel.currentInitialLookUpTable = lookaheadObj.wordTable;
-          console.log("tokenToBeRemoved", tokenToBeRemoved)
+          // console.log("tokenToBeRemoved", tokenToBeRemoved)
           removeToken = false;
         }
       }
     } else if (viewModel.$text_field.val().length == 0) {
-      console.log("this._clearTextArea();")
+      // console.log("this._clearTextArea();")
       this._clearTextArea();
     }
   },
 
   _clearTextArea() {
-    console.log("text area empty");
+    // console.log("text area empty");
     textLineData.nodes = [" "];
     textLineData.sentences = [];
     viewModel.textAreaStr("");
     viewModel.token("");
     viewModel.processedInput("");
 
-    console.log("viewModel.textAreaStr()", viewModel.textAreaStr());
-    console.log("viewModel.token()", viewModel.token())
+    // console.log("viewModel.textAreaStr()", viewModel.textAreaStr());
+    // console.log("viewModel.token()", viewModel.token())
 
     viewModel.lookaheadObject(viewModel.initLookUpObj);
     viewModel.lookUpTable(viewModel.initLookUpTable);

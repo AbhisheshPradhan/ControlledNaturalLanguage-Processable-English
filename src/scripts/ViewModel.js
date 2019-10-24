@@ -74,27 +74,8 @@ var viewModel = {
 
     updateViewForWord(word) {
         var request = $.when(token.postToken(word));
-
-        // console.log("updateViewForWord", word);
-        // console.log("textLineData.nodes", textLineData.nodes);
-
-        // let str = viewModel.textAreaStr().toString();
         request.done(function (data) {
             var json = JSON.parse(data);
-            if (eventHandler.lastInputEntered == "." || eventHandler.lastInputEntered == "?") {
-                // alert(eventHandler.lastInputEntered + "inputed. Now trigger lexicon check, and only insert punctuation");
-                if (json.hasOwnProperty('spelling suggestions') || (json.lookahead.length == 0 && !json.hasOwnProperty('asp'))) {
-                    // viewModel.allowInput = false;
-                    // var lAhead = lookaheadObj.createLookaheadTable(lookaheadObj);
-                    // lAhead = lookaheadObj.addStrInHeadForEachCatInLookahead(word, lAhead);
-                    // viewModel.lookaheadObject(lAhead);
-                    // viewModel.anaExp(json.ana);
-                    // console.log("word", word);
-                    // console.log("eventHandler.lastInputEntered", eventHandler.lastInputEntered);
-                    // console.log("viewModel.token()", viewModel.token());
-                }
-            }
-            // console.log("viewModel.token()", viewModel.token());
             if (json.hasOwnProperty('spelling suggestions') || (json.lookahead.length == 0 && !json.hasOwnProperty('asp'))) {
                 viewModel.allowInput = false;
                 var lAhead = lookaheadObj.createLookaheadTable(lookaheadObj);
@@ -109,10 +90,7 @@ var viewModel = {
             }
             
             if (word == "." || word == "?") {
-                // console.log("word", word)
-                // console.log("sentence textAreaStr: ", viewModel.textAreaStr());
                 var sentences = (viewModel.textAreaStr().trim().slice(0, viewModel.textAreaStr().length) + word)
-                // console.log("sentences", sentences);
                 // remove extra '.'s when there are consecutive .'s e.g .. = .
                 var regexReplaceFullStop = /(^[\.\s]*)|([\s\.]*(?=(\.|\))))|(\s*\([\.\s]*\)\s*\.)|(\s*(?=\())/g;
                 sentences = sentences.replace(regexReplaceFullStop, "").trim();
@@ -122,7 +100,6 @@ var viewModel = {
 
                 sentences = sentences.replace(/\.(?!\d)|([^\d])\.(?=\d)/g, '$1.|');
                 sentences = sentences.replace(/\?(?!\d)|([^\d])\?(?=\d)/g, '$1?|');
-                // console.log("sentences : ", sentences);
 
                 var sentencesArray = sentences.split("|");
                 sentencesArray.pop(); //remove "" at the end of the array
@@ -134,7 +111,6 @@ var viewModel = {
                 viewModel.updateViewForWord(" ");
 
                 viewModel.isEndOfSentence = true;
-                // console.log("viewModel.isEndOfSentence = true;")
             } else {
                 viewModel.isEndOfSentence = false;
             }
@@ -157,17 +133,6 @@ var viewModel = {
                 }
                 viewModel.anaExp(temp);
             }
-        });
-    },
-
-    postToken: function (word) {
-        var request = $.when(token.postToken(word));
-        request.done(function (data) {
-            var json = JSON.parse(data);
-            expressionLoader.loadLookahead();
-            viewModel.populateLookUpTable(json);
-            viewModel.anaExp(json.ana);
-            viewModel.allowInput = true;
         });
     },
 

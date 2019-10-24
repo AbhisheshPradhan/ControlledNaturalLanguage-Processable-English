@@ -115,7 +115,7 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
         </div>
 
         <div class="processed-input-container">
-            Processed Input:
+            Last Processed Sentence:
             <span data-bind="text: processedInput"></span>
         </div>
         <div class="processed-input-container">
@@ -242,8 +242,8 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
             </div>
 
             <div id="cnl_text" class="collapse show" aria-labelledby="cnl_text_heading">
-                <div class="card-body">
-                    <ol data-bind="foreach: textList">
+                <div class="card-body results-text">
+                    <ol class="CNL-text-list" data-bind="foreach: textList">
                         <li data-bind="text: $data"> </li>
                     </ol>
                 </div>
@@ -267,7 +267,7 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
                 </h5>
             </div>
             <div id="asp" class="collapse" aria-labelledby="asp_heading">
-                <div class="card-body">
+                <div class="card-body results-text">
                     <pre id="asp-text" data-bind="text: asp"></pre>
                 </div>
             </div>
@@ -286,7 +286,7 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
                 </h5>
             </div>
             <div id="answer_sets_container" class="collapse" aria-labelledby="anwser_sets_heading">
-                <div class="card-body">
+                <div class="card-body results-text">
                     <pre data-bind="text: result"></pre>
                 </div>
             </div>
@@ -304,7 +304,7 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
                 </h5>
             </div>
             <div id="answers_container" class="collapse" aria-labelledby="answers_heading">
-                <div class="card-body">
+                <div class="card-body results-text">
                     <pre data-bind="text: answer"></pre>
                 </div>
             </div>

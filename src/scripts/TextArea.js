@@ -16,7 +16,7 @@ var textLineData = {
       filename: " ",
       spectext: " ",
       snum: this.sentences.length + 1,
-      spos: this.getSpos(),
+      spos: this.sposNum,
       reasoner: (word == "." || word == "?") ? "on" : "off",
       reasonermode: rmode
     };
@@ -28,15 +28,11 @@ var textLineData = {
   addNode: function (node) {
     this.nodes.push(node);
     this.sposNum = node == " " ? 0 : this.sposNum + 1;
-    
   },
 
   addSentence: function (sentence) {
+    this.sposNum = 0;
     this.sentences.push(sentence);
-    this.firstIndexOfSentence = this.nodes.length;
-    console.log("sposNum", this.sposNum);
-
-    console.log("sentences", this.sentences);
   },
 
   lastSentenceNodes: function() {
@@ -44,18 +40,13 @@ var textLineData = {
   },
 
   removeSentence: function() {
-    console.log("sentences", this.sentences);
+    let lastSentenceNodes = this.lastSentenceNodes();
+    this.sposNum = lastSentenceNodes.length - 1;
     return this.sentences.pop();
   },
 
   removeTailNode: function () {
+    this.sposNum = this.sposNum - 1;
     return this.nodes.pop();
-  },
-
-  getSpos: function () {
-    if (this.nodes.length - this.firstIndexOfSentence > 1) {
-      return this.nodes.length - this.firstIndexOfSentence - 1;
-    }
-    return 0;
   }
 };
