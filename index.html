@@ -171,14 +171,14 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
                 <div class="modal-body">
                     <span aria-hidden="true">
                         <label for="save-file">Please enter file name: </label>
-                        <input type="text" class="form-control" name="save-file">
+                        <input type="text" class="form-control" name="save-file" id="saveFileName">
                     </span>
                 </div>
                 <div class="modal-footer">
                     <button id="modal_save_file_close_button" type="button" class="btn btn-secondary"
                         data-dismiss="modal">Close</button>
                     <button id="modal_save_file_button" type="button" class="btn btn-primary"
-                        data-bind="event: {click: onSubmit}">Save</button>
+                        data-bind="event: {click: saveFile}">Save</button>
                 </div>
             </div>
         </div>

@@ -19,7 +19,7 @@ var navBar = {
     },
 
     saveButton: function () {
-        var file_name = prompt("Please enter your name");
+        var file_name = viewModel.$saveFileName.val();
         if (file_name != null) {
             var spectext = "";
             for (var i = 0; i < textLineData.sentences.length; i++) {
@@ -72,17 +72,12 @@ var navBar = {
                             } else {
                                 viewModel.textAreaStr(viewModel.textAreaStr() + nodes[i] + " ");
                             }
-
+                            viewModel.isLoadFileInput = true;
                             viewModel.$text_field.val(viewModel.textAreaStr());
                             viewModel.updateViewForWord(nodes[i]);
                             i = x;
                         }
                     }
-
-                    viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
-                    viewModel.lookaheadObject(viewModel.initLookUpObj);
-                    viewModel.lookUpTable(viewModel.initLookUpTable);
-
                     viewModel.$loading.hide();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -93,6 +88,8 @@ var navBar = {
         } else {
             alert("Complete sentence before loading file.");
         }
+
+        viewModel.isLoadFileInput = false;
 
         return true;
     },

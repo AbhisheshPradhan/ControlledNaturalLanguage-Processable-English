@@ -6,10 +6,11 @@
 
 var viewModel = {
     $text_field: $("#text_field"),
+    $saveFileName: $("#saveFileName"),
     textAreaStr: ko.observable(""), 
     processedInput: ko.observable(""),// For display 
     result: ko.observable(""),
-    firstIndexOfCurrentWord: 0, //Need to use this for backspace 
+    // firstIndexOfCurrentWord: 0, //Need to use this for backspace 
     token: ko.observable(""),
     textList: ko.observableArray([]),
     smallAsp: "",
@@ -35,6 +36,9 @@ var viewModel = {
     initLookUpTable: [], //initial lookuptable
 
     currentInitialLookUpTable: [], //used in backspace handler
+
+    isDropdownInput: false,
+    isLoadFileInput: false,
 
     init: function () {
         console.log("init should be only called once or after sentence completion")
@@ -108,11 +112,10 @@ var viewModel = {
 
                 viewModel.setAsp(json);
                 viewModel.setAnswer(json.answer);
-                viewModel.updateViewForWord(" ");
 
-                viewModel.isEndOfSentence = true;
-            } else {
-                viewModel.isEndOfSentence = false;
+                if(viewModel.isDropdownInput || viewModel.isLoadFileInput) {
+                    viewModel.updateViewForWord(" ");
+                }
             }
 
             if(textLineData.lastSentenceNodes().length > 1) {
@@ -134,6 +137,7 @@ var viewModel = {
                 viewModel.anaExp(temp);
             }
         });
+        console.log("nodes", textLineData.nodes);
     },
 
     // NAVBAR functions
@@ -156,6 +160,10 @@ var viewModel = {
 
     generateText: function () {
         navBar.generateText();
+    },
+
+    saveFile() {
+        navBar.saveButton();
     },
 
 

@@ -46,7 +46,7 @@ var textLineData = {
   },
 
   removeTailNode: function () {
-    this.sposNum = this.sposNum - 1;
+    this.sposNum = this.sposNum - 1 < 0 ? 0 : this.sposNum - 1;
     return this.nodes.pop();
   }
 };

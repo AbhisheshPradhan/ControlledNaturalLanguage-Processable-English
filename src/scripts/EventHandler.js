@@ -2,7 +2,7 @@
 
 var eventHandler = {
 
-  lastInputEntered: null,
+  isLastWordOfSentence: false,
 
   keyUpdate: function (d, e) {
     var keyID = e.keyCode;
@@ -33,12 +33,10 @@ var eventHandler = {
     return true;
   },
 
-  // Submit action happens here
-  // Need to create and array and split up sentences and add them as sentences..push them into textList 
-  //and then clear everything. Or not??
+  // Submit
   enterKey: function () {
-    // console.log("isEndOfSentence", viewModel.isEndOfSentence)
-    if (viewModel.isEndOfSentence) {
+    console.log("isEndOfSentence", viewModel.isEndOfSentence);
+    if (viewModel.isEndOfSentence || textLineData.nodes[textLineData.nodes.length - 1] == " ") {
       viewModel.textList.removeAll();
       for (let i = 0; i < textLineData.sentences.length; i++) {
         viewModel.textList.push(textLineData.sentences[i]);
@@ -49,24 +47,40 @@ var eventHandler = {
   punctuation: function (chr) {
     // Post the word before punctuation first
     var sizeOfWord = viewModel.token().length;
-    eventHandler.lastInputEntered = chr;
+    viewModel.isDropdownInput = false;
+    // viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length + 1;
 
-    if (viewModel.token() != '.' && viewModel.token() != '?') {
-      viewModel.updateViewForWord(viewModel.token().slice(0, sizeOfWord));
+    console.log("chr", chr);
+    console.log("viewModel.token()", viewModel.token());
 
-    } else if (viewModel.token() == '.' || viewModel.token() == '?') {
-      if (viewModel.allowInput && $.inArray(viewModel.token(), viewModel.lookUpTable()) != -1) {
-        viewModel.updateViewForWord(viewModel.token());
-        viewModel.lookaheadObject(viewModel.initLookUpObj);
-        viewModel.lookUpTable(viewModel.initLookUpTable);
+
+    // when backspace to . then pressing space, 
+    if(chr == "" && viewModel.token() == " ") {
+      console.log("no need to update view")
+      return;
+    }
+
+    if ((viewModel.token() == "." || viewModel.token() == "?") && textLineData.nodes[textLineData.nodes.length - 1] != " ") {
+      // reinit when space typed after . or ?
+      viewModel.updateViewForWord(" ");
+    } else {
+      // update for typed word
+      if (viewModel.token() != "." || viewModel.token() != "?") {
+        viewModel.updateViewForWord(viewModel.token().slice(0, sizeOfWord));
+      }
+
+      // if chr is . or ?, update for it and set end of sentence
+      if (chr == '.' || chr == '?') {
+        if (viewModel.allowInput && $.inArray(chr, viewModel.lookUpTable()) != -1) {
+          viewModel.updateViewForWord(chr);
+          viewModel.isEndOfSentence = true;
+        }
       }
     }
 
-    viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length + 1;
   },
 
   switchKeyVal: function (keyVal) {
-
     switch (keyVal) {
       case ',':
         eventHandler.punctuation('');
@@ -91,67 +105,89 @@ var eventHandler = {
   },
 
 
+  // viewModel.textAreaStr() is ko var for the strings in text editor
+  // viewModel.$text_field.val() is the var to get the value of HTML element
+  // when backspace is pressed, chars are deleted from viewModel.$text_field.val()
+  // so it will not equal to viewModel.$text_field.val()
+  // 
   backspace: function () {
     //backspace detected
     if (viewModel.$text_field.val().length > 0) {
       while (viewModel.textAreaStr() != viewModel.$text_field.val()) {
-        // console.log("viewModel.textAreaStr()", viewModel.textAreaStr());
-        // console.log("viewModel.$text_field.val()", viewModel.$text_field.val());
-
         let charBeingRemoved = viewModel.textAreaStr().slice(viewModel.textAreaStr().length - 1, viewModel.textAreaStr().length);
-        let removeToken = false;
+
+        // deleting chars from currently constructing token when backspace pressed
         viewModel.token(viewModel.token().slice(0, viewModel.token().length - 1));
+
+        // update ko variable textAreaStr
         viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1));
-
-        let charBeforeCharBeingRemoved = viewModel.textAreaStr().slice(viewModel.textAreaStr().length - 1, viewModel.textAreaStr().length);
         
-        if (charBeingRemoved == "." || charBeingRemoved == "?") {
-          // console.log("nodes before", textLineData.nodes);
-          tokenToBeRemoved = textLineData.removeTailNode();
-          // console.log("nodes after", textLineData.nodes);
-          textLineData.removeSentence();
-          removeToken = true;
-        } else if (charBeforeCharBeingRemoved == " ") {
-          // console.log("nodes before", textLineData.nodes);
-          tokenToBeRemoved = textLineData.removeTailNode();
-          // console.log("nodes after", textLineData.nodes);
-          removeToken = true;
-        } else if (charBeforeCharBeingRemoved == "." || charBeforeCharBeingRemoved == "?") {
-          // console.log("nodes before", textLineData.nodes);
-          tokenToBeRemoved = textLineData.removeTailNode();
-          // console.log("nodes after", textLineData.nodes);
-        }
+        let currentIndexBehindPreviousToken = charBeingRemoved == " " || charBeingRemoved == "," || charBeingRemoved == "." ||
+        charBeingRemoved == "?";
 
-        if (textLineData.lastSentenceNodes().length == 1) {
-          viewModel.lookaheadObject(viewModel.initLookUpObj);
-          viewModel.lookUpTable(viewModel.initLookUpTable);
-        } else if (removeToken) {
-          let prevToken = textLineData.removeTailNode();
-          viewModel.updateViewForWord(prevToken);
-          viewModel.lookUpTable(lookaheadObj.wordTable);
-          viewModel.currentInitialLookUpTable = lookaheadObj.wordTable;
-          // console.log("tokenToBeRemoved", tokenToBeRemoved)
-          removeToken = false;
+        if(currentIndexBehindPreviousToken) {
+          var tokenToBeDel = textLineData.nodes[textLineData.nodes.length - 1];
+          console.log("tokenToBeDel", tokenToBeDel)
+
+          if(tokenToBeDel == "." || tokenToBeDel == "?" || tokenToBeDel == "," ) {
+            var prevNode = textLineData.removeTailNode();
+            prevNode = textLineData.removeTailNode();
+            viewModel.token(prevNode);
+            prevNode = textLineData.removeTailNode();
+            console.log("need to delete 3 tokens");
+            console.log("prevNode", prevNode);
+            if(tokenToBeDel == "." || tokenToBeDel == "?" ) {
+              textLineData.removeSentence();
+            }
+            viewModel.isDropdownInput = false;
+            viewModel.updateViewForWord(prevNode);
+            viewModel.lookUpTable(lookaheadObj.wordTable);
+            viewModel.currentInitialLookUpTable = lookaheadObj.wordTable;
+            console.log("nodes", textLineData.nodes);
+          } else if(tokenToBeDel != " "){
+            var prevNode = textLineData.removeTailNode();
+            viewModel.token(prevNode);
+            prevNode = textLineData.removeTailNode();
+            
+            if(this.isLastWordOfSentence) {
+              prevNode = textLineData.removeTailNode();
+            }
+            console.log("word deleted")
+            console.log("prevNode", prevNode);
+
+            viewModel.isDropdownInput = false;
+            viewModel.updateViewForWord(prevNode);
+            viewModel.lookUpTable(lookaheadObj.wordTable);
+            viewModel.currentInitialLookUpTable = lookaheadObj.wordTable;
+            console.log("nodes", textLineData.nodes);
+            this.isLastWordOfSentence = false;
+          } else {
+            var prevNode = textLineData.removeTailNode();
+            viewModel.token(prevNode);
+            viewModel.isEndOfSentence = true;
+            console.log("empty token deleted");
+            
+            this.isLastWordOfSentence = false;
+          }
         }
       }
-    } else if (viewModel.$text_field.val().length == 0) {
-      // console.log("this._clearTextArea();")
-      this._clearTextArea();
+    } else {
+      console.log("text area cleared");
+      console.log("sentences", textLineData.sentences);
+      console.log("nodes", textLineData.nodes);
+      console.log("token", viewModel.token());
+      console.log("viewModel.textAreaStr()", viewModel.textAreaStr())
+      textLineData.nodes = [];
+      textLineData.sentences = [];
+      textLineData.sposNum = 0;
+      viewModel.textAreaStr("")
+      viewModel.token("");
+      console.log("text area cleared");
+      console.log("sentences", textLineData.sentences);
+      console.log("nodes", textLineData.nodes);
+      console.log("token", viewModel.token());
+      console.log("viewModel.textAreaStr()", viewModel.textAreaStr())
+      viewModel.init();
     }
-  },
-
-  _clearTextArea() {
-    // console.log("text area empty");
-    textLineData.nodes = [" "];
-    textLineData.sentences = [];
-    viewModel.textAreaStr("");
-    viewModel.token("");
-    viewModel.processedInput("");
-
-    // console.log("viewModel.textAreaStr()", viewModel.textAreaStr());
-    // console.log("viewModel.token()", viewModel.token())
-
-    viewModel.lookaheadObject(viewModel.initLookUpObj);
-    viewModel.lookUpTable(viewModel.initLookUpTable);
   }
 }

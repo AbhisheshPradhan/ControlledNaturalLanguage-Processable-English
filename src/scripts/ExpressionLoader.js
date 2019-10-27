@@ -40,9 +40,10 @@ var expressionLoader = {
                 viewModel.textAreaStr(str);
                 var s1;
                 for (s1 = 0; s1 < dataArr1.length; s1++) {
+                    viewModel.isDropdownInput = true;
                     viewModel.updateViewForWord(viewModel.token() + dataArr1[s1]);
                     viewModel.textAreaStr(viewModel.textAreaStr() + dataArr1[s1] + " ");
-                    viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
+                    // viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
                     this.loadLookahead();
                     viewModel.$text_field.val(viewModel.textAreaStr());
                 }
@@ -52,6 +53,7 @@ var expressionLoader = {
         } else if (viewModel.allowInput) {
             var dataArr = data.split(" ");
             for (var s = 0; s < dataArr.length; s++) {
+                viewModel.isDropdownInput = true;
                 viewModel.updateViewForWord(viewModel.token() + dataArr[s]);
                 if (dataArr[s] == "." || dataArr[s] == "?") {
                     viewModel.isEndOfSentence = true;
@@ -60,7 +62,7 @@ var expressionLoader = {
                     viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1) + dataArr[s] + " ");
                     viewModel.$text_field.val(viewModel.textAreaStr());
 
-                    viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
+                    // viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
                     viewModel.lookaheadObject(viewModel.initLookUpObj);
                     viewModel.lookUpTable(viewModel.initLookUpTable);
                 } else if (data == ",") {
@@ -71,7 +73,7 @@ var expressionLoader = {
                     viewModel.isEndOfSentence = false;
                     viewModel.textAreaStr(viewModel.textAreaStr() + dataArr[s] + " ");
                     viewModel.$text_field.val(viewModel.textAreaStr());
-                    viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
+                    // viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
                     this.loadLookahead();
                 }
             }
@@ -109,7 +111,7 @@ var expressionLoader = {
             "filename": " ",
             "spectext": " ",
             "snum": textLineData.sentences.length + 1,
-            "spos": textLineData.getSpos() - 1,
+            "spos": textLineData.sposNum - 1,
             "reasoner": "off",
             "reasonermode": "normal"
         }
