@@ -32,21 +32,35 @@ var expressionLoader = {
                 var wform = data.add;
                 this.addToLexicon(cat, wform, vform, num);
                 textLineData.removeTailNode();
+                console.log("nodes", textLineData.nodes);
                 var dataArr1 = wform.split(" ");
                 var str = viewModel.textAreaStr().toString();
                 str = str.replace(/^\s+|\s+$/g, "");
                 var pos = str.lastIndexOf(" ");
                 str = str.substring(0, pos + 1);
                 viewModel.textAreaStr(str);
-                var s1;
-                for (s1 = 0; s1 < dataArr1.length; s1++) {
-                    viewModel.isDropdownInput = true;
-                    viewModel.updateViewForWord(viewModel.token() + dataArr1[s1]);
-                    viewModel.textAreaStr(viewModel.textAreaStr() + dataArr1[s1] + " ");
-                    // viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
-                    this.loadLookahead();
-                    viewModel.$text_field.val(viewModel.textAreaStr());
+
+                // When puntuation mark is entered after a new content word
+                if(viewModel.token() == "." || viewModel.token() == "?" || viewModel.token() == ",") {
+                    for (var s1 = 0; s1 < dataArr1.length; s1++) {
+                        viewModel.isDropdownInput = true;
+                        viewModel.updateViewForWord(dataArr1[s1]);
+                        viewModel.updateViewForWord(viewModel.token());
+                        viewModel.textAreaStr(viewModel.textAreaStr() + dataArr1[s1] + viewModel.token());
+                        viewModel.token(" ");
+                        this.loadLookahead();
+                        viewModel.$text_field.val(viewModel.textAreaStr());
+                    }
+                } else {
+                    for (var s1 = 0; s1 < dataArr1.length; s1++) {
+                        viewModel.isDropdownInput = true;
+                        viewModel.updateViewForWord(viewModel.token() + dataArr1[s1]);
+                        viewModel.textAreaStr(viewModel.textAreaStr() + dataArr1[s1] + " ");
+                        this.loadLookahead();
+                        viewModel.$text_field.val(viewModel.textAreaStr());
+                    }
                 }
+                
             } else {
                 return false;
             }
@@ -62,7 +76,6 @@ var expressionLoader = {
                     viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1) + dataArr[s] + " ");
                     viewModel.$text_field.val(viewModel.textAreaStr());
 
-                    // viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
                     viewModel.lookaheadObject(viewModel.initLookUpObj);
                     viewModel.lookUpTable(viewModel.initLookUpTable);
                 } else if (data == ",") {
@@ -73,7 +86,6 @@ var expressionLoader = {
                     viewModel.isEndOfSentence = false;
                     viewModel.textAreaStr(viewModel.textAreaStr() + dataArr[s] + " ");
                     viewModel.$text_field.val(viewModel.textAreaStr());
-                    // viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length;
                     this.loadLookahead();
                 }
             }

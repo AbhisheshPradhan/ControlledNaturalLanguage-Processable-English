@@ -48,11 +48,9 @@ var eventHandler = {
     // Post the word before punctuation first
     var sizeOfWord = viewModel.token().length;
     viewModel.isDropdownInput = false;
-    // viewModel.firstIndexOfCurrentWord = viewModel.textAreaStr().length + 1;
 
     console.log("chr", chr);
     console.log("viewModel.token()", viewModel.token());
-
 
     // when backspace to . then pressing space, 
     if(chr == "" && viewModel.token() == " ") {

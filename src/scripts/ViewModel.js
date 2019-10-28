@@ -10,7 +10,6 @@ var viewModel = {
     textAreaStr: ko.observable(""), 
     processedInput: ko.observable(""),// For display 
     result: ko.observable(""),
-    // firstIndexOfCurrentWord: 0, //Need to use this for backspace 
     token: ko.observable(""),
     textList: ko.observableArray([]),
     smallAsp: "",
