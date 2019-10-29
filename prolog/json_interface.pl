@@ -2,7 +2,7 @@
 % Projct: PENG ASP
 % Module: json_interface.pl
 % Author: Rolf Schwitter
-% Date:   2019-02-03
+% Date:   2019-09-25
 % ========================================================================
 
   
@@ -343,7 +343,7 @@ json_interface(json([id=Id, inputmode=IMode, editmode=save, token=TokenAtom,
 		     featurestructure=FS, filename=FName, spectext=Text,
 		     snum=SNumAtom, spos=SPosAtom, reasoner=Flag, reasonermode=RMode]), Output) :-
   (
-     FName = 'text.tmp',
+     % FName = 'text.tmp',
      nonvar(Text),
      atom_concat('', FName, Path),
      atom_chars(Text, CharList),
@@ -431,23 +431,26 @@ json_interface(json([id=Id, inputmode=IMode, editmode=generate, token=TokenAtom,
 
   generate(GenSentences, _AnaList),			
   load_parser(chart),
-    (
+  (
        current_cnl_file(''),
        load_complete_lexicon
-    ;  
+  ;  
        current_cnl_file(Path),
        cnl_file(FileNumber, Path),
        load_specific_lexicon(FileNumber)
-    ),
-    asp_file(ASPFileName),
-    tokeniser('text.tmp', Sentences, Atom), !,
-    delete_file('text.tmp'),
-    SNum = 0,
-    process_sentences_2(chart, SNum, Sentences, [[]], [Clauses], [[]], [Ante]), !,
-    writer(ASPFileName, [Clauses]),
-    read_answerset_program(ASPFileName, AnswerSetProgram),
-    execute_answerset_program(ASPFileName, Answers, AnswerSets),
-    Output = json([id=Id, spectext=Atom, gentext=GenSentences, lookahead=[], ana=[],
+  ;
+       current_cnl_file(Path),
+       load_complete_lexicon
+  ),
+  asp_file(ASPFileName),
+  tokeniser('text.tmp', Sentences, Atom), !,
+  delete_file('text.tmp'),
+  SNum = 0,
+  process_sentences_2(chart, SNum, Sentences, [[]], [Clauses], [[]], [Ante]), !,
+  writer(ASPFileName, [Clauses]),
+  read_answerset_program(ASPFileName, AnswerSetProgram),
+  execute_answerset_program(ASPFileName, Answers, AnswerSets),
+  Output = json([id=Id, spectext=Atom, gentext=GenSentences, lookahead=[], ana=[],
 		   answer=Answers, asp=AnswerSetProgram, reasoner=AnswerSets]).
    
 
@@ -465,9 +468,16 @@ json_interface(json([id=Id, inputmode=IMode, editmode=load, token=TokenAtom,
   clean_up_knowledge_base,
   atom_concat('texts/', FName, Path),
   asserta(current_cnl_file(Path)),
-  cnl_file(FileNumber, Path),
-  load_parser(chart),
-  load_specific_lexicon(FileNumber),
+  write(user, bla),
+  (
+     cnl_file(FileNumber, Path),
+     load_parser(chart),
+     load_specific_lexicon(FileNumber)
+  ;
+     load_parser(chart),
+     load_complete_lexicon
+  ),
+  write(user, bla2),
   asp_file(ASPFileName),
   tokeniser(Path, Sentences, Atom), !,
   SNum = 0,

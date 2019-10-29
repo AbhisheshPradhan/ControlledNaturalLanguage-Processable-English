@@ -1,6 +1,4 @@
-prop(1,blue).
+named(1,adina).
 
-class(1,accommodation).
-
-prop(1,blue).
+pred(1,party).
 
