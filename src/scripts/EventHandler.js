@@ -26,9 +26,11 @@ var eventHandler = {
 
     if (viewModel.allowInput) {
       this.switchKeyVal(keyVal);
+      console.log("keyVal", keyVal)
       keyVal = (keyID == 13) ? "" : keyVal;
       viewModel.textAreaStr(viewModel.textAreaStr() + keyVal);
       viewModel.updateLookUpTable();
+      viewModel.prevInputFromDropdown = false;
     }
     return true;
   },
@@ -47,7 +49,6 @@ var eventHandler = {
   punctuation: function (chr) {
     // Post the word before punctuation first
     var sizeOfWord = viewModel.token().length;
-    viewModel.isDropdownInput = false;
 
     console.log("chr", chr);
     console.log("viewModel.token()", viewModel.token());
@@ -58,17 +59,24 @@ var eventHandler = {
       return;
     }
 
+    // when entering a space after . 
+    if(chr == "" && viewModel.token() == "." && textLineData.nodes[textLineData.nodes.length - 1] == " ") {
+      console.log("no need to update view")
+      return;
+    }
+
     if ((viewModel.token() == "." || viewModel.token() == "?") && textLineData.nodes[textLineData.nodes.length - 1] != " ") {
       // reinit when space typed after . or ?
       viewModel.updateViewForWord(" ");
     } else {
       // update for typed word
-      if (viewModel.token() != "." || viewModel.token() != "?") {
+      if ((viewModel.token() != "." || viewModel.token() != "?") && !viewModel.prevInputFromDropdown) {
         viewModel.updateViewForWord(viewModel.token().slice(0, sizeOfWord));
       }
 
       // if chr is . or ?, update for it and set end of sentence
       if (chr == '.' || chr == '?') {
+        console.log("hehe")
         if (viewModel.allowInput && $.inArray(chr, viewModel.lookUpTable()) != -1) {
           viewModel.updateViewForWord(chr);
           viewModel.isEndOfSentence = true;
@@ -97,17 +105,19 @@ var eventHandler = {
         eventHandler.enterKey();
         break;
       default:
+        if(viewModel.prevInputFromDropdown) {
+          viewModel.token("");
+          viewModel.prevInputFromDropdown = false;
+        }
         let chr = viewModel.token() + keyVal;
         viewModel.token(chr);
     }
   },
 
-
   // viewModel.textAreaStr() is ko var for the strings in text editor
   // viewModel.$text_field.val() is the var to get the value of HTML element
   // when backspace is pressed, chars are deleted from viewModel.$text_field.val()
   // so it will not equal to viewModel.$text_field.val()
-  // 
   backspace: function () {
     //backspace detected
     if (viewModel.$text_field.val().length > 0) {

@@ -1,4 +1,6 @@
-named(1,john).
+prop(1,blue).
 
-pred(1,asd).
+class(1,accommodation).
+
+prop(1,blue).
 

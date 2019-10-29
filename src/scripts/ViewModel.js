@@ -38,6 +38,7 @@ var viewModel = {
 
     isDropdownInput: false,
     isLoadFileInput: false,
+    prevInputFromDropdown: false,
 
     init: function () {
         console.log("init should be only called once or after sentence completion")

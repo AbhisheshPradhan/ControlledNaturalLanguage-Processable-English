@@ -16,6 +16,8 @@ var expressionLoader = {
     },
 
     postLookaheadWord: function (data, event) {
+        viewModel.prevInputFromDropdown = true;
+        viewModel.isDropdownInput = true;
         if (typeof data.add != "undefined") {
             if (confirm('Are you sure you want to add "' + data.add + '" to the temporary vocabulary?')) {
                 lookaheadObj.createLookaheadTable(lookaheadObj);
@@ -54,24 +56,27 @@ var expressionLoader = {
                 } else {
                     for (var s1 = 0; s1 < dataArr1.length; s1++) {
                         viewModel.isDropdownInput = true;
-                        viewModel.updateViewForWord(viewModel.token() + dataArr1[s1]);
+                        // viewModel.updateViewForWord(viewModel.token() + dataArr1[s1]);
+                        viewModel.updateViewForWord(dataArr1[s1]);
                         viewModel.textAreaStr(viewModel.textAreaStr() + dataArr1[s1] + " ");
                         this.loadLookahead();
                         viewModel.$text_field.val(viewModel.textAreaStr());
                     }
                 }
-                
             } else {
                 return false;
             }
         } else if (viewModel.allowInput) {
             var dataArr = data.split(" ");
+            console.log("dataArr", dataArr);
             for (var s = 0; s < dataArr.length; s++) {
                 viewModel.isDropdownInput = true;
-                viewModel.updateViewForWord(viewModel.token() + dataArr[s]);
+                // viewModel.updateViewForWord(viewModel.token() + dataArr[s]);
+                viewModel.updateViewForWord(dataArr[s]);
+                viewModel.token(dataArr[s]);
+                console.log("viewModel.token()", viewModel.token());
                 if (dataArr[s] == "." || dataArr[s] == "?") {
                     viewModel.isEndOfSentence = true;
-
                     // The text editor sentence will have space in the end
                     viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1) + dataArr[s] + " ");
                     viewModel.$text_field.val(viewModel.textAreaStr());
@@ -93,6 +98,7 @@ var expressionLoader = {
     },
 
     postAnaExpClicked: function (words) {
+        viewModel.isDropdownInput = true;
         var wordA = "" + words;
         var word = wordA.split(" ");
         if (viewModel.lookUpTable().indexOf(word[0]) != -1) {
