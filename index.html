@@ -75,7 +75,7 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
                             <li class="dropdown-divider"></li>
                         </ul>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" data-toggle="modal" data-target="#saveModal">
+                        <a class="dropdown-item" data-bind="event:{click: saveFile}">
                             Save
                         </a>
                     </div>
@@ -157,30 +157,6 @@ Author: Abhishesh Pradhan, Evan Bernardez, Rolf Schwitter, Macquarie University,
 
                 </li>
             </ul>
-        </div>
-    </div>
-
-    <!-- Save File Modal -->
-    <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title" id="saveModalLabel">Save file</h6>
-                </div>
-                <div class="modal-body">
-                    <span aria-hidden="true">
-                        <label for="save-file">Please enter file name: </label>
-                        <input type="text" class="form-control" name="save-file" id="saveFileName">
-                    </span>
-                </div>
-                <div class="modal-footer">
-                    <button id="modal_save_file_close_button" type="button" class="btn btn-secondary"
-                        data-dismiss="modal">Close</button>
-                    <button id="modal_save_file_button" type="button" class="btn btn-primary"
-                        data-bind="event: {click: saveFile}">Save</button>
-                </div>
-            </div>
         </div>
     </div>
 

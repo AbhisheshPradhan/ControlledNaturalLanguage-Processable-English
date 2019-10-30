@@ -319,6 +319,8 @@ lexicon([cat:expl, wform:['There', is], num:sg]).
 
 lexicon([cat:wh, wform:['Who']]).
 
+lexicon([cat:wh, wform:['Where']]).
+
 
 % -------------------------------------------------------------------
 % Full stop

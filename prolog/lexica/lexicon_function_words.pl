@@ -2,7 +2,7 @@
 % Project: PENG ASP				
 % Module:  lexicon_function_words.pl
 % Author:  Rolf Schwitter
-% Date:    2019-01-04
+% Date:    2019-10-30
 % ==================================================================
 
 % ------------------------------------------------------------------
@@ -67,15 +67,36 @@ lexicon([cat:nadj, wform:[eleven], num:pl, type:cardinal, arg:X, lit:data_prop(X
 
 lexicon([cat:nadj, wform:[twelve], num:pl, type:cardinal, arg:X, lit:data_prop(X, pos_int(12), cardinal)]).
 
-%% lexicon([cat:nadj, wform:[1], num:sg, type:cardinal, arg:X, lit:data_prop(X, pos_int(1), cardinal)]).
+
 
 lexicon([cat:nadj, wform:[Num], num:pl, type:cardinal, arg:X, lit:data_prop(X, pos_int(Num), cardinal)]) :-
    number(Num),
    Num > 1.
 
+
 lexicon([cat:nadj, wform:[Num], num:_, type:nom, arg:X, lit:data_prop(X, pos_int(Num), nominal)]) :-
    number(Num),
    Num > 0.
+
+
+% -------------------------------------------------------------------
+% Number
+% -------------------------------------------------------------------
+
+lexicon([cat:number, wform:[1], arg:X, lit:data_prop(X, pos_int(1), cardinal)]).
+
+lexicon([cat:number, wform:[2], arg:X, lit:data_prop(X, pos_int(2), cardinal)]).
+
+lexicon([cat:number, wform:[3], arg:X, lit:data_prop(X, pos_int(3), cardinal)]).
+
+lexicon([cat:number, wform:[4], arg:X, lit:data_prop(X, pos_int(4), cardinal)]).
+
+lexicon([cat:number, wform:[5], arg:X, lit:data_prop(X, pos_int(5), cardinal)]).
+
+lexicon([cat:number, wform:[6], arg:X, lit:data_prop(X, pos_int(6), cardinal)]).
+
+% lexicon([cat:number, wform:[Num], arg:X, lit:data_prop(X, pos_int(Num), cardinal)]) :- 
+%   number(Num).
 
 
 % -------------------------------------------------------------------

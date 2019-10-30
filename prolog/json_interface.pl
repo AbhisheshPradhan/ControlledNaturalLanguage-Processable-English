@@ -2,7 +2,7 @@
 % Projct: PENG ASP
 % Module: json_interface.pl
 % Author: Rolf Schwitter
-% Date:   2019-09-25
+% Date:   2019-10-30
 % ========================================================================
 
   
@@ -336,16 +336,22 @@ downcase_token_list([Token1|Tokens1], [Token2|Tokens2]) :-
 % ------------------------------------------------------------------------
 % json_interface/2
 %
-% - save: text.tmp to top-level
+% - save: text.tmp to top-folder, rest to texts folder
 % ------------------------------------------------------------------------
 
 json_interface(json([id=Id, inputmode=IMode, editmode=save, token=TokenAtom, 
 		     featurestructure=FS, filename=FName, spectext=Text,
 		     snum=SNumAtom, spos=SPosAtom, reasoner=Flag, reasonermode=RMode]), Output) :-
   (
-     % FName = 'text.tmp',
      nonvar(Text),
-     atom_concat('', FName, Path),
+     (
+	FName = 'text.tmp',
+	Folder = ''
+     ;
+        nonvar(FName),
+        Folder = 'texts/'
+     ),
+     atom_concat(Folder, FName, Path),
      atom_chars(Text, CharList),
      open(Path, write, Stream),
      write_char_list(CharList, Stream),
@@ -355,30 +361,6 @@ json_interface(json([id=Id, inputmode=IMode, editmode=save, token=TokenAtom,
      Output = json([id=Id, saved=no])
   ).
 
-
-% ------------------------------------------------------------------------
-% json_interface/2
-%
-% - save 
-%   Example: FName = 'test.txt'
-%            Text  = 'Roberta and Thelma are female.'
-% ------------------------------------------------------------------------
-
-json_interface(json([id=Id, inputmode=IMode, editmode=save, token=TokenAtom, 
-		     featurestructure=FS, filename=FName, spectext=Text,
-		     snum=SNumAtom, spos=SPosAtom, reasoner=Flag, reasonermode=RMode]), Output) :-
-  (
-     nonvar(FName),
-     nonvar(Text),
-     atom_concat('texts/', FName, Path),
-     atom_chars(Text, CharList),
-     open(Path, write, Stream),
-     write_char_list(CharList, Stream),
-     close(Stream),
-     Output = json([id=Id, saved=yes])
-  ;
-     Output = json([id=Id, saved=no])
-  ).
 
 write_char_list([], Stream).
 
@@ -468,7 +450,6 @@ json_interface(json([id=Id, inputmode=IMode, editmode=load, token=TokenAtom,
   clean_up_knowledge_base,
   atom_concat('texts/', FName, Path),
   asserta(current_cnl_file(Path)),
-  write(user, bla),
   (
      cnl_file(FileNumber, Path),
      load_parser(chart),
@@ -477,7 +458,6 @@ json_interface(json([id=Id, inputmode=IMode, editmode=load, token=TokenAtom,
      load_parser(chart),
      load_complete_lexicon
   ),
-  write(user, bla2),
   asp_file(ASPFileName),
   tokeniser(Path, Sentences, Atom), !,
   SNum = 0,
@@ -595,8 +575,11 @@ chart_handler(Id, IMode, Token, SNum, SPos, Flag, RMode, Output) :-
      Flag = off,
      (
         start_chart_parser(SNum, SPos, EPos, [Token]),
+        % writeq(user, Token), nl(user),
         collect_lookahead_categories_x(SNum, SPos, EPos, LAHCatsJSON),
+        % writeq(user, LAHCatsJSON), nl(user),
         collect_anaphoric_expressions_x(SNum, SPos, AnaList),
+        % writeq(user, AnaList), nl(user),
         Output =  json([id=Id, lookahead=LAHCatsJSON, ana=AnaList])
     ;
        % spelling_checker(text, SNum, SPos, EPos, [Token], Solution),

@@ -1,5 +1,5 @@
 % ==================================================================
-% Project: PENG ASP				%
+% Project: PENG ASP				
 % Module:  lexicon_content_words_3.pl
 % Author:  Rolf Schwitter
 % Date:    2019-01-03

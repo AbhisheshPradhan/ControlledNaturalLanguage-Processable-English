@@ -255,8 +255,21 @@ lexicon([cat:cqnt, wform:[at, least, Num], mode:gen, num:sg, lit:Lit, cond:Cond,
 % Number
 % -------------------------------------------------------------------
 
-lexicon([cat:number, wform:[Num], arg:X, lit:data_prop(X, pos_int(Num), cardinal)]) :- 
-   number(Num).
+lexicon([cat:number, wform:[1], arg:X, lit:data_prop(X, pos_int(1), cardinal)]).
+
+lexicon([cat:number, wform:[2], arg:X, lit:data_prop(X, pos_int(2), cardinal)]).
+
+lexicon([cat:number, wform:[3], arg:X, lit:data_prop(X, pos_int(3), cardinal)]).
+
+lexicon([cat:number, wform:[4], arg:X, lit:data_prop(X, pos_int(4), cardinal)]).
+
+lexicon([cat:number, wform:[5], arg:X, lit:data_prop(X, pos_int(5), cardinal)]).
+
+lexicon([cat:number, wform:[6], arg:X, lit:data_prop(X, pos_int(6), cardinal)]).
+
+
+% lexicon([cat:number, wform:[Num], arg:X, lit:data_prop(X, pos_int(Num), cardinal)]) :- 
+%   number(Num).
 
 
 % -------------------------------------------------------------------

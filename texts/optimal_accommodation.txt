@@ -12,7 +12,7 @@ The motel Posh that is located on the main street owns three stars and costs 75 
 
 If an accommodation is located on a main street then the accommodation is noisy.
 
-If an accommodation costs N dollars and owns M stars then N/M is the cost per star of the accommodation.
+If an accommodation costs N dollars and owns M stars then N / M is the cost per star of the accommodation.
 
 If an accommodation owns N stars then N is the star rating of the accommodation.
 

@@ -19,8 +19,9 @@ var navBar = {
     },
 
     saveButton: function () {
-        var file_name = viewModel.$saveFileName.val();
+        var file_name = prompt("Please enter file name");
         if (file_name != null) {
+            viewModel.$loading.show();
             var spectext = "";
             for (var i = 0; i < textLineData.sentences.length; i++) {
                 textLineData.sentences[i] = textLineData.sentences[i].split('\r').join('');
@@ -33,7 +34,7 @@ var navBar = {
                 "editmode": "save",
                 "token": " ",
                 "featurestructure": "{ \"cat\" : \" \",  \"wform\" : \" \"}",
-                "filename": file_name,
+                "filename": file_name + ".txt",
                 "spectext": spectext,
                 "snum": "0",
                 "spos": "0",
@@ -43,7 +44,15 @@ var navBar = {
             $.ajax({
                 url: "/peng",
                 type: "POST",
-                data: saveData
+                data: saveData,
+                success: function () {
+                    viewModel.$loading.hide();
+                    alert("File saved: " + file_name);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    viewModel.$loading.hide();
+                    alert("Failed to save file: \n " + errorThrown);
+                }
             });
         }
     },
@@ -53,7 +62,6 @@ var navBar = {
         let self = this;
         let jsonObj = globalHelper.createJsonObject("load", " ", loadedFileName, " ", "off", "normal");
 
-        
         if (viewModel.textAreaStr().length == 0 || viewModel.isEndOfSentence) {
             viewModel.$loading.show();
             $.ajax({
@@ -79,10 +87,11 @@ var navBar = {
                         }
                     }
                     viewModel.$loading.hide();
+                    // alert("File loaded successfully: ", loadedFileName);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Failed JSON object input when loading file: \n " + errorThrown);
                     viewModel.$loading.hide();
+                    alert("Failed JSON object input when loading file: \n " + errorThrown);
                 }
             });
         } else {
