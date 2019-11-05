@@ -1,4 +1,4 @@
-var expressionLoader = {
+let expressionLoader = {
   loadLookahead: function () {
     let lookaheadTable = lookaheadObj.createLookaheadTable(lookaheadObj);
     viewModel.lookaheadObject(lookaheadTable);
@@ -89,7 +89,15 @@ var expressionLoader = {
           viewModel.$text_field.val(viewModel.textAreaStr());
         } else {
           viewModel.isEndOfSentence = false;
-          viewModel.textAreaStr(viewModel.textAreaStr() + dataArr[s] + " ");
+
+          
+          // When user enter "." manually without space, add space after "." when loading word with dropdown
+          if(textLineData.nodes[textLineData.nodes.length - 2] == " " && viewModel.textAreaStr()[viewModel.textAreaStr().length - 1] != " ")  {
+            viewModel.textAreaStr(viewModel.textAreaStr() + " " + dataArr[s] + " ");
+          } else {
+            viewModel.textAreaStr(viewModel.textAreaStr() + dataArr[s] + " "); 
+          }
+
           viewModel.$text_field.val(viewModel.textAreaStr());
           this.loadLookahead();
         }

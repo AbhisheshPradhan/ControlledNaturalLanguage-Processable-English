@@ -58,13 +58,20 @@ let lookaheadObj = {
 
   // Removes all values in a lookahead table that does not correspond with token  (@ a node level).
   filterTable: function (token, lookahead) {
+    // console.log("lookahead", lookahead)
+    // console.log("token", token)
     for (let i = 0; i < lookahead.length; i++) { //CHANGE TO FILTER
-      let notSameString = token != lookahead[i].slice(0, token.length);
-      if (notSameString) {
-        lookahead.splice(i, 1);
-        i--;
+      // console.log("lookahead[i]", lookahead[i])
+      if(typeof lookahead[i] === "string") {
+        let notSameString = token != lookahead[i].slice(0, token.length);
+        if (notSameString) {
+          lookahead.splice(i, 1);
+          i--;
+        }
       }
     }
+    
+    // console.log("lookahead", lookahead)
     return lookahead;
   },
 
