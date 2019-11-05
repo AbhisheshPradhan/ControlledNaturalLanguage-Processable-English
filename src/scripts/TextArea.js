@@ -1,13 +1,13 @@
 
-var textLineData = {
+let textLineData = {
   nodes: [],
   sentences: [],
   sposNum: 0,
   firstIndexOfSentence: 0,
 
-  createNode: function (word, rmode) {
-    var idNum = this.nodes.length + 1;
-    var ajaxStruct = {
+  createNode: function (word) {
+    let idNum = this.nodes.length + 1;
+    let ajaxStruct = {
       id: idNum, //ID starts at 1                          
       inputmode: "text",
       editmode: "parse",
@@ -18,7 +18,7 @@ var textLineData = {
       snum: this.sentences.length + 1,
       spos: this.sposNum,
       reasoner: (word == "." || word == "?") ? "on" : "off",
-      reasonermode: rmode
+      reasonermode: "normal"
     };
 
     this.addNode(word);
@@ -35,11 +35,11 @@ var textLineData = {
     this.sentences.push(sentence);
   },
 
-  lastSentenceNodes: function() {
+  lastSentenceNodes: function () {
     return this.nodes.lastIndexOf(" ") > this.nodes.lastIndexOf("") ? this.nodes.slice(this.nodes.lastIndexOf(" ")) : this.nodes.slice(this.nodes.lastIndexOf(""));
   },
 
-  removeSentence: function() {
+  removeSentence: function () {
     let lastSentenceNodes = this.lastSentenceNodes();
     this.sposNum = lastSentenceNodes.length - 1;
     return this.sentences.pop();

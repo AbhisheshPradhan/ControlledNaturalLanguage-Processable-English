@@ -1,72 +1,28 @@
-class(1,node).
+prop(A,successful) :- class(A,student), pred(A,work).
 
-data_prop(1,pos_int(1),cardinal).
+pred(B,work) ; pred(B,party) :- class(B,student), pred(B,C,study_at), named(C,macquarie_university).
 
-prop(1,2,connected_to).
+:- class(D,student), prop(D,E,enrolled_in), named(E,information_technology), pred(D,party).
 
-class(2,node).
+named(1,tom).
 
-data_prop(2,pos_int(2),cardinal).
+class(1,student).
 
-prop(1,3,connected_to).
+pred(1,2,study_at).
 
-class(3,node).
+named(2,macquarie_university).
 
-data_prop(3,pos_int(3),cardinal).
+prop(1,3,enrolled_in).
 
-prop(1,4,connected_to).
+named(3,information_technology).
 
-class(4,node).
+named(4,bob).
 
-data_prop(4,pos_int(4),cardinal).
+class(4,student).
 
-prop(2,4,connected_to).
+pred(4,2,study_at).
 
-prop(2,5,connected_to).
+-pred(4,work).
 
-class(5,node).
-
-data_prop(5,pos_int(5),cardinal).
-
-prop(2,6,connected_to).
-
-class(6,node).
-
-data_prop(6,pos_int(6),cardinal).
-
-prop(3,1,connected_to).
-
-prop(3,4,connected_to).
-
-prop(3,5,connected_to).
-
-prop(4,1,connected_to).
-
-prop(4,2,connected_to).
-
-prop(5,3,connected_to).
-
-prop(5,4,connected_to).
-
-prop(5,6,connected_to).
-
-prop(6,2,connected_to).
-
-prop(6,3,connected_to).
-
-prop(6,5,connected_to).
-
-named(7,red).
-
-class(7,colour).
-
-named(8,blue).
-
-class(8,colour).
-
-named(9,green).
-
-class(9,colour).
-
-1 { prop(A,B,assigned_to) : class(B,colour) } 1 :- class(A,node).
+answer(named(F,G)) :- named(F,G), prop(F,successful).
 

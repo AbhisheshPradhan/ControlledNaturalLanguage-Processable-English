@@ -54,13 +54,13 @@ var eventHandler = {
     console.log("viewModel.token()", viewModel.token());
 
     // when backspace to . then pressing space, 
-    if(chr == "" && viewModel.token() == " ") {
+    if (chr == "" && viewModel.token() == " ") {
       console.log("no need to update view")
       return;
     }
 
     // when entering a space after . 
-    if(chr == "" && viewModel.token() == "." && textLineData.nodes[textLineData.nodes.length - 1] == " ") {
+    if (chr == "" && viewModel.token() == "." && textLineData.nodes[textLineData.nodes.length - 1] == " ") {
       console.log("no need to update view")
       return;
     }
@@ -105,7 +105,7 @@ var eventHandler = {
         eventHandler.enterKey();
         break;
       default:
-        if(viewModel.prevInputFromDropdown) {
+        if (viewModel.prevInputFromDropdown) {
           viewModel.token("");
           viewModel.prevInputFromDropdown = false;
         }
@@ -129,22 +129,22 @@ var eventHandler = {
 
         // update ko variable textAreaStr
         viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1));
-        
-        let currentIndexBehindPreviousToken = charBeingRemoved == " " || charBeingRemoved == "," || charBeingRemoved == "." ||
-        charBeingRemoved == "?";
 
-        if(currentIndexBehindPreviousToken) {
+        let currentIndexBehindPreviousToken = charBeingRemoved == " " || charBeingRemoved == "," || charBeingRemoved == "." ||
+          charBeingRemoved == "?";
+
+        if (currentIndexBehindPreviousToken) {
           var tokenToBeDel = textLineData.nodes[textLineData.nodes.length - 1];
           console.log("tokenToBeDel", tokenToBeDel)
 
-          if(tokenToBeDel == "." || tokenToBeDel == "?" || tokenToBeDel == "," ) {
+          if (tokenToBeDel == "." || tokenToBeDel == "?" || tokenToBeDel == ",") {
             var prevNode = textLineData.removeTailNode();
             prevNode = textLineData.removeTailNode();
             viewModel.token(prevNode);
             prevNode = textLineData.removeTailNode();
             console.log("need to delete 3 tokens");
             console.log("prevNode", prevNode);
-            if(tokenToBeDel == "." || tokenToBeDel == "?" ) {
+            if (tokenToBeDel == "." || tokenToBeDel == "?") {
               textLineData.removeSentence();
             }
             viewModel.isDropdownInput = false;
@@ -152,12 +152,12 @@ var eventHandler = {
             viewModel.lookUpTable(lookaheadObj.wordTable);
             viewModel.currentInitialLookUpTable = lookaheadObj.wordTable;
             console.log("nodes", textLineData.nodes);
-          } else if(tokenToBeDel != " "){
+          } else if (tokenToBeDel != " ") {
             var prevNode = textLineData.removeTailNode();
             viewModel.token(prevNode);
             prevNode = textLineData.removeTailNode();
-            
-            if(this.isLastWordOfSentence) {
+
+            if (this.isLastWordOfSentence) {
               prevNode = textLineData.removeTailNode();
             }
             console.log("word deleted")
@@ -174,7 +174,7 @@ var eventHandler = {
             viewModel.token(prevNode);
             viewModel.isEndOfSentence = true;
             console.log("empty token deleted");
-            
+
             this.isLastWordOfSentence = false;
           }
         }
