@@ -76,8 +76,19 @@ var viewModel = {
         expressionLoader.populateLookUpTable(data);
     },
 
+    postToken(word) {
+        var wordData = textLineData.createNode(word, viewModel.reasonerMode);
+        var request = $.ajax({
+            url: "/peng",
+            type: "POST",
+            data: wordData,
+            async: false
+        });
+        return request;
+    },
+
     updateViewForWord(word) {
-        var request = $.when(token.postToken(word));
+        var request = $.when(this.postToken(word));
         request.done(function (data) {
             var json = JSON.parse(data);
             if (json.hasOwnProperty('spelling suggestions') || (json.lookahead.length == 0 && !json.hasOwnProperty('asp'))) {

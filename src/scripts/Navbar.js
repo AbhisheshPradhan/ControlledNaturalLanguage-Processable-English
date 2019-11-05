@@ -61,13 +61,16 @@ var navBar = {
     loadFile: function (loadedFileName) {
         let self = this;
         let jsonObj = globalHelper.createJsonObject("load", " ", loadedFileName, " ", "off", "normal");
+        
+        // if (viewModel.textAreaStr().length == 0 || viewModel.isEndOfSentence) {
 
-        if (viewModel.textAreaStr().length == 0 || viewModel.isEndOfSentence) {
+        // read the text file and send them as nodes instead..
+            if (viewModel.isEndOfSentence || textLineData.nodes[textLineData.nodes.length - 1] == " ") {
             viewModel.$loading.show();
             $.ajax({
                 url: "/peng",
                 type: "POST",
-                data: jsonObj,
+                data: jsonObj, 
                 success: function (data, textStatus, jqXHR) {
                     var json = JSON.parse(data);
                     var nodes = self._formatToReadableInput(json.spectext);
@@ -159,7 +162,7 @@ var navBar = {
 
     saveTemporary: function () {
         var file_name = 'text.tmp';
-        if (textLineData.sentences.length > 0) {
+        if (viewModel.isEndOfSentence || textLineData.nodes[textLineData.nodes.length - 1] == " ") {
             var spectext = "";
             for (var i = 0; i < textLineData.sentences.length; i++) {
                 textLineData.sentences[i] = textLineData.sentences[i].split('\r').join('');

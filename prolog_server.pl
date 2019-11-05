@@ -117,8 +117,6 @@ server(Port) :-
 
 :- http_handler('/src/scripts/ExpressionLoader.js', js_expression_loader, []).
 
-:- http_handler('/src/scripts/Token.js', js_token, []).
-
 %---------------------------------------------------------------
 % http_handler/3
 %
@@ -271,9 +269,6 @@ js_results(Request) :-
     
 js_expression_loader(Request) :-
   http_reply_file('./src/scripts/ExpressionLoader.js', [mime_type('text/javascript')], Request).
-
-js_token(Request) :-
-  http_reply_file('./src/scripts/Token.js', [mime_type('text/javascript')], Request).
 
 %---------------------------------------------------------------
 % Assets closure
