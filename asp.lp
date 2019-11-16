@@ -1,6 +1,2 @@
-prop(1,blue).
-
-class(1,accommodation).
-
-prop(1,blue).
+prop(A,successful) :- class(A,student), pred(A,work).
 

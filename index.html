@@ -135,7 +135,7 @@
 									type="text"
 									class="form-control cnl-input"
 									placeholder="Enter sentence here..."
-                  data-bind="event: {click: loadLookahead, keypress: onKeyPress, keyup: onKeyUp }"
+                  data-bind="event: {click: onCursorInput, keypress: onCharInput, keyup: onBackSpace }"
         ></textarea>
 				<span class="input-group-addon submit-button-container">
 					<button class="btn submit-button"
@@ -388,7 +388,6 @@
 
   <!-- new -->
 	<script src="./src/scripts/Navbar.js"></script>
-	<script src="./src/scripts/GlobalHelper.js"></script>
 	<script src="./src/scripts/Results.js"></script>
   <script src="./src/scripts/ExpressionLoader.js"></script>
   

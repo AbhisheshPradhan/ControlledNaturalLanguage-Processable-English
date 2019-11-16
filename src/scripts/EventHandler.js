@@ -191,5 +191,101 @@ var eventHandler = {
       console.log("viewModel.textAreaStr()", viewModel.textAreaStr())
       viewModel.init();
     }
-  }
+  },
+
+  getCaretPosition(ctrl) {
+    var CaretPos = 0;   // IE Support
+    if (document.selection) {
+      ctrl.focus();
+      var Sel = document.selection.createRange();
+      Sel.moveStart('character', -ctrl.value.length);
+      CaretPos = Sel.text.length;
+    }
+    // Firefox support
+    else if (ctrl.selectionStart || ctrl.selectionStart == '0')
+      CaretPos = ctrl.selectionStart;
+    return (CaretPos);
+  },
+
+  //Functions to get the word
+  returnWord(text, caretPos) {
+    var index = text.indexOf(caretPos);
+    var preText = text.substring(0, caretPos);
+    var hasPunctuation = preText.indexOf(".") != -1 || preText.indexOf(",") != -1 || preText.indexOf("?") != -1;
+    var words = [" "];
+
+    //If the cursor is between letters of a word and the cursor is not between the last word and full-stop
+    //eg. this is an example|.
+    //we set preText to previous word otherwise we select the last word as well
+    if (text[preText.length] != " " && preText[preText.length - 1] != "." && text[preText.length] != ".") {
+      preText = text.substring(0, preText.lastIndexOf(" "));
+    }
+
+    if (hasPunctuation) {
+      //if it has punctuation, return proper array with punctuations splitted
+      preText = preText.split(" ");
+      if (preText[preText.length - 1] == "") {
+        preText.pop();
+      }
+
+      //preText is a string, so we need to separate . and ? when we find one then push it to word
+      preText.forEach((item) => {
+        if (item.indexOf(".") != -1) {
+          words.push(item.substring(0, item.length - 1));
+          words.push(".");
+          // words.push(" ");
+        } else if (item.indexOf("?") != -1) {
+          words.push(item.substring(0, item.length - 1));
+          words.push("?");
+          // words.push(" ");
+        } else if (item.indexOf(",") != -1) {
+          words.push(item.substring(0, item.length - 1));
+          words.push(",");
+        } else {
+          words.push(item);
+        }
+      })
+      return words;
+    } else {
+      preText = preText.split(" ");
+      //remove the last item which is ""
+      if (preText[preText.length - 1] == "") {
+        preText.pop();
+      }
+      words = words.concat(preText);
+      return words;
+    }
+  },
+
+  //NEED TO POST EVERY ITEM THAT IS MISSING IN textLineData.nodes from words.
+  //if textLineData.nodes.length < words.length
+  //otherwise 
+  //Trying to replace the word instead of posting at the end of the sentence
+  //maybe try making text, words, wordsintextbox a property of KeyHandler so it can be accessed from viewModel.
+  alertPrevWord() {
+    let textField = document.getElementById("text_field");
+    let caretPos = this.getCaretPosition(textField);
+    let words = this.returnWord(textField.value, caretPos);
+
+    console.log("caretPos", caretPos);
+    console.log("words", words);
+
+    console.log("wordsInTextbox", textLineData.nodes)
+
+
+    if (words) {
+      textLineData.nodes = [];
+      textLineData.sentences = [];
+      textLineData.sposNum = 0;
+      viewModel.textAreaStr("")
+      viewModel.token("");
+      viewModel.isCursorInput = true;
+
+      words.forEach((word) => {
+        viewModel.updateViewForWord(word);
+      });
+      
+      viewModel.isCursorInput = false;
+    }
+  },
 }

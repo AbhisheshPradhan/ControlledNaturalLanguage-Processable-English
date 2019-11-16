@@ -111,8 +111,6 @@ server(Port) :-
 
 :- http_handler('/src/scripts/Navbar.js', js_navbar, []).
 
-:- http_handler('/src/scripts/GlobalHelper.js', js_global_helper, []).
-
 :- http_handler('/src/scripts/Results.js', js_results, []).
 
 :- http_handler('/src/scripts/ExpressionLoader.js', js_expression_loader, []).
@@ -260,9 +258,6 @@ js_dropdown(Request) :-
 
 js_navbar(Request) :-
   http_reply_file('./src/scripts/Navbar.js', [mime_type('text/javascript')], Request).
-
-js_global_helper(Request) :-
-  http_reply_file('./src/scripts/GlobalHelper.js', [mime_type('text/javascript')], Request).
   
 js_results(Request) :-
   http_reply_file('./src/scripts/Results.js', [mime_type('text/javascript')], Request).

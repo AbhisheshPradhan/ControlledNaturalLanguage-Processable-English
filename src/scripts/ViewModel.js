@@ -30,12 +30,13 @@ let viewModel = {
   anaExp: ko.observableArray([]),
   lookaheadObject: ko.observableArray([]),
   lookUpTable: ko.observableArray([]),
-  initLookUpObj: [], 
-  initLookUpTable: [], 
+  initLookUpObj: [],
+  initLookUpTable: [],
   currentInitialLookUpTable: [], //used in backspace handler
 
   isDropdownInput: false,
   isLoadFileInput: false,
+  isCursorInput: false,
   prevInputFromDropdown: false,
 
   init: function () {
@@ -86,9 +87,45 @@ let viewModel = {
 
   updateViewForWord(word) {
     let request = $.when(this.postToken(word));
+    // console.log("word", word);
     request.done(function (data) {
       let json = JSON.parse(data);
-      if (json.hasOwnProperty('spelling suggestions') || (json.lookahead.length == 0 && !json.hasOwnProperty('asp'))) {
+
+      if (word == "." || word == "?") {
+        let sentences = (viewModel.textAreaStr().trim().slice(0, viewModel.textAreaStr().length) + word)
+        // remove extra '.'s when there are consecutive .'s e.g .. = .
+        let regexReplaceFullStop = /(^[\.\s]*)|([\s\.]*(?=(\.|\))))|(\s*\([\.\s]*\)\s*\.)|(\s*(?=\())/g;
+        sentences = sentences.replace(regexReplaceFullStop, "").trim();
+
+        // remove 
+        let regexReplaceQuestionMark = /(^[\?\s]*)|([\s\?]*(?=(\?|\))))|(\s*\([\?\s]*\)\s*\?)|(\s*(?=\())/g;
+        sentences = sentences.replace(regexReplaceQuestionMark, "").trim();
+
+        // 
+        sentences = sentences.replace(/\.(?!\d)|([^\d])\.(?=\d)/g, '$1.|');
+        sentences = sentences.replace(/\?(?!\d)|([^\d])\?(?=\d)/g, '$1?|');
+
+        let sentencesArray = sentences.split("|");
+        sentencesArray.pop(); //remove "" at the end of the array
+
+        console.log("sentencesArray", sentencesArray)
+        if (sentencesArray.length > 0) {
+          textLineData.addSentence((sentencesArray.pop()).trim());
+        }
+
+        // console.log("sentencesArray", sentencesArray);
+        viewModel.setAsp(json);
+        viewModel.setAnswer(json.answer);
+
+        if (viewModel.isDropdownInput ||
+          viewModel.isLoadFileInput ||
+          viewModel.isCursorInput) {
+          viewModel.updateViewForWord(" ");
+        }
+      }
+
+      if ((json.hasOwnProperty('spelling suggestions') || (json.lookahead.length == 0 && !json.hasOwnProperty('asp')) 
+          && !viewModel.isCursorInput)) {
         viewModel.allowInput = false;
         let lAhead = lookaheadObj.createLookaheadTable(lookaheadObj);
         lAhead = lookaheadObj.addStrInHeadForEachCatInLookahead(word, lAhead);
@@ -101,30 +138,6 @@ let viewModel = {
         viewModel.allowInput = true;
       }
 
-      if (word == "." || word == "?") {
-        let sentences = (viewModel.textAreaStr().trim().slice(0, viewModel.textAreaStr().length) + word)
-        // remove extra '.'s when there are consecutive .'s e.g .. = .
-        let regexReplaceFullStop = /(^[\.\s]*)|([\s\.]*(?=(\.|\))))|(\s*\([\.\s]*\)\s*\.)|(\s*(?=\())/g;
-        sentences = sentences.replace(regexReplaceFullStop, "").trim();
-
-        let regexReplaceQuestionMark = /(^[\?\s]*)|([\s\?]*(?=(\?|\))))|(\s*\([\?\s]*\)\s*\?)|(\s*(?=\())/g;
-        sentences = sentences.replace(regexReplaceQuestionMark, "").trim();
-
-        sentences = sentences.replace(/\.(?!\d)|([^\d])\.(?=\d)/g, '$1.|');
-        sentences = sentences.replace(/\?(?!\d)|([^\d])\?(?=\d)/g, '$1?|');
-
-        let sentencesArray = sentences.split("|");
-        sentencesArray.pop(); //remove "" at the end of the array
-
-        textLineData.addSentence((sentencesArray.pop()).trim());
-
-        viewModel.setAsp(json);
-        viewModel.setAnswer(json.answer);
-
-        if (viewModel.isDropdownInput || viewModel.isLoadFileInput) {
-          viewModel.updateViewForWord(" ");
-        }
-      }
 
       if (textLineData.lastSentenceNodes().length > 1) {
         viewModel.processedInput(textLineData.lastSentenceNodes().join(" "));
@@ -174,7 +187,6 @@ let viewModel = {
     navBar.saveButton();
   },
 
-
   // EVENT HANDLER functions
 
   // Text submitted
@@ -184,16 +196,22 @@ let viewModel = {
   },
 
   // Char entered
-  onKeyPress: function (d, e) {
+  onCharInput: function (d, e) {
     return eventHandler.keyUpdate(d, e);
   },
 
   // Backspace detected
-  onKeyUp: function (d, e) {
+  onBackSpace: function (d, e) {
     let keyVal = e.keyCode;
     if (keyVal == 8) {
       eventHandler.backspace();
     }
+  },
+
+  onCursorInput: function (d, e) {
+    viewModel.loadLookahead();
+    console.log("onCursorInput");
+    eventHandler.alertPrevWord();
   },
 
   // RESULTS section functions

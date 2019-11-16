@@ -34,7 +34,7 @@ let expressionLoader = {
         let wform = data.add;
         this.addToLexicon(cat, wform, vform, num);
         textLineData.removeTailNode();
-        console.log("nodes", textLineData.nodes);
+        // console.log("nodes", textLineData.nodes);
         let dataArr1 = wform.split(" ");
         let str = viewModel.textAreaStr().toString();
         str = str.replace(/^\s+|\s+$/g, "");
@@ -68,7 +68,7 @@ let expressionLoader = {
       }
     } else if (viewModel.allowInput) {
       let dataArr = data.split(" ");
-      console.log("dataArr", dataArr);
+      // console.log("dataArr", dataArr);
       for (let s = 0; s < dataArr.length; s++) {
         viewModel.isDropdownInput = true;
         // viewModel.updateViewForWord(viewModel.token() + dataArr[s]);
