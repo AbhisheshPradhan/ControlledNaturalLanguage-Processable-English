@@ -59,6 +59,15 @@ let eventHandler = {
     if ((viewModel.token() == "." || viewModel.token() == "?") && textLineData.nodes[textLineData.nodes.length - 1] != " ") {
       // reinit when space typed after . or ?
       viewModel.updateViewForWord(" ");
+
+      // For space + punctuation, remove the space before punctuation
+      let currentTextFieldStr = viewModel.$text_field.val();
+      if( currentTextFieldStr[currentTextFieldStr.length - 2] == " ") {
+        viewModel.$text_field.val(viewModel.$text_field.val().slice(0, viewModel.$text_field.val().length - 2) + viewModel.token());
+        viewModel.textAreaStr(viewModel.$text_field.val());
+      }
+
+      // console.log()
     } else if (chr == "" && (viewModel.token() != "." || viewModel.token() != "?") && textLineData.nodes[textLineData.nodes.length - 1] != " ") {
       viewModel.updateViewForWord(viewModel.token());
     } else {
@@ -74,7 +83,14 @@ let eventHandler = {
       // if chr is . or ?, update for it and set end of sentence
       if (chr == '.' || chr == '?') {
         if (viewModel.allowInput && $.inArray(chr, viewModel.lookUpTable()) != -1) {
+
           viewModel.updateViewForWord(chr);
+          // console.log("textAreaStr", viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1) + chr);
+          // console.log();
+          // viewModel.textAreaStr(viewModel.textAreaStr().slice(0, viewModel.textAreaStr().length - 1) + chr);
+          // viewModel.$text_field.val(viewModel.textAreaStr());
+
+
           viewModel.isEndOfSentence = true;
         }
       }

@@ -1,16 +1,41 @@
 # PENG
 CNL PENG ASP
-<h4>Project Goals:</h4>
+
+<h4>Completed tasks:</h4>
 <ul>
-  <li>Update Libraries - <b>DONE</b></li>
-  <li>Refactor Codebase (All project files) - <b>DONE</b></li>
-  <li>Multi-sentence Input - <b>DONE</b></li>
-  <li>Backspace for Multi-sentence - <b>DONE</b></li>
-  <li>Cursor lookahead options loadging - <b>DONE</b></li>
+  <li>Updated Libraries</li>
+  <li>Refactoring (All the project files)</li>
+  <li>Restructuring (All the project files)</li>
+  <li>Auto-complete sentences</li>
+  <li>Scrollable dropdown menu</li>
+  <li>Enter to submit</li>
+  
 </ul>
 
-<h4>Other Improvements:</h4>
+<h4>Remaining tasks:</h4>
+<h5>Bug fixing:</h5>
 <ul>
-  <li>Add to lexicon + punctuation bug - <b>DONE</b></li>
-  <li>Cross-browser Compatibility - <b>DONE</b></li>
+  <li>Backspace bugs</li>
+  <li>Add to lexicon + punctuation (happening in previous version as well)</li>
 </ul>
+
+<h5>Functionality:</h5>
+<ul>
+  <li>Save button</li>
+  <li>Cursor jump handling</li>
+</ul>
+
+<h5>UI:</h5>
+<ul>
+  <li>UI fixes</li>
+  <li>Responsive UI</li>
+</ul>
+
+<h5>Testing:</h5>
+<ul>
+  <li>Browser Testing</li>
+  <li>Unit Testing</li>
+  <li>Functional Testing</li>
+  <li>Test auto-complete for multiple words suggestions Testing</li>
+</ul>
+
