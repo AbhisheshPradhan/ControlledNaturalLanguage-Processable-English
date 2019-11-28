@@ -1,9 +1,3 @@
-/**
- *   Author: Rudz Evan Bernardez, Macquarie University
- *   File Name: ViewModel.js
- *
- */
-
 let viewModel = {
   $text_field: $("#text_field"),
   $saveFileName: $("#saveFileName"),
@@ -32,7 +26,7 @@ let viewModel = {
   lookUpTable: ko.observableArray([]),
   initLookUpObj: [],
   initLookUpTable: [],
-  currentInitialLookUpTable: [], //used in backspace handler
+  currentInitialLookUpTable: [],
 
   isDropdownInput: false,
   isLoadFileInput: false,
@@ -87,28 +81,28 @@ let viewModel = {
 
   updateViewForWord(word) {
     let request = $.when(this.postToken(word));
-    // console.log("word", word);
     request.done(function (data) {
       let json = JSON.parse(data);
 
       if (word == "." || word == "?") {
-        let sentences = (viewModel.textAreaStr().trim().slice(0, viewModel.textAreaStr().length) + word)
+        let sentences = (viewModel.textAreaStr().trim().slice(0, viewModel.textAreaStr().length) + word);
+
         // remove extra '.'s when there are consecutive .'s e.g .. = .
         let regexReplaceFullStop = /(^[\.\s]*)|([\s\.]*(?=(\.|\))))|(\s*\([\.\s]*\)\s*\.)|(\s*(?=\())/g;
         sentences = sentences.replace(regexReplaceFullStop, "").trim();
 
-        // remove 
+        // remove extra '?'s when there are consecutive ?'s e.g ?? = ? 
         let regexReplaceQuestionMark = /(^[\?\s]*)|([\s\?]*(?=(\?|\))))|(\s*\([\?\s]*\)\s*\?)|(\s*(?=\())/g;
         sentences = sentences.replace(regexReplaceQuestionMark, "").trim();
 
-        // 
+        // remove the | used to split the sentences
         sentences = sentences.replace(/\.(?!\d)|([^\d])\.(?=\d)/g, '$1.|');
         sentences = sentences.replace(/\?(?!\d)|([^\d])\?(?=\d)/g, '$1?|');
 
         let sentencesArray = sentences.split("|");
         sentencesArray.pop(); //remove "" at the end of the array
 
-        console.log("sentencesArray", sentencesArray)
+        console.log("sentencesArray", sentencesArray);
         if (sentencesArray.length > 0) {
           textLineData.addSentence((sentencesArray.pop()).trim());
         }
@@ -124,8 +118,9 @@ let viewModel = {
         }
       }
 
-      if ((json.hasOwnProperty('spelling suggestions') || (json.lookahead.length == 0 && !json.hasOwnProperty('asp')) 
-          && !viewModel.isCursorInput)) {
+      // If new content word, alert add to lexicon
+      // Else update the lookahead information
+      if ((json.hasOwnProperty('spelling suggestions') || (json.lookahead.length == 0 && !json.hasOwnProperty('asp')) && !viewModel.isCursorInput)) {
         viewModel.allowInput = false;
         let lAhead = lookaheadObj.createLookaheadTable(lookaheadObj);
         lAhead = lookaheadObj.addStrInHeadForEachCatInLookahead(word, lAhead);
@@ -138,32 +133,30 @@ let viewModel = {
         viewModel.allowInput = true;
       }
 
-
+      // Get the last processed input -- For display
       if (textLineData.lastSentenceNodes().length > 1) {
         viewModel.processedInput(textLineData.lastSentenceNodes().join(" "));
       } else if (textLineData.sentences.length > 0) {
         viewModel.processedInput(textLineData.sentences[textLineData.sentences.length - 1]);
       }
 
+      // If the word is an anaphoric expression, add it to the anaphoric expression dropdown menu
       if (json.hasOwnProperty('ana') && word != "." && json.ana.length != 0) {
-        let temp = json.ana;
+        let anaExp = json.ana;
         for (i = 0; i < json.ana.length; i++) {
           if (json.ana[i].length > 1) {
-            temp[i] = [temp[i].join(" ")];
-
+            anaExp[i] = [anaExp[i].join(" ")];
           } else {
-            temp[i] = json.ana[i];
+            anaExp[i] = json.ana[i];
           }
         }
-        viewModel.anaExp(temp);
+        viewModel.anaExp(anaExp);
       }
     });
     console.log("nodes", textLineData.nodes);
   },
 
   // NAVBAR functions
-
-  // Loads the list of file names in texts folder
   loadFileNames: function () {
     if (this.initialLoad) {
       expressionLoader.loadLookahead();
@@ -172,35 +165,25 @@ let viewModel = {
     }
     navBar.loadFileNames();
   },
-
-  // Load a single file name
   loadFile: function () {
     let loadedFileName = this;
     navBar.loadFile(loadedFileName);
   },
-
   generateText: function () {
     navBar.generateText();
   },
-
   saveFile() {
     navBar.saveButton();
   },
 
   // EVENT HANDLER functions
-
-  // Text submitted
   onSubmit: function () {
-    console.log("onSubmit")
+    console.log("onSubmit");
     eventHandler.enterKey();
   },
-
-  // Char entered
   onCharInput: function (d, e) {
     return eventHandler.keyUpdate(d, e);
   },
-
-  // Backspace detected
   onBackSpace: function (d, e) {
     let keyVal = e.keyCode;
     if (keyVal == 8) {
@@ -211,11 +194,10 @@ let viewModel = {
   onCursorInput: function (d, e) {
     viewModel.loadLookahead();
     console.log("onCursorInput");
-    eventHandler.alertPrevWord();
+    // eventHandler.cursorLookaheadLoading();
   },
 
   // RESULTS section functions
-
   setAnswer: function (ansData) {
     results.setAnswer(ansData);
   },
@@ -226,26 +208,3 @@ let viewModel = {
 };
 
 ko.applyBindings(viewModel);
-
-
-// Prevent default behavior of the text area html element
-(function ($) {
-  $(document).ready(function () {
-    $("#text_field").keypress(function (e) {
-      if (e.keyCode == 13 && !e.shiftKey) {
-        e.preventDefault();
-        return false;
-      }
-    });
-    $("#text_field").click(function (e) {
-      console.log("text field clicked");
-      e.preventDefault();
-    });
-    $("#text_field").keyup(function (e) {
-      if (e.keyCode == 8) {
-        e.preventDefault();
-        return false;
-      }
-    });
-  });
-})(jQuery);

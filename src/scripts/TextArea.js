@@ -3,12 +3,11 @@ let textLineData = {
   nodes: [],
   sentences: [],
   sposNum: 0,
-  firstIndexOfSentence: 0,
 
   createNode: function (word) {
     let idNum = this.nodes.length + 1;
     let ajaxStruct = {
-      id: idNum, //ID starts at 1                          
+      id: idNum,                    
       inputmode: "text",
       editmode: "parse",
       token: word == "" ? " " : word,

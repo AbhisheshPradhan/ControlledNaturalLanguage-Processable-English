@@ -47,7 +47,6 @@ let lookaheadObj = {
           temp.push(this.wforms[i][j][0]);
         }
       }
-      //remove duplicates of word table
       let temp2 = [];
       $.each(temp, function (i, el) {
         if ($.inArray(el, temp2) === -1) temp2.push(el);
@@ -56,12 +55,10 @@ let lookaheadObj = {
     }
   },
 
+  // TODO
   // Removes all values in a lookahead table that does not correspond with token  (@ a node level).
   filterTable: function (token, lookahead) {
-    // console.log("lookahead", lookahead)
-    // console.log("token", token)
     for (let i = 0; i < lookahead.length; i++) { //CHANGE TO FILTER
-      // console.log("lookahead[i]", lookahead[i])
       if(typeof lookahead[i] === "string") {
         let notSameString = token != lookahead[i].slice(0, token.length);
         if (notSameString) {
@@ -80,7 +77,6 @@ let lookaheadObj = {
 	*     return: an array containing lookahead data containing {cat, wform}
 	*/
   createLookaheadTable: function (lookahead) {
-    let wform = [];
     let temp = [];
     for (i = 0; i < lookahead.cats.length; i++) {
       let wform = [];
@@ -113,7 +109,6 @@ let lookaheadObj = {
 	* Return: an array with str inserted in the head of wform
 	*/
   addStrInHeadForEachCatInLookahead: function (str, lookaheadObject) {
-    // Add modal here
     alert('"' + str + '" is not a valid word. Please go back and re-enter a word or add the word to the lexicon via the Lookahead Information menu.');
     let catArr = ["verb: intransitive", "verb: transitive", "name", "noun: common", "noun: relational", "adjective", "adjective: relational"];
     for (i = 0; i < lookaheadObject.length; i++) {

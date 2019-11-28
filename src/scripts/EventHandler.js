@@ -1,12 +1,8 @@
-// Modified by Rolf Schwitter: 1.2.2019
-
-var eventHandler = {
-
-  isLastWordOfSentence: false,
+let eventHandler = {
 
   keyUpdate: function (d, e) {
-    var keyID = e.keyCode;
-    var keyVal = (String.fromCharCode(keyID)); // Character form
+    let keyID = e.keyCode;
+    let keyVal = (String.fromCharCode(keyID)); // Character form
     let enterKeyPressed = keyID == 13 ? true : false;
 
     if (enterKeyPressed) {
@@ -47,7 +43,8 @@ var eventHandler = {
 
   punctuation: function (chr) {
     // Post the word before punctuation first
-    var sizeOfWord = viewModel.token().length;
+    let sizeOfWord = viewModel.token().length;
+    viewModel.isDropdownInput = false;
 
     // when backspace to . then pressing space, 
     if (chr == "" && viewModel.token() == " ") {
@@ -103,15 +100,11 @@ var eventHandler = {
         eventHandler.enterKey();
         break;
       default:
-        console.log("viewModel.token() + keyVal", viewModel.token() + keyVal)
+        console.log("viewModel.token() + keyVal", viewModel.token() + keyVal);
         viewModel.token(viewModel.token() + keyVal);
     }
   },
 
-  // viewModel.textAreaStr() is ko var for the strings in text editor
-  // viewModel.$text_field.val() is the var to get the value of HTML element
-  // when backspace is pressed, chars are deleted from viewModel.$text_field.val()
-  // so it will not equal to viewModel.$text_field.val()
   backspace: function () {
     //backspace detected
     if (viewModel.$text_field.val().length > 0) {
@@ -128,11 +121,11 @@ var eventHandler = {
           charBeingRemoved == "?";
 
         if (currentIndexBehindPreviousToken) {
-          var tokenToBeDel = textLineData.nodes[textLineData.nodes.length - 1];
+          let tokenToBeDel = textLineData.nodes[textLineData.nodes.length - 1];
           console.log("tokenToBeDel", tokenToBeDel)
 
           if (tokenToBeDel == "." || tokenToBeDel == "?" || tokenToBeDel == ",") {
-            var prevNode = textLineData.removeTailNode();
+            let prevNode = textLineData.removeTailNode();
             prevNode = textLineData.removeTailNode();
             viewModel.token(prevNode);
             prevNode = textLineData.removeTailNode();
@@ -147,13 +140,10 @@ var eventHandler = {
             viewModel.currentInitialLookUpTable = lookaheadObj.wordTable;
             console.log("nodes", textLineData.nodes);
           } else if (tokenToBeDel != " ") {
-            var prevNode = textLineData.removeTailNode();
+            let prevNode = textLineData.removeTailNode();
             viewModel.token(prevNode);
             prevNode = textLineData.removeTailNode();
 
-            if (this.isLastWordOfSentence) {
-              prevNode = textLineData.removeTailNode();
-            }
             console.log("word deleted")
             console.log("prevNode", prevNode);
 
@@ -162,14 +152,12 @@ var eventHandler = {
             viewModel.lookUpTable(lookaheadObj.wordTable);
             viewModel.currentInitialLookUpTable = lookaheadObj.wordTable;
             console.log("nodes", textLineData.nodes);
-            this.isLastWordOfSentence = false;
           } else {
-            var prevNode = textLineData.removeTailNode();
+            let prevNode = textLineData.removeTailNode();
             viewModel.token(prevNode);
             viewModel.isEndOfSentence = true;
             console.log("empty token deleted");
 
-            this.isLastWordOfSentence = false;
           }
         }
       }
@@ -193,11 +181,11 @@ var eventHandler = {
     }
   },
 
-  getCaretPosition(ctrl) {
-    var CaretPos = 0;   // IE Support
+  _getCaretPosition: function(ctrl) {
+    let CaretPos = 0;   // IE Support
     if (document.selection) {
       ctrl.focus();
-      var Sel = document.selection.createRange();
+      let Sel = document.selection.createRange();
       Sel.moveStart('character', -ctrl.value.length);
       CaretPos = Sel.text.length;
     }
@@ -207,12 +195,10 @@ var eventHandler = {
     return (CaretPos);
   },
 
-  //Functions to get the word
-  returnWord(text, caretPos) {
-    var index = text.indexOf(caretPos);
-    var preText = text.substring(0, caretPos);
-    var hasPunctuation = preText.indexOf(".") != -1 || preText.indexOf(",") != -1 || preText.indexOf("?") != -1;
-    var words = [" "];
+  _returnWord: function (text, caretPos) {
+    let preText = text.substring(0, caretPos);
+    let hasPunctuation = preText.indexOf(".") != -1 || preText.indexOf(",") != -1 || preText.indexOf("?") != -1;
+    let words = [" "];
 
     //If the cursor is between letters of a word and the cursor is not between the last word and full-stop
     //eg. this is an example|.
@@ -233,11 +219,9 @@ var eventHandler = {
         if (item.indexOf(".") != -1) {
           words.push(item.substring(0, item.length - 1));
           words.push(".");
-          // words.push(" ");
         } else if (item.indexOf("?") != -1) {
           words.push(item.substring(0, item.length - 1));
           words.push("?");
-          // words.push(" ");
         } else if (item.indexOf(",") != -1) {
           words.push(item.substring(0, item.length - 1));
           words.push(",");
@@ -256,27 +240,21 @@ var eventHandler = {
       return words;
     }
   },
-
-  //NEED TO POST EVERY ITEM THAT IS MISSING IN textLineData.nodes from words.
-  //if textLineData.nodes.length < words.length
-  //otherwise 
-  //Trying to replace the word instead of posting at the end of the sentence
-  //maybe try making text, words, wordsintextbox a property of KeyHandler so it can be accessed from viewModel.
-  alertPrevWord() {
+  
+  cursorLookaheadLoading: function () {
     let textField = document.getElementById("text_field");
-    let caretPos = this.getCaretPosition(textField);
-    let words = this.returnWord(textField.value, caretPos);
+    let caretPos = this._getCaretPosition(textField);
+    let words = this._returnWord(textField.value, caretPos);
 
-    console.log("caretPos", caretPos);
-    console.log("words", words);
-
-    console.log("wordsInTextbox", textLineData.nodes)
-
+    // console.log("caretPos", caretPos);
+    // console.log("words", words);
+    // console.log("wordsInTextbox", textLineData.nodes);
 
     if (words) {
       textLineData.nodes = [];
       textLineData.sentences = [];
       textLineData.sposNum = 0;
+      textLineData.snum = 0;
       viewModel.textAreaStr("")
       viewModel.token("");
       viewModel.isCursorInput = true;
@@ -284,8 +262,7 @@ var eventHandler = {
       words.forEach((word) => {
         viewModel.updateViewForWord(word);
       });
-      
-      viewModel.isCursorInput = false;
     }
+    viewModel.isCursorInput = false;
   },
 }

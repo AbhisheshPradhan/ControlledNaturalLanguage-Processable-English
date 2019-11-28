@@ -1,11 +1,11 @@
 let expressionLoader = {
+
   loadLookahead: function () {
     let lookaheadTable = lookaheadObj.createLookaheadTable(lookaheadObj);
     viewModel.lookaheadObject(lookaheadTable);
   },
 
   updateLookUpTable: function () {
-    // This concat must be done to avoid unwanted changes in to other data structures
     let tempLookAheadTable = [].concat(viewModel.lookUpTable());
     viewModel.lookUpTable(lookaheadObj.filterTable(viewModel.token(), tempLookAheadTable));
   },
@@ -73,7 +73,7 @@ let expressionLoader = {
         viewModel.isDropdownInput = true;
         // viewModel.updateViewForWord(viewModel.token() + dataArr[s]);
         viewModel.updateViewForWord(dataArr[s]);
-        viewModel.token(dataArr[s]);
+        // viewModel.token(dataArr[s]);
         console.log("viewModel.token()", viewModel.token());
         if (dataArr[s] == "." || dataArr[s] == "?") {
           viewModel.isEndOfSentence = true;
@@ -107,8 +107,8 @@ let expressionLoader = {
 
   postAnaExpClicked: function (words) {
     viewModel.isDropdownInput = true;
-    let wordA = "" + words;
-    let word = wordA.split(" ");
+    let wordArr = "" + words;
+    let word = wordArr.split(" ");
     if (viewModel.lookUpTable().indexOf(word[0]) != -1) {
       if (word.length > 1) {
         for (k = 0; k < word.length; k++) {
@@ -148,7 +148,6 @@ let expressionLoader = {
       data: addData
     });
   },
-
 
   // HELPER functions
   createFS: function (cat, wform, vform, num) {

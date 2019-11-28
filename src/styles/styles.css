@@ -1,13 +1,8 @@
-a {
-  cursor: pointer;
-}
-
 .btn-primary {
   color: #fff;
   background-color: #001f3f;
 }
 
-/* lvl2 submenu navbar css */
 .dropdown-submenu {
   left: 100%;
   top: -3px;
@@ -258,9 +253,4 @@ ul.ui-autocomplete {
 .ui-menu {
   position: inherit;
   background-color: #fff;
-}
-
-.svg-inline--fa {
-  height: 12px;
-  width: 12px;
 }

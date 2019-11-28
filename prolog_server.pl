@@ -101,13 +101,11 @@ server(Port) :-
 
 :- http_handler('/src/scripts/LookaheadObject.js', js_lookahead, []).
 
-:- http_handler('/src/scripts/superfish_modules.js', js_superfish_mod, []).
-
 :- http_handler('/src/scripts/TextArea.js', js_text_area, []).
 
 :- http_handler('/src/scripts/ViewModel.js', js_view_model, []).
 
-:- http_handler('/src/scripts/Dropdown.js', js_dropdown, []).
+:- http_handler('/src/scripts/Setup.js', js_setup, []).
 
 :- http_handler('/src/scripts/Navbar.js', js_navbar, []).
 
@@ -249,12 +247,9 @@ js_text_area(Request) :-
 
 js_lookahead(Request) :-
   http_reply_file('./src/scripts/LookaheadObject.js', [mime_type('text/javascript')], Request).
-
-js_superfish_mod(Request) :-
-  http_reply_file('./src/scripts/superfish_modules.js', [mime_type('text/javascript')], Request).
   
-js_dropdown(Request) :-
-  http_reply_file('./src/scripts/Dropdown.js', [mime_type('text/javascript')], Request).
+js_setup(Request) :-
+  http_reply_file('./src/scripts/Setup.js', [mime_type('text/javascript')], Request).
 
 js_navbar(Request) :-
   http_reply_file('./src/scripts/Navbar.js', [mime_type('text/javascript')], Request).

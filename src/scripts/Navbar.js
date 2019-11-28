@@ -1,7 +1,20 @@
 let navBar = {
   loadFileNames: function () {
     if (viewModel.fileNames().length == 0) {
-      let jsonObj = this._createJsonObject("load", " ", " ", " ", "off", "normal");
+      let jsonObj = {
+        id: -1,
+        inputmode: "text",
+        editmode: "load",
+        token: " ",
+        featurestructure: "{ \"cat\" : \" \",  \"wform\" : \" \"}",
+        filename: " ",
+        spectext: " ",
+        snum: -1,
+        spos: -1,
+        reasoner: "off",
+        reasonermode: "normal"
+      };
+
       $.ajax({
         url: "/peng",
         type: "POST",
@@ -40,7 +53,8 @@ let navBar = {
         "spos": "0",
         "reasoner": "off",
         "reasonermode": "normal"
-      }
+      };
+
       $.ajax({
         url: "/peng",
         type: "POST",
@@ -60,8 +74,19 @@ let navBar = {
   // Load a single file name
   loadFile: function (loadedFileName) {
     let self = this;
-
-    let jsonObj = this._createJsonObject("load", " ", loadedFileName, " ", "off", "normal");
+    let jsonObj = {
+      id: -1,
+      inputmode: "text",
+      editmode: "load",
+      token: " ",
+      featurestructure: "{ \"cat\" : \" \",  \"wform\" : \" \"}",
+      filename: loadedFileName,
+      spectext: " ",
+      snum: -1,
+      spos: -1,
+      reasoner: "off",
+      reasonermode: "normal"
+    }
 
     // read the text file and send them as nodes instead..
     if (viewModel.isEndOfSentence || textLineData.nodes[textLineData.nodes.length - 1] == " ") {
@@ -105,7 +130,6 @@ let navBar = {
     } else {
       alert("Complete sentence before loading file.");
     }
-
     return true;
   },
 
@@ -113,7 +137,21 @@ let navBar = {
   generateText: function () {
     let self = this;
     this.saveTemporary();
-    let jsonObj = this._createJsonObject("generate", " ", " ", " ", "off", "normal");
+
+    let jsonObj = {
+      id: -1,
+      inputmode: "text",
+      editmode: "generate",
+      token: " ",
+      featurestructure: "{ \"cat\" : \" \",  \"wform\" : \" \"}",
+      filename: " ",
+      spectext: " ",
+      snum: -1,
+      spos: -1,
+      reasoner: "off",
+      reasonermode: "normal"
+    }
+
     viewModel.$loading.show();
     $.ajax({
       url: "/peng",
@@ -122,8 +160,6 @@ let navBar = {
       success: function (data) {
         let json = JSON.parse(data);
         console.log("json", json);
-
-        // console.log("spectext: ", json.spectext);
 
         viewModel.textList.removeAll();
 
@@ -168,15 +204,15 @@ let navBar = {
   },
 
   saveTemporary: function () {
-    var file_name = 'text.tmp';
+    let file_name = 'text.tmp';
     if (viewModel.isEndOfSentence || textLineData.nodes[textLineData.nodes.length - 1] == " ") {
-      var spectext = "";
-      for (var i = 0; i < textLineData.sentences.length; i++) {
+      let spectext = "";
+      for (let i = 0; i < textLineData.sentences.length; i++) {
         textLineData.sentences[i] = textLineData.sentences[i].split('\r').join('');
         spectext += ('\n' + textLineData.sentences[i] + '\n');
       }
 
-      var saveData = {
+      let jsonObj = {
         "id": "-1",
         "inputmode": "text",
         "editmode": "save",
@@ -188,11 +224,12 @@ let navBar = {
         "spos": "0",
         "reasoner": "off",
         "reasonermode": "normal"
-      }
+      };
+
       $.ajax({
         url: "/peng",
         type: "POST",
-        data: saveData
+        data: jsonObj
       });
     } else {
       alert('CNL Text is empty.');
@@ -200,7 +237,7 @@ let navBar = {
     }
   },
 
-  // Helper function
+  // HELPER functions
   _formatToReadableInput: function (input) {
     // FORMATS TO READABLE INPUT
     input = input.replace(/%(.)*/g, '');
@@ -216,22 +253,5 @@ let navBar = {
     input = input.split(" ");
     input.pop();
     return input;
-  },
-
-  _createJsonObject: function (emode, token, fname, stext, reason, rmode) {
-    let object = {
-      id: -1,
-      inputmode: "text",
-      editmode: emode,
-      token: token,
-      featurestructure: "{ \"cat\" : \" \",  \"wform\" : \" \"}",
-      filename: fname,
-      spectext: stext,
-      snum: -1,
-      spos: -1,
-      reasoner: reason,
-      reasonermode: rmode
-    }
-    return object;
   }
 }
