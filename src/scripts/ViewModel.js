@@ -129,7 +129,20 @@ let viewModel = {
       } else {
         viewModel.populateLookUpTable(json);
         expressionLoader.loadLookahead();
-        viewModel.anaExp(json.ana);
+        
+        // viewModel.anaExp(json.ana);
+        // If the word is an anaphoric expression, add it to the anaphoric expression dropdown menu
+        if (json.hasOwnProperty('ana') && word != "." && json.ana.length != 0) {
+          let anaExp = json.ana;
+          for (i = 0; i < json.ana.length; i++) {
+            if (json.ana[i].length > 1) {
+              anaExp[i] = [anaExp[i].join(" ")];
+            } else {
+              anaExp[i] = json.ana[i];
+            }
+          }
+          viewModel.anaExp(anaExp);
+        }
         viewModel.allowInput = true;
       }
 
@@ -140,18 +153,7 @@ let viewModel = {
         viewModel.processedInput(textLineData.sentences[textLineData.sentences.length - 1]);
       }
 
-      // If the word is an anaphoric expression, add it to the anaphoric expression dropdown menu
-      if (json.hasOwnProperty('ana') && word != "." && json.ana.length != 0) {
-        let anaExp = json.ana;
-        for (i = 0; i < json.ana.length; i++) {
-          if (json.ana[i].length > 1) {
-            anaExp[i] = [anaExp[i].join(" ")];
-          } else {
-            anaExp[i] = json.ana[i];
-          }
-        }
-        viewModel.anaExp(anaExp);
-      }
+
     });
     console.log("nodes", textLineData.nodes);
   },

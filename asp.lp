@@ -1,4 +1,10 @@
-named(1,john).
+named(1,adina).
 
-pred(1,work).
+prop(1,blue).
+
+prop(1,blue).
+
+named(2,amora).
+
+prop(2,blue).
 
