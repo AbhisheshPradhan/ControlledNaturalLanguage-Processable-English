@@ -114,10 +114,12 @@ let expressionLoader = {
         for (k = 0; k < word.length; k++) {
           viewModel.updateViewForWord(word[k]);
           viewModel.textAreaStr(viewModel.textAreaStr() + word[k] + " ");
+          viewModel.$text_field.val(viewModel.textAreaStr());
         }
       } else {
         viewModel.updateViewForWord(word[0]);
         viewModel.textAreaStr(viewModel.textAreaStr() + word[0] + " ");
+        viewModel.$text_field.val(viewModel.textAreaStr());
       }
       this.loadLookahead();
     } else {
