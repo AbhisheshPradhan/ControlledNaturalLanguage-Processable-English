@@ -1,10 +1,6 @@
-named(1,adina).
-
 prop(1,blue).
 
+class(1,accommodation).
+
 prop(1,blue).
-
-named(2,amora).
-
-prop(2,blue).
 

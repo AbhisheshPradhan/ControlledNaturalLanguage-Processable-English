@@ -46,6 +46,10 @@ let eventHandler = {
     let sizeOfWord = viewModel.token().length;
     viewModel.isDropdownInput = false;
 
+    console.log("token", viewModel.token());
+    console.log("chr", chr);
+
+
     // when backspace to . then pressing space, 
     if (chr == "" && viewModel.token() == " ") {
       return;
@@ -58,7 +62,13 @@ let eventHandler = {
 
     if ((viewModel.token() == "." || viewModel.token() == "?") && textLineData.nodes[textLineData.nodes.length - 1] != " ") {
       // reinit when space typed after . or ?
-      viewModel.updateViewForWord(" ");
+
+      if(textLineData.nodes.length == 1) {
+        viewModel.updateViewForWord(viewModel.token());
+      } else {
+        viewModel.updateViewForWord(" ");
+      }
+      
 
       // For space + punctuation, remove the space before punctuation
       let currentTextFieldStr = viewModel.$text_field.val();
@@ -67,8 +77,8 @@ let eventHandler = {
         viewModel.textAreaStr(viewModel.$text_field.val());
       }
 
-      // console.log()
-    } else if (chr == "" && (viewModel.token() != "." || viewModel.token() != "?") && textLineData.nodes[textLineData.nodes.length - 1] != " ") {
+    // } else if (chr == "" && (viewModel.token() != "." || viewModel.token() != "?") && textLineData.nodes[textLineData.nodes.length - 1] != " ") {
+    } else if (chr == "" && (viewModel.token() != "." || viewModel.token() != "?")) {
       viewModel.updateViewForWord(viewModel.token());
     } else {
       // update for typed word
