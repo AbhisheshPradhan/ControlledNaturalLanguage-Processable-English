@@ -129,7 +129,7 @@ let viewModel = {
       } else {
         viewModel.populateLookUpTable(json);
         expressionLoader.loadLookahead();
-        
+
         // viewModel.anaExp(json.ana);
         // If the word is an anaphoric expression, add it to the anaphoric expression dropdown menu
         if (json.hasOwnProperty('ana') && word != "." && json.ana.length != 0) {
@@ -197,6 +197,15 @@ let viewModel = {
     viewModel.loadLookahead();
     console.log("onCursorInput");
     // eventHandler.cursorLookaheadLoading();
+
+
+    val = this.$text_field.val();
+
+    // focus textarea, clear value, re-apply
+    this.$text_field
+      .focus()
+      .val("")
+      .val(val);
   },
 
   // RESULTS section functions
