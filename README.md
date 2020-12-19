@@ -1,5 +1,5 @@
 # PENG
-CNL PENG ASP
+Controlled Natural Language - Processable English - Natural Language Processing
 
 Processable English (PENG) is a controlled natural language (CNL) that serves as
 a high-level speciﬁcation language for logic programs. The writing in a CNL needs
